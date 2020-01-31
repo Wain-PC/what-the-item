@@ -5,7 +5,9 @@ const {
   SET_PLAYERS_NUMBER,
   SET_PLAYER_READY,
   SET_SCREEN_CONTROLS,
-  SET_TIMER
+  SET_TIMER,
+  SET_TIMER_INTERVAL_ID,
+  CANCEL_TIMER_INTERVAL_ID
 } = require("./constants/actions");
 
 const setScreenTop = () => ({
@@ -14,10 +16,6 @@ const setScreenTop = () => ({
 
 const setScreenReady = () => ({
   type: SET_SCREEN_READY
-});
-
-const setScreenGame = () => ({
-  type: SET_SCREEN_GAME
 });
 
 const setPlayersNumber = number => ({
@@ -35,6 +33,14 @@ const setTimer = number => ({
   payload: number
 });
 
+const stopTimer = () => (dispatch, getState) => {
+  const { interval } = getState();
+  clearInterval(interval);
+  dispatch({
+    type: CANCEL_TIMER_INTERVAL_ID
+  });
+};
+
 const runTimer = (onTimerFinish = () => {}) => (dispatch, getState) => {
   let { timer } = getState(); // initial timer
   const interval = setInterval(() => {
@@ -42,12 +48,30 @@ const runTimer = (onTimerFinish = () => {}) => (dispatch, getState) => {
     if (timer >= 1) {
       dispatch(setTimer(timer));
     } else {
-      clearInterval(interval);
+      dispatch(stopTimer());
       onTimerFinish();
     }
   }, 1000);
 
+  dispatch({
+    type: SET_TIMER_INTERVAL_ID,
+    payload: interval
+  });
+
   return interval;
+};
+
+const setScreenGame = () => dispatch => {
+  // Set the screen
+  dispatch({
+    type: SET_SCREEN_GAME
+  });
+
+  // Start the round.
+  // Run the timer.
+  dispatch(runTimer());
+
+  // Load 4 random pictures. Select one of them as a 'correct' one.
 };
 
 // Show timer for N seconds, then switch to game screen

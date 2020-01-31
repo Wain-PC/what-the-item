@@ -5,7 +5,9 @@ const {
   SET_SCREEN_GAME,
   SET_PLAYERS_NUMBER,
   SET_PLAYER_READY,
-  SET_TIMER
+  SET_TIMER,
+  SET_TIMER_INTERVAL_ID,
+  CANCEL_TIMER_INTERVAL_ID
 } = require("./constants/actions");
 
 const {
@@ -24,6 +26,7 @@ const {
 const initialState = {
   started: false,
   timer: 0,
+  timerId: 0,
   screen: SCREEN_TOP,
   players: 1,
   playerReadiness: []
@@ -92,6 +95,22 @@ module.exports = (state = initialState, action) => {
       return {
         ...state,
         timer: action.payload
+      };
+    }
+
+    case SET_TIMER_INTERVAL_ID: {
+      return {
+        ...state,
+        timerId: action.payload
+      };
+    }
+
+    case CANCEL_TIMER_INTERVAL_ID: {
+      const { timerId } = initialState;
+
+      return {
+        ...state,
+        timerId
       };
     }
     default: {
