@@ -4,6 +4,7 @@ import GamepadController from './gamepadController';
 import './App.css';
 
 import TopScreen from './screens/top';
+import ReadyScreen from './screens/ready';
 
 export default class App extends PureComponent {
   constructor(props) {
@@ -24,16 +25,14 @@ export default class App extends PureComponent {
   }
 
   onMessage = (message) => {
-    this.setState({
-      ...this.state,
-      ...message
-    })
+    console.log('received message', message);
+    this.setState(message);
   };
 
   onButtonPress = (button) => {
     // Send every button press to backend.
     // It should process the input and return the updated state.
-    this.socket.send(button);
+    this.socket.send({type: 'button', ...button});
   };
 
   onButtonRelease = (button) => {
@@ -56,6 +55,9 @@ export default class App extends PureComponent {
     switch(screen) {
       case "top": {
         return <TopScreen {...restProps}/>
+      }
+      case "ready": {
+        return <ReadyScreen {...restProps}/>
       }
       default: {
         return null;

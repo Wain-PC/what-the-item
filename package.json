@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "node-dev ./bin/www --no-notify"
+    "dev": "node-dev --no-notify ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
