@@ -4,7 +4,7 @@ const startWebsocket = () => {
     socket.onopen = function(e) {
         console.log("[open] Соединение установлено");
         console.log("Отправляем данные на сервер");
-        socket.send("hello");
+        socket.send(JSON.stringify({action: 'hello'}));
     };
 
     socket.onmessage = function(event) {

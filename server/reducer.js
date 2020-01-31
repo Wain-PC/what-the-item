@@ -1,4 +1,4 @@
-import {SET_SCREEN_TOP} from './constants';
+const {SET_SCREEN_TOP} = require('./constants');
 
 const initialState = {
     started: false,
@@ -6,7 +6,7 @@ const initialState = {
     rounds: []
 };
 
-export default (state = initialState, action) => {
+module.exports = (state = initialState, action) => {
     switch (action.type) {
         case SET_SCREEN_TOP: {
             return initialState;
