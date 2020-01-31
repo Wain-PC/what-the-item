@@ -2,6 +2,8 @@ import React, {PureComponent} from 'react';
 import Socket from './socket';
 import './App.css';
 
+import TopScreen from './screens/top';
+
 export default class App extends PureComponent {
   constructor(props) {
     super(props);
@@ -26,11 +28,22 @@ export default class App extends PureComponent {
     return (
         <div className="App">
           <header className="App-header">
-            <p>
-              {JSON.stringify(this.state)}
-            </p>
+            {this.renderScreen()}
           </header>
         </div>
     );
+  }
+
+  renderScreen() {
+    const {screen, ...restProps} = this.state;
+
+    switch(screen) {
+      case "top": {
+        return <TopScreen {...restProps}/>
+      }
+      default: {
+        return null;
+      }
+    }
   }
 }
