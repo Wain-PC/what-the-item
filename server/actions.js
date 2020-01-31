@@ -35,12 +35,7 @@ const setTimer = number => ({
   payload: number
 });
 
-// Show timer for N seconds, then switch to game screen
-const setScreenControls = () => (dispatch, getState) => {
-  dispatch({
-    type: SET_SCREEN_CONTROLS
-  });
-
+const runTimer = (onTimerFinish = () => {}) => (dispatch, getState) => {
   let { timer } = getState(); // initial timer
   const interval = setInterval(() => {
     timer -= 1;
@@ -48,9 +43,24 @@ const setScreenControls = () => (dispatch, getState) => {
       dispatch(setTimer(timer));
     } else {
       clearInterval(interval);
-      dispatch(setScreenGame());
+      onTimerFinish();
     }
   }, 1000);
+
+  return interval;
+};
+
+// Show timer for N seconds, then switch to game screen
+const setScreenControls = () => dispatch => {
+  dispatch({
+    type: SET_SCREEN_CONTROLS
+  });
+
+  dispatch(
+    runTimer(() => {
+      dispatch(setScreenGame());
+    })
+  );
 };
 
 module.exports = {
