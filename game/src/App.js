@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import Socket from './socket';
+import GamepadController from './gamepadController';
 import './App.css';
 
 import TopScreen from './screens/top';
@@ -15,6 +16,11 @@ export default class App extends PureComponent {
     // Start Websocket connection
     this.socket = new Socket();
     this.socket.onMessage(this.onMessage);
+
+    // Start gamepads listener
+    this.gamepadController = new GamepadController();
+    this.gamepadController.onPress(this.onButtonPress);
+    this.gamepadController.onRelease(this.onButtonRelease);
   }
 
   onMessage = (message) => {
@@ -22,6 +28,14 @@ export default class App extends PureComponent {
       ...this.state,
       ...message
     })
+  };
+
+  onButtonPress = (button) => {
+    console.log('Button pressed:', button);
+  };
+
+  onButtonRelease = (button) => {
+    console.log('Button released:', button);
   };
 
   render() {
