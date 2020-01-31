@@ -7,7 +7,7 @@ module.exports = () => {
   wss.on("connection", ws => {
     const game = new Game(ws.send.bind(ws));
 
-    ws.on("message", function incoming(message) {
+    ws.on("message", message => {
       console.log("received: %s", message);
       try {
         const parsedMessage = JSON.parse(message);

@@ -16,11 +16,14 @@ const initialState = {
 module.exports = (state = initialState, action) => {
   switch (action.type) {
     case SET_SCREEN_TOP: {
-      return initialState;
+      return {
+        ...initialState,
+        players: state.players
+      };
     }
     case SET_SCREEN_READY: {
       return {
-        ...initialState,
+        ...state,
         screen: "ready",
         playerReadiness: Array(state.players).fill(false)
       };

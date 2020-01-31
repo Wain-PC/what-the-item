@@ -5,13 +5,13 @@ export default class Socket {
     this.connect();
   }
 
-  connect() {
+  connect(reconnect = false) {
     this.socket = new WebSocket("ws://localhost:3334");
     this.socket.onopen = this._onOpen;
     this.socket.onclose = this._onClose;
     this.socket.onerror = this._onError;
     this.socket.onmessage = this._onMessage;
-    this.listener = () => {};
+    this.listener = reconnect ? this.listener : () => {};
   }
 
   send(message) {
@@ -32,7 +32,7 @@ export default class Socket {
 
   _onOpen = () => {
     // Socket connected
-    console.log("[close] Соединение установлено");
+    console.log("[open] Соединение установлено");
   };
 
   _onClose = event => {
@@ -44,7 +44,7 @@ export default class Socket {
       // например, сервер убил процесс или сеть недоступна
       // обычно в этом случае event.code 1006
       console.log("[close] Соединение прервано, пробуем реконнект.");
-      this.connect();
+      this.connect(true);
     }
   };
 
