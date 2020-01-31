@@ -31,11 +31,13 @@ export default class App extends PureComponent {
   };
 
   onButtonPress = (button) => {
-    console.log('Button pressed:', button);
+    // Send every button press to backend.
+    // It should process the input and return the updated state.
+    this.socket.send(button);
   };
 
   onButtonRelease = (button) => {
-    console.log('Button released:', button);
+    // Do something on button release
   };
 
   render() {

@@ -15,10 +15,16 @@ export default class Socket {
     }
 
     send(message) {
-        if(message && typeof message === "object") {
-            this.socket.send(JSON.stringify(message));
+        if(!message) {
+            return;
         }
-        this.socket.send(message);
+
+        if(typeof message === "object") {
+            this.socket.send(JSON.stringify(message));
+        } else if( typeof message === "string") {
+            this.socket.send(message);
+        }
+
 
     }
 
