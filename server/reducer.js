@@ -1,3 +1,5 @@
+// TODO: Rework using several reducers, e.g. "timer", "round", "players", "screen"
+
 const {
   SET_SCREEN_TOP,
   SET_SCREEN_READY,
