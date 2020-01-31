@@ -1,0 +1,14 @@
+{
+  "extends": ["airbnb", "plugin:prettier/recommended", "prettier/react"],
+  "env": {
+    "browser": true,
+    "es2020": true
+  },
+  "ignorePatterns": ["node_modules/", "serviceWorker.js"],
+  "rules": {
+    "react/jsx-filename-extension": "off",
+    "react/jsx-props-no-spreading": "off",
+    "no-underscore-dangle": "off",
+    "no-console": "off"
+  }
+}

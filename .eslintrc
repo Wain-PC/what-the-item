@@ -1,0 +1,13 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["airbnb", "plugin:prettier/recommended", "prettier/react"],
+  "env": {
+    "node": true,
+    "es2020": true
+  },
+  "ignorePatterns": ["node_modules/"],
+  "rules": {
+    "no-underscore-dangle": "off",
+    "no-console": "off"
+  }
+}

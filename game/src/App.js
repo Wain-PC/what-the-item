@@ -1,10 +1,10 @@
-import React, {PureComponent} from 'react';
-import Socket from './socket';
-import GamepadController from './gamepadController';
-import './App.css';
+import React, { PureComponent } from "react";
+import Socket from "./socket";
+import GamepadController from "./gamepadController";
+import "./App.css";
 
-import TopScreen from './screens/top';
-import ReadyScreen from './screens/ready';
+import TopScreen from "./screens/top";
+import ReadyScreen from "./screens/ready";
 
 export default class App extends PureComponent {
   constructor(props) {
@@ -21,47 +21,41 @@ export default class App extends PureComponent {
     // Start gamepads listener
     this.gamepadController = new GamepadController();
     this.gamepadController.onPress(this.onButtonPress);
-    this.gamepadController.onRelease(this.onButtonRelease);
+    // this.gamepadController.onRelease(this.onButtonRelease);
   }
 
-  onMessage = (message) => {
-    console.log('received message', message);
+  onMessage = message => {
+    console.log("received message", message);
     this.setState(message);
   };
 
-  onButtonPress = (button) => {
+  onButtonPress = button => {
     // Send every button press to backend.
     // It should process the input and return the updated state.
-    this.socket.send({type: 'button', ...button});
+    this.socket.send({ type: "button", ...button });
   };
-
-  onButtonRelease = (button) => {
-    // Do something on button release
-  };
-
-  render() {
-    return (
-        <div className="App">
-          <header className="App-header">
-            {this.renderScreen()}
-          </header>
-        </div>
-    );
-  }
 
   renderScreen() {
-    const {screen, ...restProps} = this.state;
+    const { screen, ...restProps } = this.state;
 
-    switch(screen) {
+    switch (screen) {
       case "top": {
-        return <TopScreen {...restProps}/>
+        return <TopScreen {...restProps} />;
       }
       case "ready": {
-        return <ReadyScreen {...restProps}/>
+        return <ReadyScreen {...restProps} />;
       }
       default: {
         return null;
       }
     }
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <header className="App-header">{this.renderScreen()}</header>
+      </div>
+    );
   }
 }
