@@ -39,14 +39,39 @@ class Game {
     switch (state.screen) {
       case SCREEN_TOP: {
         // Switch to 'ready' screen 'ok' button is pressed
-        if (message.type === "button" && message.button === "ok") {
-          this.actions.setScreenReady();
+        if (message.type === "button") {
+          switch (message.button) {
+            case "ok": {
+              this.actions.setScreenReady();
+              break;
+            }
+            case "right": {
+              this.actions.setPlayersNumber(state.players + 1);
+              break;
+            }
+            case "left": {
+              this.actions.setPlayersNumber(state.players - 1);
+              break;
+            }
+            default: {
+              // do nothing
+            }
+          }
         }
         break;
       }
       case SCREEN_READY: {
         // Switch back to 'top' screen when 'back' button is pressed
         if (message.type === "button") {
+          switch (message.button) {
+            case "back": {
+              this.actions.setScreenTop();
+              break;
+            }
+            default: {
+              // do nothing
+            }
+          }
           if (message.button === "back") {
             this.actions.setScreenTop();
           }

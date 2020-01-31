@@ -1,4 +1,8 @@
-const { SET_SCREEN_TOP, SET_SCREEN_READY } = require("./constants/actions");
+const {
+  SET_SCREEN_TOP,
+  SET_SCREEN_READY,
+  SET_PLAYERS_NUMBER
+} = require("./constants/actions");
 
 const setScreenTop = () => ({
   type: SET_SCREEN_TOP
@@ -7,4 +11,9 @@ const setScreenReady = () => ({
   type: SET_SCREEN_READY
 });
 
-module.exports = { setScreenTop, setScreenReady };
+const setPlayersNumber = number => ({
+  type: SET_PLAYERS_NUMBER,
+  payload: number
+});
+
+module.exports = { setScreenTop, setScreenReady, setPlayersNumber };

@@ -1,8 +1,16 @@
-const { SET_SCREEN_TOP, SET_SCREEN_READY } = require("./constants/actions");
+const {
+  SET_SCREEN_TOP,
+  SET_SCREEN_READY,
+  SET_PLAYERS_NUMBER
+} = require("./constants/actions");
+
+const MIN_PLAYERS = 1;
+const MAX_PLAYERS = 4;
 
 const initialState = {
   started: false,
-  screen: "top"
+  screen: "top",
+  players: 1
 };
 
 module.exports = (state = initialState, action) => {
@@ -14,7 +22,17 @@ module.exports = (state = initialState, action) => {
       return {
         ...initialState,
         screen: "ready",
-        playerReadiness: [false, false]
+        playerReadiness: Array(state.players).fill(false)
+      };
+    }
+    case SET_PLAYERS_NUMBER: {
+      const number = action.payload;
+      if (number < MIN_PLAYERS || number > MAX_PLAYERS) {
+        return state;
+      }
+      return {
+        ...state,
+        players: number
       };
     }
     default: {
