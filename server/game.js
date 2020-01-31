@@ -18,8 +18,6 @@ class Game {
 
     // Send updated state after each action.
     this.store.subscribe(() => {
-      console.log("Store has changed");
-      console.log(this.store.getState());
       this.send(this.store.getState());
     });
   }
@@ -45,10 +43,12 @@ class Game {
               this.actions.setScreenReady();
               break;
             }
+            case "up":
             case "right": {
               this.actions.setPlayersNumber(state.players + 1);
               break;
             }
+            case "down":
             case "left": {
               this.actions.setPlayersNumber(state.players - 1);
               break;
@@ -61,9 +61,14 @@ class Game {
         break;
       }
       case SCREEN_READY: {
-        // Switch back to 'top' screen when 'back' button is pressed
         if (message.type === "button") {
           switch (message.button) {
+            // Toggle player readiness
+            case "ok": {
+              this.actions.setPlayerReady(message.gamepad);
+              break;
+            }
+            // Switch back to 'top' screen when 'back' button is pressed
             case "back": {
               this.actions.setScreenTop();
               break;
@@ -71,9 +76,6 @@ class Game {
             default: {
               // do nothing
             }
-          }
-          if (message.button === "back") {
-            this.actions.setScreenTop();
           }
         }
         break;
