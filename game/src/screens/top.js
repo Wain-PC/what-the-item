@@ -6,18 +6,13 @@ const Top = props => {
   return (
     <>
       <div>Top Screen</div>
-      <div>{JSON.stringify(props)}</div>
       <div>Players: {players}</div>
     </>
   );
 };
 
 Top.propTypes = {
-  players: PropTypes.number
-};
-
-Top.defaultProps = {
-  players: 0
+  players: PropTypes.number.isRequired
 };
 
 export default Top;

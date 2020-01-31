@@ -1,4 +1,4 @@
-module.exports = ({ actions, message }) => {
+const controller = ({ actions, message }) => {
   if (message.type === "button") {
     switch (message.button) {
       // Toggle player readiness
@@ -17,3 +17,12 @@ module.exports = ({ actions, message }) => {
     }
   }
 };
+
+const onStateChange = ({ state, actions }) => {
+  if (state.playerReadiness.every(ready => ready === true)) {
+    console.log("Every player is ready, start the game!");
+    actions.setScreenControls();
+  }
+};
+
+module.exports = { controller, onStateChange };

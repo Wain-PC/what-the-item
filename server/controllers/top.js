@@ -1,4 +1,4 @@
-module.exports = ({ state, actions, message }) => {
+const controller = ({ state, actions, message }) => {
   // Switch to 'ready' screen 'ok' button is pressed
   if (message.type === "button") {
     switch (message.button) {
@@ -22,3 +22,5 @@ module.exports = ({ state, actions, message }) => {
     }
   }
 };
+
+module.exports = { controller };

@@ -1,16 +1,30 @@
 const {
   SET_SCREEN_TOP,
   SET_SCREEN_READY,
+  SET_SCREEN_CONTROLS,
+  SET_SCREEN_GAME,
   SET_PLAYERS_NUMBER,
-  SET_PLAYER_READY
+  SET_PLAYER_READY,
+  SET_TIMER
 } = require("./constants/actions");
 
-const MIN_PLAYERS = 1;
-const MAX_PLAYERS = 4;
+const {
+  SCREEN_TOP,
+  SCREEN_CONTROLS,
+  SCREEN_READY,
+  SCREEN_GAME
+} = require("./constants/screens");
+const {
+  MIN_PLAYERS,
+  MAX_PLAYERS,
+  CONTROLS_SCREEN_TIMER,
+  GAME_SCREEN_TIMER
+} = require("./constants/gameplay");
 
 const initialState = {
   started: false,
-  screen: "top",
+  timer: 0,
+  screen: SCREEN_TOP,
   players: 1,
   playerReadiness: []
 };
@@ -27,8 +41,24 @@ module.exports = (state = initialState, action) => {
     case SET_SCREEN_READY: {
       return {
         ...state,
-        screen: "ready",
+        screen: SCREEN_READY,
         playerReadiness: Array(state.players).fill(false)
+      };
+    }
+
+    case SET_SCREEN_CONTROLS: {
+      return {
+        ...state,
+        screen: SCREEN_CONTROLS,
+        timer: CONTROLS_SCREEN_TIMER
+      };
+    }
+
+    case SET_SCREEN_GAME: {
+      return {
+        ...state,
+        screen: SCREEN_GAME,
+        timer: GAME_SCREEN_TIMER
       };
     }
 
@@ -44,8 +74,7 @@ module.exports = (state = initialState, action) => {
     }
 
     case SET_PLAYER_READY: {
-      console.log(action.payload);
-      const { index } = action.payload;
+      const index = action.payload;
       if (index < 0 || index > state.players - 1) {
         return state;
       }
@@ -56,6 +85,13 @@ module.exports = (state = initialState, action) => {
       return {
         ...state,
         playerReadiness: readiness
+      };
+    }
+
+    case SET_TIMER: {
+      return {
+        ...state,
+        timer: action.payload
       };
     }
     default: {

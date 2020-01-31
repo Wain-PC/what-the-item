@@ -18,7 +18,12 @@ class Game {
 
     // Send updated state after each action.
     this.store.subscribe(() => {
-      this.send(this.store.getState());
+      const state = this.store.getState();
+      const { screen } = state;
+      this.send(state);
+      if (controllers[screen] && controllers[screen].onStateChange) {
+        controllers[screen].onStateChange({ state, actions: this.actions });
+      }
     });
   }
 
@@ -35,10 +40,8 @@ class Game {
     const state = this.store.getState();
     const { screen } = state;
 
-    if (controllers[screen]) {
-      controllers[screen]({ state, actions: this.actions, message });
-    } else {
-      console.error("Controller not found for screen ", screen);
+    if (controllers[screen] && controllers[screen].controller) {
+      controllers[screen].controller({ state, actions: this.actions, message });
     }
   }
 }

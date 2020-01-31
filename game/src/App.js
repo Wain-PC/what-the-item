@@ -5,6 +5,8 @@ import "./App.css";
 
 import TopScreen from "./screens/top";
 import ReadyScreen from "./screens/ready";
+import ControlsScreen from "./screens/controls";
+import GameScreen from "./screens/Game";
 
 export default class App extends PureComponent {
   constructor(props) {
@@ -44,6 +46,12 @@ export default class App extends PureComponent {
       }
       case "ready": {
         return <ReadyScreen {...restProps} />;
+      }
+      case "controls": {
+        return <ControlsScreen {...restProps} />;
+      }
+      case "game": {
+        return <GameScreen {...restProps} />;
       }
       default: {
         return null;
