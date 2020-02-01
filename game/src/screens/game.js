@@ -9,7 +9,7 @@ const Game = props => {
   } = props;
 
   const options = pictures.map((picture, index) => {
-    const text = <span key={picture}>{picture}</span>;
+    const text = <span>{picture}</span>;
     const selectionLeft =
       list[0] && list[0].selectedAnswer === index ? (
         <span>
@@ -24,7 +24,7 @@ const Game = props => {
       ) : null;
 
     return (
-      <div>
+      <div key={picture}>
         {selectionLeft}
         {text}
         {selectionRight}
@@ -38,7 +38,11 @@ const Game = props => {
         Time left:
         <strong>{timer}</strong>
       </div>
-      <img src={`/pictures/${answer}.jpg`} alt="Что здесь изображено?" />
+      <img
+        src={`/pictures/${answer}.jpg`}
+        alt="Что здесь изображено?"
+        style={{ maxHeight: "400px" }}
+      />
       {options}
     </>
   );
