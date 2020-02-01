@@ -35,8 +35,22 @@ class Game {
   }
 
   send(object = this.store.getState()) {
+    // TODO: redo this shit. Only the safe state should be sent to client.
+    const {
+      players,
+      timer: { timer },
+      round,
+      screen
+    } = object;
+
     try {
-      const str = JSON.stringify(object);
+      const objectToSend = {
+        players,
+        timer: { timer },
+        round,
+        screen
+      };
+      const str = JSON.stringify(objectToSend);
       this._send(str);
     } catch (err) {
       console.error("Unable to send:", err);

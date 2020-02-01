@@ -26,6 +26,9 @@ const controller = ({ actions, message }) => {
 
 const onStateChange = ({ state, actions }) => {
   if (state.round.answered === true) {
+    // Calculate points
+    // TODO: зацикливается, этот onStateChange вообще нужен? Кажется, всё можно сделать в экшнах
+    // actions.calculateRoundPoints();
     actions.startRound();
   }
 };

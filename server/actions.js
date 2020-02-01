@@ -12,13 +12,15 @@ const {
   START_GAME_ROUND,
   MOVE_ROUND_ANSWER_UP,
   MOVE_ROUND_ANSWER_DOWN,
-  SELECT_ROUND_ANSWER
+  SELECT_ROUND_ANSWER,
+  CALCULATE_ROUND_POINTS
 } = require("./constants/actions");
 
 const {
   CONTROLS_SCREEN_TIMER,
   GAME_SCREEN_TIMER,
-  ROUNDS_IN_GAME
+  ROUNDS_IN_GAME,
+  POINTS_PER_ROUND
 } = require("./constants/gameplay");
 
 const getPictures = require("./utils/getPictures");
@@ -41,11 +43,6 @@ const setPlayerReady = index => ({
   payload: index
 });
 
-const setTimer = number => ({
-  type: SET_TIMER,
-  payload: number
-});
-
 const stopTimer = () => (dispatch, getState) => {
   const {
     timer: { timerId }
@@ -56,10 +53,22 @@ const stopTimer = () => (dispatch, getState) => {
   });
 };
 
-const runTimer = (onTimerFinish = () => {}) => (dispatch, getState) => {
-  let {
-    timer: { timer }
-  } = getState(); // initial timer
+const setTimer = number => dispatch => {
+  dispatch({
+    type: SET_TIMER,
+    payload: number
+  });
+};
+
+const runTimer = (initialTimerValue, onTimerFinish = () => {}) => (
+  dispatch,
+  getState
+) => {
+  let timer = initialTimerValue || getState().timer.timer; // initial timer
+
+  // Stop any timer from previous screen/rounds
+  dispatch(stopTimer());
+
   const interval = setInterval(() => {
     timer -= 1;
     if (timer >= 1) {
@@ -104,15 +113,14 @@ const startRound = () => async (dispatch, getState) => {
     }
   });
 
-  dispatch(setTimer(GAME_SCREEN_TIMER));
   // Run the timer.
-  /* dispatch(
-    runTimer(() => {
+  dispatch(
+    runTimer(GAME_SCREEN_TIMER, () => {
       // If the timer is here, no one has answered correctly.
       // Show failure message for 3 seconds, then switch to the next round.
       dispatch(startRound());
     })
-  ); */
+  );
 };
 
 const setScreenGame = () => dispatch => {
@@ -130,9 +138,8 @@ const setScreenControls = () => dispatch => {
     type: SET_SCREEN_CONTROLS
   });
 
-  dispatch(setTimer(CONTROLS_SCREEN_TIMER));
   dispatch(
-    runTimer(() => {
+    runTimer(CONTROLS_SCREEN_TIMER, () => {
       dispatch(setScreenGame());
     })
   );
@@ -153,6 +160,37 @@ const selectAnswer = playerIndex => ({
   payload: playerIndex
 });
 
+const calculateRoundPoints = () => (dispatch, getState) => {
+  // Find the user that won the round
+  const {
+    players: { list },
+    timer: { timer: timeLeft },
+    round: { pictures, answer, answered: roundFinished }
+  } = getState();
+
+  // Prevent any miscalculations.
+  if (!roundFinished) {
+    return;
+  }
+
+  const winner = list.find(
+    ({ answered, selectedAnswer }) =>
+      answered && pictures[selectedAnswer] === answer
+  );
+
+  if (!winner) {
+    return;
+  }
+
+  const { index } = winner;
+  const points = timeLeft * POINTS_PER_ROUND;
+
+  dispatch({
+    type: CALCULATE_ROUND_POINTS,
+    payload: { index, points }
+  });
+};
+
 module.exports = {
   setScreenTop,
   setScreenReady,
@@ -164,5 +202,6 @@ module.exports = {
   startRound,
   moveAnswerUp,
   moveAnswerDown,
-  selectAnswer
+  selectAnswer,
+  calculateRoundPoints
 };

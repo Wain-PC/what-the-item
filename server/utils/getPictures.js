@@ -20,7 +20,7 @@ module.exports = async () => {
   // TODO: return correct answer
   const filesToReturn = [];
   for (let i = 0; i < ANSWERS_IN_ROUND; i += 1) {
-    const index = Math.round(Math.random() * files.length);
+    const index = Math.floor(Math.random() * files.length);
     const file = files[index].slice(0, -4);
     if (filesToReturn.includes(file)) {
       i -= 1;

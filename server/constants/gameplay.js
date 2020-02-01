@@ -5,6 +5,7 @@ const MIN_PLAYERS = 1;
 const MAX_PLAYERS = 2;
 const ROUNDS_IN_GAME = 3;
 const ANSWERS_IN_ROUND = 4;
+const POINTS_PER_ROUND = 10;
 
 module.exports = {
   INITIAL_PLAYERS,
@@ -13,5 +14,6 @@ module.exports = {
   CONTROLS_SCREEN_TIMER,
   GAME_SCREEN_TIMER,
   ROUNDS_IN_GAME,
-  ANSWERS_IN_ROUND
+  ANSWERS_IN_ROUND,
+  POINTS_PER_ROUND
 };

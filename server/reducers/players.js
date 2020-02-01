@@ -4,7 +4,8 @@ const {
   START_GAME_ROUND,
   MOVE_ROUND_ANSWER_UP,
   MOVE_ROUND_ANSWER_DOWN,
-  SELECT_ROUND_ANSWER
+  SELECT_ROUND_ANSWER,
+  CALCULATE_ROUND_POINTS
 } = require("../constants/actions");
 
 const {
@@ -139,6 +140,23 @@ module.exports = (state = initialState, action) => {
         list
       };
     }
+
+    case CALCULATE_ROUND_POINTS: {
+      const { index, points } = action.payload;
+
+      const list = getNewList(state, index);
+      if (!list) {
+        return state;
+      }
+
+      list[index].score += points;
+
+      return {
+        ...state,
+        list
+      };
+    }
+
     default: {
       return state;
     }

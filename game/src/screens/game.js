@@ -32,12 +32,21 @@ const Game = props => {
     );
   });
 
+  const players = list.map(({ name, score }) => (
+    <div key={name}>
+      <strong>{name}:</strong> {score} очков
+    </div>
+  ));
+
   return (
     <>
       <div>
         Time left:
         <strong>{timer}</strong>
       </div>
+      <br />
+      {players}
+      <br />
       <img
         src={`/pictures/${answer}.jpg`}
         alt="Что здесь изображено?"
