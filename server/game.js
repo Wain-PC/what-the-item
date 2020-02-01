@@ -1,12 +1,17 @@
-const { createStore, applyMiddleware, bindActionCreators } = require("redux");
+const {
+  createStore,
+  applyMiddleware,
+  bindActionCreators,
+  combineReducers
+} = require("redux");
 const thunk = require("redux-thunk").default;
-const reducer = require("./reducer");
+const reducers = require("./reducers");
 const actions = require("./actions");
 const controllers = require("./controllers");
 
 class Game {
   constructor(send) {
-    this.store = createStore(reducer, applyMiddleware(thunk));
+    this.store = createStore(combineReducers(reducers), applyMiddleware(thunk));
     this._send = send;
     this.actions = bindActionCreators(
       actions,
@@ -19,10 +24,12 @@ class Game {
     // Send updated state after each action.
     this.store.subscribe(() => {
       const state = this.store.getState();
-      const { screen } = state;
+      const {
+        screen: { id }
+      } = state;
       this.send(state);
-      if (controllers[screen] && controllers[screen].onStateChange) {
-        controllers[screen].onStateChange({ state, actions: this.actions });
+      if (controllers[id] && controllers[id].onStateChange) {
+        controllers[id].onStateChange({ state, actions: this.actions });
       }
     });
   }
@@ -38,10 +45,12 @@ class Game {
 
   onMessage(message) {
     const state = this.store.getState();
-    const { screen } = state;
+    const {
+      screen: { id }
+    } = state;
 
-    if (controllers[screen] && controllers[screen].controller) {
-      controllers[screen].controller({ state, actions: this.actions, message });
+    if (controllers[id] && controllers[id].controller) {
+      controllers[id].controller({ state, actions: this.actions, message });
     }
   }
 }

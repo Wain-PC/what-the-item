@@ -6,14 +6,16 @@ import "./App.css";
 import TopScreen from "./screens/top";
 import ReadyScreen from "./screens/ready";
 import ControlsScreen from "./screens/controls";
-import GameScreen from "./screens/Game";
+import GameScreen from "./screens/game";
 
 export default class App extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      screen: null
+      screen: {
+        id: null
+      }
     };
 
     // Start Websocket connection
@@ -38,9 +40,12 @@ export default class App extends PureComponent {
   };
 
   renderScreen() {
-    const { screen, ...restProps } = this.state;
+    const {
+      screen: { id },
+      ...restProps
+    } = this.state;
 
-    switch (screen) {
+    switch (id) {
       case "top": {
         return <TopScreen {...restProps} />;
       }

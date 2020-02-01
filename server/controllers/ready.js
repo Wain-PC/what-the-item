@@ -19,7 +19,7 @@ const controller = ({ actions, message }) => {
 };
 
 const onStateChange = ({ state, actions }) => {
-  if (state.playerReadiness.every(ready => ready === true)) {
+  if (state.players.list.every(({ ready }) => ready === true)) {
     console.log("Every player is ready, start the game!");
     actions.setScreenControls();
   }

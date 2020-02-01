@@ -2,7 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Game = props => {
-  const { timer } = props;
+  const {
+    timer: { timer }
+  } = props;
 
   return (
     <>
@@ -18,7 +20,9 @@ const Game = props => {
 };
 
 Game.propTypes = {
-  timer: PropTypes.number.isRequired
+  timer: PropTypes.shape({
+    timer: PropTypes.number.isRequired
+  }).isRequired
 };
 
 export default Game;

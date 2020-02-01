@@ -2,12 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Ready = props => {
-  const { players, playerReadiness } = props;
+  const {
+    players: { list }
+  } = props;
 
-  const playersDivs = playerReadiness.map((status, index) => (
-    // eslint-disable-next-line react/no-array-index-key
+  const playersDivs = list.map(({ name, ready, index }) => (
     <div key={index}>
-      Player {index + 1}: <strong>{status ? "Ready" : "Not ready"}</strong>
+      {name}: <strong>{ready ? "Ready" : "Not ready"}</strong>
     </div>
   ));
   return (
@@ -15,7 +16,7 @@ const Ready = props => {
       <div>Ready Screen</div>
       <div>
         Players in the game:
-        <strong>{players}</strong>
+        <strong>{list.length}</strong>
         <div>{playersDivs}</div>
       </div>
     </>
@@ -23,8 +24,14 @@ const Ready = props => {
 };
 
 Ready.propTypes = {
-  players: PropTypes.number.isRequired,
-  playerReadiness: PropTypes.arrayOf(PropTypes.bool).isRequired
+  players: PropTypes.shape({
+    list: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        ready: PropTypes.bool.isRequired
+      })
+    ).isRequired
+  }).isRequired
 };
 
 export default Ready;

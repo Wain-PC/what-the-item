@@ -8,12 +8,12 @@ const controller = ({ state, actions, message }) => {
       }
       case "up":
       case "right": {
-        actions.setPlayersNumber(state.players + 1);
+        actions.setPlayersNumber(state.players.list.length + 1);
         break;
       }
       case "down":
       case "left": {
-        actions.setPlayersNumber(state.players - 1);
+        actions.setPlayersNumber(state.players.list.length - 1);
         break;
       }
       default: {

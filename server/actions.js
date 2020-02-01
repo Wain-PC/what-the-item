@@ -34,7 +34,9 @@ const setTimer = number => ({
 });
 
 const stopTimer = () => (dispatch, getState) => {
-  const { timerId } = getState();
+  const {
+    timer: { timerId }
+  } = getState();
   clearInterval(timerId);
   dispatch({
     type: CANCEL_TIMER_INTERVAL_ID
@@ -42,7 +44,9 @@ const stopTimer = () => (dispatch, getState) => {
 };
 
 const runTimer = (onTimerFinish = () => {}) => (dispatch, getState) => {
-  let { timer } = getState(); // initial timer
+  let {
+    timer: { timer }
+  } = getState(); // initial timer
   const interval = setInterval(() => {
     timer -= 1;
     if (timer >= 1) {

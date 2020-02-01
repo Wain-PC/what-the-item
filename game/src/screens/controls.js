@@ -2,7 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const Controls = props => {
-  const { timer } = props;
+  const {
+    timer: {
+      timer: { timer }
+    }
+  } = props;
 
   return (
     <>
@@ -17,7 +21,9 @@ const Controls = props => {
 };
 
 Controls.propTypes = {
-  timer: PropTypes.number.isRequired
+  timer: PropTypes.shape({
+    timer: PropTypes.number.isRequired
+  }).isRequired
 };
 
 export default Controls;
