@@ -37,7 +37,7 @@ export default class GamepadController {
           ) {
             const buttonName = GamepadController.getButtonMapping(buttonIndex);
             if (buttonName) {
-              this.pressListener({ gamepad: index - 1, button: buttonName });
+              this.pressListener({ gamepad: index, button: buttonName });
             }
           }
         }
@@ -55,7 +55,7 @@ export default class GamepadController {
             this.prevState[gamepadIndex].buttons[buttonIndex].pressed === true
           ) {
             const buttonName = GamepadController.getButtonMapping(buttonIndex);
-            this.releaseListener({ gamepad: index - 1, button: buttonName });
+            this.releaseListener({ gamepad: index, button: buttonName });
           }
         }
       });

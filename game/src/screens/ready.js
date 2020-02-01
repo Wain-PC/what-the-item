@@ -8,15 +8,13 @@ const Ready = props => {
 
   const playersDivs = list.map(({ name, ready, index }) => (
     <div key={index}>
-      {name}: <strong>{ready ? "Ready" : "Not ready"}</strong>
+      {name}: <strong>{ready ? "Готов" : "Не готов"}</strong>
     </div>
   ));
   return (
     <>
-      <div>Ready Screen</div>
+      <div>Готовность пользователей</div>
       <div>
-        Players in the game:
-        <strong>{list.length}</strong>
         <div>{playersDivs}</div>
       </div>
     </>

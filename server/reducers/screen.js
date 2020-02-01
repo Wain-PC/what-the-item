@@ -2,14 +2,16 @@ const {
   SET_SCREEN_TOP,
   SET_SCREEN_READY,
   SET_SCREEN_CONTROLS,
-  SET_SCREEN_GAME
+  SET_SCREEN_GAME,
+  SET_SCREEN_GAME_END
 } = require("../constants/actions");
 
 const {
   SCREEN_TOP,
   SCREEN_CONTROLS,
   SCREEN_READY,
-  SCREEN_GAME
+  SCREEN_GAME,
+  SCREEN_GAME_END
 } = require("../constants/screens");
 
 const initialState = {
@@ -43,6 +45,13 @@ module.exports = (state = initialState, action) => {
       return {
         ...state,
         id: SCREEN_GAME
+      };
+    }
+
+    case SET_SCREEN_GAME_END: {
+      return {
+        ...state,
+        id: SCREEN_GAME_END
       };
     }
     default: {

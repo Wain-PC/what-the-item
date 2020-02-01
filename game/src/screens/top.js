@@ -7,8 +7,13 @@ const Top = props => {
   } = props;
   return (
     <>
-      <div>Top Screen</div>
-      <div>Players: {list.length}</div>
+      <div>Таблица с топ-5 игроков здесь</div>
+      <div>Количество игроков: {list.length}</div>
+      <br />
+      <br />
+      <div>
+        <strong>Нажмите X, чтобы начать игру</strong>
+      </div>
     </>
   );
 };

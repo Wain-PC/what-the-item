@@ -1,12 +1,8 @@
 import React, { PureComponent } from "react";
 import Socket from "./socket";
 import GamepadController from "./gamepadController";
+import * as screens from "./screens";
 import "./App.css";
-
-import TopScreen from "./screens/top";
-import ReadyScreen from "./screens/ready";
-import ControlsScreen from "./screens/controls";
-import GameScreen from "./screens/game";
 
 export default class App extends PureComponent {
   constructor(props) {
@@ -45,23 +41,13 @@ export default class App extends PureComponent {
       ...restProps
     } = this.state;
 
-    switch (id) {
-      case "top": {
-        return <TopScreen {...restProps} />;
-      }
-      case "ready": {
-        return <ReadyScreen {...restProps} />;
-      }
-      case "controls": {
-        return <ControlsScreen {...restProps} />;
-      }
-      case "game": {
-        return <GameScreen {...restProps} />;
-      }
-      default: {
-        return null;
-      }
+    const Screen = screens[id];
+
+    if (Screen) {
+      return <Screen {...restProps} />;
     }
+
+    return <div>Unknown screen id: {id}</div>;
   }
 
   render() {

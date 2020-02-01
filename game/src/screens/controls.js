@@ -3,17 +3,15 @@ import PropTypes from "prop-types";
 
 const Controls = props => {
   const {
-    timer: {
-      timer: { timer }
-    }
+    timer: { timer }
   } = props;
 
   return (
     <>
-      <div>Controls Screen</div>
-      <div>A picture of a controller here</div>
+      <div>Картинка с контроллером и управлением здесь</div>
+      <div>Mеханика игры объясняется здесь</div>
       <div>
-        Game starts in:
+        Игра начинается через:
         <strong>{timer}</strong>
       </div>
     </>

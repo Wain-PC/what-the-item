@@ -3,18 +3,43 @@ import PropTypes from "prop-types";
 
 const Game = props => {
   const {
-    timer: { timer }
+    timer: { timer },
+    round: { pictures, answer },
+    players: { list }
   } = props;
+
+  const options = pictures.map((picture, index) => {
+    const text = <span key={picture}>{picture}</span>;
+    const selectionLeft =
+      list[0] && list[0].selectedAnswer === index ? (
+        <span>
+          <strong>→</strong>
+        </span>
+      ) : null;
+    const selectionRight =
+      list[1] && list[1].selectedAnswer === index ? (
+        <span>
+          <strong>←</strong>
+        </span>
+      ) : null;
+
+    return (
+      <div>
+        {selectionLeft}
+        {text}
+        {selectionRight}
+      </div>
+    );
+  });
 
   return (
     <>
-      <div>Game Screen</div>
       <div>
         Time left:
         <strong>{timer}</strong>
       </div>
-      <div>A picture of an item here</div>
-      <div>4 Options here</div>
+      <img src={`/pictures/${answer}.jpg`} alt="Что здесь изображено?" />
+      {options}
     </>
   );
 };
@@ -22,6 +47,17 @@ const Game = props => {
 Game.propTypes = {
   timer: PropTypes.shape({
     timer: PropTypes.number.isRequired
+  }).isRequired,
+  round: PropTypes.shape({
+    pictures: PropTypes.arrayOf(PropTypes.string).isRequired,
+    answer: PropTypes.string.isRequired
+  }).isRequired,
+  players: PropTypes.shape({
+    list: PropTypes.arrayOf(
+      PropTypes.shape({
+        selectedAnswer: PropTypes.number.isRequired
+      })
+    ).isRequired
   }).isRequired
 };
 

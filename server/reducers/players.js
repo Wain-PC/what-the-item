@@ -1,19 +1,26 @@
 const {
   SET_PLAYERS_NUMBER,
-  SET_PLAYER_READY
+  SET_PLAYER_READY,
+  START_GAME_ROUND,
+  MOVE_ROUND_ANSWER_UP,
+  MOVE_ROUND_ANSWER_DOWN,
+  SELECT_ROUND_ANSWER
 } = require("../constants/actions");
 
 const {
   MIN_PLAYERS,
   MAX_PLAYERS,
-  INITIAL_PLAYERS
+  INITIAL_PLAYERS,
+  ANSWERS_IN_ROUND
 } = require("../constants/gameplay");
 
 const initialPlayer = {
   index: 0,
   name: "Player 1",
   ready: false,
-  score: 0
+  answered: false,
+  score: 0,
+  selectedAnswer: 0
 };
 
 const generatePlayers = n => {
@@ -26,6 +33,19 @@ const generatePlayers = n => {
         index
       };
     });
+};
+
+const isPlayerInList = (state, index) => {
+  const playersNumber = state.list.length;
+  return index >= 0 && index < playersNumber;
+};
+
+const getNewList = (state, index) => {
+  if (!isPlayerInList(state, index)) {
+    return null;
+  }
+
+  return JSON.parse(JSON.stringify(state.list));
 };
 
 const initialState = {
@@ -47,13 +67,72 @@ module.exports = (state = initialState, action) => {
 
     case SET_PLAYER_READY: {
       const index = action.payload;
-      const playersNumber = state.list.length;
-      if (index < 0 || index > playersNumber - 1) {
+      const list = getNewList(state, index);
+      if (!list) {
         return state;
       }
 
-      const list = JSON.parse(JSON.stringify(state.list));
       list[index].ready = !list[index].ready;
+
+      return {
+        ...state,
+        list
+      };
+    }
+
+    case START_GAME_ROUND: {
+      const list = state.list.map(player => ({
+        ...player,
+        answered: false,
+        selectedAnswer: 0
+      }));
+
+      return {
+        ...state,
+        list
+      };
+    }
+
+    case MOVE_ROUND_ANSWER_UP: {
+      const { playerIndex: index } = action.payload;
+      const list = getNewList(state, index);
+      if (!list) {
+        return state;
+      }
+
+      list[index].selectedAnswer =
+        (list[index].selectedAnswer + ANSWERS_IN_ROUND - 1) % ANSWERS_IN_ROUND;
+
+      return {
+        ...state,
+        list
+      };
+    }
+
+    case MOVE_ROUND_ANSWER_DOWN: {
+      const { playerIndex: index } = action.payload;
+      const list = getNewList(state, index);
+      if (!list) {
+        return state;
+      }
+
+      list[index].selectedAnswer =
+        (list[index].selectedAnswer + 1) % ANSWERS_IN_ROUND;
+
+      return {
+        ...state,
+        list
+      };
+    }
+
+    case SELECT_ROUND_ANSWER: {
+      const index = action.payload;
+      const list = getNewList(state, index);
+      if (!list) {
+        return state;
+      }
+
+      list[index].answered = true;
 
       return {
         ...state,
