@@ -10,6 +10,11 @@ const {
   CANCEL_TIMER_INTERVAL_ID
 } = require("./constants/actions");
 
+const {
+  CONTROLS_SCREEN_TIMER,
+  GAME_SCREEN_TIMER
+} = require("./constants/gameplay");
+
 const setScreenTop = () => ({
   type: SET_SCREEN_TOP
 });
@@ -71,6 +76,8 @@ const setScreenGame = () => dispatch => {
     type: SET_SCREEN_GAME
   });
 
+  dispatch(setTimer(GAME_SCREEN_TIMER));
+
   // Start the round.
   // Run the timer.
   dispatch(runTimer());
@@ -83,6 +90,8 @@ const setScreenControls = () => dispatch => {
   dispatch({
     type: SET_SCREEN_CONTROLS
   });
+
+  dispatch(setTimer(CONTROLS_SCREEN_TIMER));
 
   dispatch(
     runTimer(() => {
