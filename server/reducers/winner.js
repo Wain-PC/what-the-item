@@ -6,15 +6,18 @@ const {
   SET_WINNER_LETTER_INDEX_DECREASE
 } = require("../constants/actions");
 
-const { WINNER_NAME_MAX_LETTERS } = require("../constants/gameplay");
+const {
+  WINNER_NICKNAME_MAX_LETTERS,
+  NICKNAME_LETTER_TABLE
+} = require("../constants/gameplay");
 
 const initialState = {
   index: 0,
   name: "",
   score: 0,
   activeLetter: 0,
-  nickName: Array(WINNER_NAME_MAX_LETTERS)
-    .fill("A")
+  nickName: Array(WINNER_NICKNAME_MAX_LETTERS)
+    .fill("_")
     .join("")
 };
 
@@ -32,7 +35,7 @@ module.exports = (state = initialState, action) => {
     case SET_WINNER_LETTER_INDEX_INCREASE: {
       return {
         ...state,
-        activeLetter: (state.activeLetter + 1) % WINNER_NAME_MAX_LETTERS
+        activeLetter: (state.activeLetter + 1) % WINNER_NICKNAME_MAX_LETTERS
       };
     }
 
@@ -40,15 +43,20 @@ module.exports = (state = initialState, action) => {
       return {
         ...state,
         activeLetter:
-          (state.activeLetter + WINNER_NAME_MAX_LETTERS - 1) %
-          WINNER_NAME_MAX_LETTERS
+          (state.activeLetter + WINNER_NICKNAME_MAX_LETTERS - 1) %
+          WINNER_NICKNAME_MAX_LETTERS
       };
     }
 
     case SET_WINNER_LETTER_INCREASE: {
       const { activeLetter, nickName } = state;
-      const currentLetterIndex = nickName.charCodeAt(activeLetter);
-      const newLetter = String.fromCharCode(currentLetterIndex + 1);
+      const currentLetterIndex = NICKNAME_LETTER_TABLE.indexOf(
+        nickName.charAt(activeLetter)
+      );
+      const newLetter =
+        NICKNAME_LETTER_TABLE[
+          (currentLetterIndex + 1) % NICKNAME_LETTER_TABLE.length
+        ];
       const nickNameArray = nickName.split("");
       nickNameArray.splice(activeLetter, 1, newLetter);
       return {
@@ -59,8 +67,14 @@ module.exports = (state = initialState, action) => {
 
     case SET_WINNER_LETTER_DECREASE: {
       const { activeLetter, nickName } = state;
-      const currentLetterIndex = nickName.charCodeAt(activeLetter);
-      const newLetter = String.fromCharCode(currentLetterIndex - 1);
+      const currentLetterIndex = NICKNAME_LETTER_TABLE.indexOf(
+        nickName.charAt(activeLetter)
+      );
+      const newLetter =
+        NICKNAME_LETTER_TABLE[
+          (currentLetterIndex + NICKNAME_LETTER_TABLE.length - 1) %
+            NICKNAME_LETTER_TABLE.length
+        ];
       const nickNameArray = nickName.split("");
       nickNameArray.splice(activeLetter, 1, newLetter);
       return {
