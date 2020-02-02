@@ -19,36 +19,27 @@ class Game {
     );
 
     // Send default state upon connection
+    this.actions.setScreenGameEnd();
     this.send();
 
     // Send updated state after each action.
     this.store.subscribe(() => {
       const state = this.store.getState();
-      const {
-        screen: { id }
-      } = state;
       this.send(state);
-      if (controllers[id] && controllers[id].onStateChange) {
-        controllers[id].onStateChange({ state, actions: this.actions });
-      }
     });
   }
 
   send(object = this.store.getState()) {
     // TODO: redo this shit. Only the safe state should be sent to client.
     const {
-      players,
       timer: { timer },
-      round,
-      screen
+      ...rest
     } = object;
 
     try {
       const objectToSend = {
-        players,
         timer: { timer },
-        round,
-        screen
+        ...rest
       };
       const str = JSON.stringify(objectToSend);
       this._send(str);

@@ -18,11 +18,4 @@ const controller = ({ actions, message }) => {
   }
 };
 
-const onStateChange = ({ state, actions }) => {
-  if (state.players.list.every(({ ready }) => ready === true)) {
-    console.log("Every player is ready, start the game!");
-    actions.setScreenControls();
-  }
-};
-
-module.exports = { controller, onStateChange };
+module.exports = { controller };

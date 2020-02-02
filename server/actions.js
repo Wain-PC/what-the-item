@@ -14,7 +14,12 @@ const {
   MOVE_ROUND_ANSWER_UP,
   MOVE_ROUND_ANSWER_DOWN,
   SELECT_ROUND_ANSWER,
-  CALCULATE_ROUND_POINTS
+  CALCULATE_ROUND_POINTS,
+  SET_WINNER,
+  SET_WINNER_LETTER_INDEX_INCREASE,
+  SET_WINNER_LETTER_INDEX_DECREASE,
+  SET_WINNER_LETTER_INCREASE,
+  SET_WINNER_LETTER_DECREASE
 } = require("./constants/actions");
 
 const {
@@ -69,7 +74,6 @@ const setPlayerReady = index => (dispatch, getState) => {
   const { list } = getState().players;
 
   if (list.every(({ ready }) => ready === true)) {
-    console.log("Every player is ready, start the game!");
     setScreenControls();
   }
 };
@@ -119,8 +123,30 @@ const runTimer = (initialTimerValue, onTimerFinish = () => {}) => (
   return interval;
 };
 
+const setWinner = () => (dispatch, getState) => {
+  // Determine the winner to show
+  const {
+    players: { list }
+  } = getState();
+
+  // TODO: what to do in case of a draw?
+  const { index, name, score } = list.sort((p1, p2) => p2.score - p1.score)[0];
+
+  // Set the winner
+  dispatch({
+    type: SET_WINNER,
+    payload: {
+      index,
+      name,
+      score
+    }
+  });
+};
+
 const setScreenGameEnd = () => dispatch => {
-  // Set the screen
+  dispatch(setWinner());
+
+  // Change the screen
   dispatch({
     type: SET_SCREEN_GAME_END
   });
@@ -165,13 +191,18 @@ const moveAnswerDown = playerIndex => ({
   payload: { playerIndex }
 });
 
-const selectAnswer = playerIndex => dispatch => {
+const selectAnswer = playerIndex => (dispatch, getState) => {
   dispatch({
     type: SELECT_ROUND_ANSWER,
     payload: playerIndex
   });
 
-  dispatch(calculateRoundPoints());
+  // If the answer was correct, recalculate the points and start a new round
+  const { answered } = getState().round;
+  if (answered === true) {
+    dispatch(calculateRoundPoints());
+    dispatch(startRound());
+  }
 };
 
 const calculateRoundPoints = () => (dispatch, getState) => {
@@ -205,11 +236,27 @@ const calculateRoundPoints = () => (dispatch, getState) => {
   });
 };
 
+const setNickNameLetterIndexIncrease = () => ({
+  type: SET_WINNER_LETTER_INDEX_INCREASE
+});
+
+const setNickNameLetterIndexDecrease = () => ({
+  type: SET_WINNER_LETTER_INDEX_DECREASE
+});
+const setNickNameLetterIncrease = () => ({
+  type: SET_WINNER_LETTER_INCREASE
+});
+
+const setNickNameLetterDecrease = () => ({
+  type: SET_WINNER_LETTER_DECREASE
+});
+
 module.exports = {
   setScreenTop,
   setScreenReady,
   setScreenControls,
   setScreenGame,
+  setScreenGameEnd,
   setPlayersNumber,
   setPlayerReady,
   setTimer,
@@ -217,5 +264,9 @@ module.exports = {
   moveAnswerUp,
   moveAnswerDown,
   selectAnswer,
-  calculateRoundPoints
+  calculateRoundPoints,
+  setNickNameLetterIndexIncrease,
+  setNickNameLetterIndexDecrease,
+  setNickNameLetterIncrease,
+  setNickNameLetterDecrease
 };

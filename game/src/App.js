@@ -25,7 +25,11 @@ export default class App extends PureComponent {
   }
 
   onMessage = message => {
-    console.log("received message", message);
+    console.log(
+      "received message",
+      message.winner.nickName,
+      message.winner.activeLetter
+    );
     this.setState(message);
   };
 
