@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 const {
   SET_SCREEN_TOP,
   SET_SCREEN_READY,
@@ -38,10 +39,40 @@ const setPlayersNumber = number => ({
   payload: number
 });
 
-const setPlayerReady = index => ({
-  type: SET_PLAYER_READY,
-  payload: index
-});
+const setScreenGame = () => dispatch => {
+  // Set the screen
+  dispatch({
+    type: SET_SCREEN_GAME
+  });
+
+  dispatch(startRound());
+};
+
+// Show timer for N seconds, then switch to game screen
+const setScreenControls = () => dispatch => {
+  dispatch({
+    type: SET_SCREEN_CONTROLS
+  });
+
+  dispatch(
+    runTimer(CONTROLS_SCREEN_TIMER, () => {
+      dispatch(setScreenGame());
+    })
+  );
+};
+
+const setPlayerReady = index => (dispatch, getState) => {
+  dispatch({
+    type: SET_PLAYER_READY,
+    payload: index
+  });
+  const { list } = getState().players;
+
+  if (list.every(({ ready }) => ready === true)) {
+    console.log("Every player is ready, start the game!");
+    setScreenControls();
+  }
+};
 
 const stopTimer = () => (dispatch, getState) => {
   const {
@@ -68,6 +99,7 @@ const runTimer = (initialTimerValue, onTimerFinish = () => {}) => (
 
   // Stop any timer from previous screen/rounds
   dispatch(stopTimer());
+  dispatch(setTimer(timer));
 
   const interval = setInterval(() => {
     timer -= 1;
@@ -100,7 +132,7 @@ const startRound = () => async (dispatch, getState) => {
   } = getState();
 
   // If we've just had a final round, switch to 'final' screen
-  if (index >= ROUNDS_IN_GAME) {
+  if (index > ROUNDS_IN_GAME) {
     dispatch(setScreenGameEnd());
   }
 
@@ -123,28 +155,6 @@ const startRound = () => async (dispatch, getState) => {
   );
 };
 
-const setScreenGame = () => dispatch => {
-  // Set the screen
-  dispatch({
-    type: SET_SCREEN_GAME
-  });
-
-  dispatch(startRound());
-};
-
-// Show timer for N seconds, then switch to game screen
-const setScreenControls = () => dispatch => {
-  dispatch({
-    type: SET_SCREEN_CONTROLS
-  });
-
-  dispatch(
-    runTimer(CONTROLS_SCREEN_TIMER, () => {
-      dispatch(setScreenGame());
-    })
-  );
-};
-
 const moveAnswerUp = playerIndex => ({
   type: MOVE_ROUND_ANSWER_UP,
   payload: { playerIndex }
@@ -155,10 +165,14 @@ const moveAnswerDown = playerIndex => ({
   payload: { playerIndex }
 });
 
-const selectAnswer = playerIndex => ({
-  type: SELECT_ROUND_ANSWER,
-  payload: playerIndex
-});
+const selectAnswer = playerIndex => dispatch => {
+  dispatch({
+    type: SELECT_ROUND_ANSWER,
+    payload: playerIndex
+  });
+
+  dispatch(calculateRoundPoints());
+};
 
 const calculateRoundPoints = () => (dispatch, getState) => {
   // Find the user that won the round

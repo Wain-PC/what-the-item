@@ -1,6 +1,7 @@
 const {
   SET_PLAYERS_NUMBER,
   SET_PLAYER_READY,
+  SET_SCREEN_GAME,
   START_GAME_ROUND,
   MOVE_ROUND_ANSWER_UP,
   MOVE_ROUND_ANSWER_DOWN,
@@ -74,6 +75,18 @@ module.exports = (state = initialState, action) => {
       }
 
       list[index].ready = !list[index].ready;
+
+      return {
+        ...state,
+        list
+      };
+    }
+
+    case SET_SCREEN_GAME: {
+      const list = state.list.map(player => ({
+        ...player,
+        score: 0
+      }));
 
       return {
         ...state,
