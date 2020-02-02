@@ -74,7 +74,7 @@ const setPlayerReady = index => (dispatch, getState) => {
   const { list } = getState().players;
 
   if (list.every(({ ready }) => ready === true)) {
-    setScreenControls();
+    dispatch(setScreenControls());
   }
 };
 

@@ -19,7 +19,6 @@ class Game {
     );
 
     // Send default state upon connection
-    this.actions.setScreenGameEnd();
     this.send();
 
     // Send updated state after each action.
