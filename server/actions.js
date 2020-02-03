@@ -25,9 +25,10 @@ const {
 const {
   CONTROLS_SCREEN_TIMER,
   GAME_SCREEN_TIMER,
-  ROUNDS_IN_GAME,
   POINTS_PER_ROUND
 } = require("./constants/gameplay");
+
+const db = require("./db");
 
 const getPictures = require("./utils/getPictures");
 
@@ -44,10 +45,14 @@ const setPlayersNumber = number => ({
   payload: number
 });
 
-const setScreenGame = () => dispatch => {
+const setScreenGame = () => async (dispatch, getState) => {
+  const { players } = getState();
+  // Start the game in DB and get gameId
+  const gameId = await db.startGame({ players });
   // Set the screen
   dispatch({
-    type: SET_SCREEN_GAME
+    type: SET_SCREEN_GAME,
+    payload: gameId
   });
 
   dispatch(startRound());
@@ -154,12 +159,13 @@ const setScreenGameEnd = () => dispatch => {
 
 const startRound = () => async (dispatch, getState) => {
   const {
-    round: { index }
+    game: { finished }
   } = getState();
 
   // If we've just had a final round, switch to 'final' screen
-  if (index > ROUNDS_IN_GAME) {
+  if (finished) {
     dispatch(setScreenGameEnd());
+    return;
   }
 
   const pictures = await getPictures();

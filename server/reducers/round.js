@@ -5,7 +5,6 @@ const {
 } = require("../constants/actions");
 
 const initialState = {
-  index: 0,
   pictures: [],
   answer: "",
   answered: false
@@ -22,7 +21,6 @@ module.exports = (state = initialState, action) => {
       const { pictures, answer } = action.payload;
       return {
         ...state,
-        index: state.index + 1,
         pictures,
         answer,
         answered: false
