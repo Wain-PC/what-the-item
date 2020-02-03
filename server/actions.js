@@ -159,7 +159,7 @@ const setScreenGameEnd = () => dispatch => {
 
 const startRound = () => async (dispatch, getState) => {
   const {
-    game: { finished }
+    game: { id: gameId, round: index, finished }
   } = getState();
 
   // If we've just had a final round, switch to 'final' screen
@@ -169,6 +169,18 @@ const startRound = () => async (dispatch, getState) => {
   }
 
   const pictures = await getPictures();
+  const answerIndex = 0;
+  const answer = pictures[answerIndex];
+  // Save round to DB
+  await db.startRound({
+    gameId,
+    index,
+    pictures,
+    answer,
+    answerIndex,
+    timeToSolve: GAME_SCREEN_TIMER
+  });
+
   dispatch({
     type: START_GAME_ROUND,
     payload: {

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { MONGODB_CONNECTION_STRING } = require("./constants/db");
 
-const { Schema, ObjectId } = mongoose;
+const { Schema } = mongoose;
 
 const playerSchema = new Schema({
   index: { type: Number, default: 0 },
@@ -68,4 +68,25 @@ const startRound = async ({
   await game.save();
 };
 
-module.exports = { connect, startGame, startRound };
+const endRound = async ({
+  gameId,
+  answered,
+  answeredBy,
+  timeLeft,
+  pointsReceived
+}) => {
+  const game = await Game.findOne({ _id: gameId });
+  const lastRoundIndex = game.rounds.length - 1;
+  const round = game.rounds[lastRoundIndex];
+  const updatedRound = {
+    ...round,
+    answered,
+    answeredBy,
+    timeLeft,
+    pointsReceived
+  };
+  game.rounds.splice(game.rounds.length - 1, 1, updatedRound);
+  await game.save();
+};
+
+module.exports = { connect, startGame, startRound, endRound };
