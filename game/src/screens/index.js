@@ -3,5 +3,6 @@ import ready from "./ready";
 import controls from "./controls";
 import game from "./game";
 import gameEnd from "./gameEnd";
+import winner from "./winner";
 
-export { top, ready, controls, game, gameEnd };
+export { top, ready, controls, game, winner, gameEnd };

@@ -114,31 +114,22 @@ const getTopPlayers = async () => {
     .exec();
 
   return documents.map(doc => ({
+    gameId: doc._id.toString(),
     name: doc.winner.name,
     score: doc.winner.score
   }));
 };
 
-const isInTop5 = async ({ gameId }) => {
-  try {
-    // Get the last player that qualifies for topN board
-    const {
-      winner: { score: lastTopScore }
-    } = await Game.find()
-      .select({ "winner.name": true, "winner.score": true })
-      .sort({ "winner.score": -1, _id: 1 })
-      .skip(TOP_PLAYERS - 1)
-      .limit(1)
-      .exec();
+const getTopPlayersWithCurrent = async ({ gameId }) => {
+  // Get the last player that qualifies for topN board
+  const topPlayers = await getTopPlayers();
 
-    const {
-      winner: { score: currentGameScore }
-    } = await Game.findOne({ _id: gameId });
-
-    return currentGameScore > lastTopScore;
-  } catch (err) {
-    return false;
-  }
+  return topPlayers.map(player => {
+    return {
+      ...player,
+      currentGame: player.gameId === gameId
+    };
+  });
 };
 
 module.exports = {
@@ -147,6 +138,6 @@ module.exports = {
   startRound,
   endRound,
   endGame,
-  isInTop5,
-  getTopPlayers
+  getTopPlayers,
+  getTopPlayersWithCurrent
 };

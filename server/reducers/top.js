@@ -1,4 +1,4 @@
-const { SET_SCREEN_TOP } = require("../constants/actions");
+const { SET_SCREEN_TOP, SET_SCREEN_GAME_END } = require("../constants/actions");
 
 const initialState = {
   players: []
@@ -6,7 +6,8 @@ const initialState = {
 
 module.exports = (state = initialState, action) => {
   switch (action.type) {
-    case SET_SCREEN_TOP: {
+    case SET_SCREEN_TOP:
+    case SET_SCREEN_GAME_END: {
       return {
         ...state,
         players: action.payload || initialState.players

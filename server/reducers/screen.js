@@ -3,6 +3,7 @@ const {
   SET_SCREEN_READY,
   SET_SCREEN_CONTROLS,
   SET_SCREEN_GAME,
+  SET_SCREEN_WINNER,
   SET_SCREEN_GAME_END
 } = require("../constants/actions");
 
@@ -11,6 +12,7 @@ const {
   SCREEN_CONTROLS,
   SCREEN_READY,
   SCREEN_GAME,
+  SCREEN_WINNER,
   SCREEN_GAME_END
 } = require("../constants/screens");
 
@@ -45,6 +47,13 @@ module.exports = (state = initialState, action) => {
       return {
         ...state,
         id: SCREEN_GAME
+      };
+    }
+
+    case SET_SCREEN_WINNER: {
+      return {
+        ...state,
+        id: SCREEN_WINNER
       };
     }
 

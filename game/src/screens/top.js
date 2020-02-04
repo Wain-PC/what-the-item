@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import TopTable from "../components/topTable";
 
 const Top = props => {
   const {
@@ -7,29 +8,9 @@ const Top = props => {
     top: { players }
   } = props;
 
-  const topTableRows = players.map(({ name, score }) => {
-    return (
-      <tr key={name + score}>
-        <td>{name}</td>
-        <td>{score}</td>
-      </tr>
-    );
-  });
-
   return (
     <>
-      <h3>Текущий ТОП</h3>
-      <div>
-        <table border={2}>
-          <thead>
-            <tr>
-              <th>Имя</th>
-              <th>Счёт</th>
-            </tr>
-          </thead>
-          <tbody>{topTableRows}</tbody>
-        </table>
-      </div>
+      <TopTable players={players} />
       <br />
       <div>Количество игроков: {list.length}</div>
       <br />

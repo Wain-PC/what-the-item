@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import TopTable from "../components/topTable";
 
 const renderNickName = (nickName, activeLetter) => {
   const word = nickName.split("").map((letter, index) => {
@@ -18,12 +19,14 @@ const renderNickName = (nickName, activeLetter) => {
 
 const GameEnd = props => {
   const {
-    winner: { name, activeLetter, nickName }
+    winner: { activeLetter, nickName },
+    top: { players }
   } = props;
+
   return (
     <>
       <div>Игра окончена!</div>
-      <div>Победитель: {name}</div>
+      <TopTable players={players} />
       <br />
       <div>Введите никнейм: {renderNickName(nickName, activeLetter)}</div>
       <div>
@@ -38,6 +41,14 @@ GameEnd.propTypes = {
     name: PropTypes.string.isRequired,
     activeLetter: PropTypes.number.isRequired,
     nickName: PropTypes.string.isRequired
+  }).isRequired,
+  top: PropTypes.shape({
+    players: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        score: PropTypes.number.isRequired
+      })
+    ).isRequired
   }).isRequired
 };
 

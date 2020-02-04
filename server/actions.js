@@ -3,6 +3,7 @@ const {
   SET_SCREEN_TOP,
   SET_SCREEN_READY,
   SET_SCREEN_GAME,
+  SET_SCREEN_WINNER,
   SET_SCREEN_GAME_END,
   SET_PLAYERS_NUMBER,
   SET_PLAYER_READY,
@@ -159,12 +160,24 @@ const setWinner = () => async (dispatch, getState) => {
   await db.endGame({ gameId, winner: { index, name, score } });
 };
 
-const setScreenGameEnd = () => async dispatch => {
+const setScreenWinner = () => async dispatch => {
   await dispatch(setWinner());
 
   // Change the screen
   dispatch({
-    type: SET_SCREEN_GAME_END
+    type: SET_SCREEN_WINNER
+  });
+};
+
+const setScreenGameEnd = () => async (dispatch, getState) => {
+  const {
+    game: { id: gameId }
+  } = getState();
+  const topPlayers = await db.getTopPlayersWithCurrent({ gameId });
+
+  dispatch({
+    type: SET_SCREEN_GAME_END,
+    payload: topPlayers
   });
 };
 
@@ -194,7 +207,7 @@ const startRound = () => async (dispatch, getState) => {
   // If we've just had a final round, switch to 'final' screen
   if (finished) {
     await dispatch(stopTimer());
-    await dispatch(setScreenGameEnd());
+    await dispatch(setScreenWinner());
     return;
   }
 
@@ -307,6 +320,7 @@ module.exports = {
   setScreenReady,
   setScreenControls,
   setScreenGame,
+  setScreenWinner,
   setScreenGameEnd,
   setPlayersNumber,
   setPlayerReady,
