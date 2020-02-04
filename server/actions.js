@@ -169,33 +169,19 @@ const setScreenGameEnd = () => async dispatch => {
 };
 
 const startRound = () => async (dispatch, getState) => {
+  // This is the data for the the previous round.
   const {
-    game: { id: gameId, round: index, finished }
+    game: { round, finished }
   } = getState();
 
   // Recalculate points after each round (except the first one, obviously)
-  if (index !== 0) {
+  if (round !== 0) {
     await dispatch(calculateRoundPoints());
-  }
-
-  // If we've just had a final round, switch to 'final' screen
-  if (finished) {
-    await dispatch(setScreenGameEnd());
-    return;
   }
 
   const pictures = await getPictures();
   const answerIndex = 0;
   const answer = pictures[answerIndex];
-  // Save round to DB
-  await db.startRound({
-    gameId,
-    index,
-    pictures,
-    answer,
-    answerIndex,
-    timeToSolve: GAME_SCREEN_TIMER
-  });
 
   dispatch({
     type: START_GAME_ROUND,
@@ -205,6 +191,13 @@ const startRound = () => async (dispatch, getState) => {
     }
   });
 
+  // If we've just had a final round, switch to 'final' screen
+  if (finished) {
+    await dispatch(stopTimer());
+    await dispatch(setScreenGameEnd());
+    return;
+  }
+
   // Run the timer.
   dispatch(
     runTimer(GAME_SCREEN_TIMER, () => {
@@ -213,6 +206,19 @@ const startRound = () => async (dispatch, getState) => {
       dispatch(startRound());
     })
   );
+
+  // Save round to DB
+  const {
+    game: { id: gameId, round: index }
+  } = getState();
+  await db.startRound({
+    gameId,
+    index,
+    pictures,
+    answer,
+    answerIndex,
+    timeToSolve: GAME_SCREEN_TIMER
+  });
 };
 
 const moveAnswerUp = playerIndex => ({

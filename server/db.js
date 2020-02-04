@@ -107,12 +107,12 @@ const endGame = async ({ gameId, winner: { index, score, name } }) => {
 };
 
 const getTopPlayers = async () => {
-  const query = Game.find()
+  const documents = await Game.find()
     .select({ "winner.name": true, "winner.score": true })
-    .sort({ "winner.score": -1 })
-    .limit(TOP_PLAYERS);
+    .sort({ "winner.score": -1, _id: 1 })
+    .limit(TOP_PLAYERS)
+    .exec();
 
-  const documents = await query.exec();
   return documents.map(doc => ({
     name: doc.winner.name,
     score: doc.winner.score
@@ -120,9 +120,25 @@ const getTopPlayers = async () => {
 };
 
 const isInTop5 = async ({ gameId }) => {
-  const {
-    winner: { score }
-  } = await Game.findOne({ _id: gameId });
+  try {
+    // Get the last player that qualifies for topN board
+    const {
+      winner: { score: lastTopScore }
+    } = await Game.find()
+      .select({ "winner.name": true, "winner.score": true })
+      .sort({ "winner.score": -1, _id: 1 })
+      .skip(TOP_PLAYERS - 1)
+      .limit(1)
+      .exec();
+
+    const {
+      winner: { score: currentGameScore }
+    } = await Game.findOne({ _id: gameId });
+
+    return currentGameScore > lastTopScore;
+  } catch (err) {
+    return false;
+  }
 };
 
 module.exports = {

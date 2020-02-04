@@ -10,7 +10,7 @@ const renderNickName = (nickName, activeLetter) => {
         </span>
       );
     }
-    return <span>{letter}</span>;
+    return <span key={letter}>{letter}</span>;
   });
 
   return <div>{word}</div>;
