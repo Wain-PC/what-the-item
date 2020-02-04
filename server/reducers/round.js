@@ -1,7 +1,9 @@
 const {
   START_GAME_ROUND,
   SELECT_ROUND_ANSWER,
-  SET_SCREEN_GAME
+  SET_SCREEN_GAME,
+  SET_SCREEN_TOP,
+  SET_SCREEN_GAME_END
 } = require("../constants/actions");
 
 const initialState = {
@@ -40,6 +42,11 @@ module.exports = (state = initialState, action) => {
         ...state,
         answered: pictures[answerIndex] === answer
       };
+    }
+
+    case SET_SCREEN_TOP:
+    case SET_SCREEN_GAME_END: {
+      return initialState;
     }
 
     default: {

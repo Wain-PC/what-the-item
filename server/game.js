@@ -19,7 +19,7 @@ class Game {
     );
 
     // Send default state upon connection
-    this.send();
+    this.actions.setScreenTop();
 
     // Send updated state after each action.
     this.store.subscribe(() => {

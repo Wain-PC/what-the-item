@@ -1,4 +1,8 @@
-const { SET_SCREEN_GAME, START_GAME_ROUND } = require("../constants/actions");
+const {
+  SET_SCREEN_GAME,
+  START_GAME_ROUND,
+  SET_SCREEN_TOP
+} = require("../constants/actions");
 
 const { ROUNDS_IN_GAME } = require("../constants/gameplay");
 
@@ -11,7 +15,7 @@ const initialState = {
 module.exports = (state = initialState, action) => {
   switch (action.type) {
     case SET_SCREEN_GAME: {
-      const { id } = action.payload;
+      const id = action.payload;
       return {
         ...initialState,
         id
@@ -32,6 +36,9 @@ module.exports = (state = initialState, action) => {
         ...state,
         round: round + 1
       };
+    }
+    case SET_SCREEN_TOP: {
+      return initialState;
     }
     default: {
       return state;

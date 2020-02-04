@@ -32,9 +32,14 @@ const db = require("./db");
 
 const getPictures = require("./utils/getPictures");
 
-const setScreenTop = () => ({
-  type: SET_SCREEN_TOP
-});
+const setScreenTop = () => async dispatch => {
+  const topPlayers = await db.getTopPlayers();
+
+  dispatch({
+    type: SET_SCREEN_TOP,
+    payload: topPlayers
+  });
+};
 
 const setScreenReady = () => ({
   type: SET_SCREEN_READY
@@ -46,7 +51,9 @@ const setPlayersNumber = number => ({
 });
 
 const setScreenGame = () => async (dispatch, getState) => {
-  const { players } = getState();
+  const {
+    players: { list: players }
+  } = getState();
   // Start the game in DB and get gameId
   const gameId = await db.startGame({ players });
   // Set the screen
@@ -306,5 +313,6 @@ module.exports = {
   setNickNameLetterIndexIncrease,
   setNickNameLetterIndexDecrease,
   setNickNameLetterIncrease,
-  setNickNameLetterDecrease
+  setNickNameLetterDecrease,
+  setWinner
 };

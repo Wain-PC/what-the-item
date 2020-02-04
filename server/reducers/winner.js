@@ -3,7 +3,8 @@ const {
   SET_WINNER_LETTER_INCREASE,
   SET_WINNER_LETTER_DECREASE,
   SET_WINNER_LETTER_INDEX_INCREASE,
-  SET_WINNER_LETTER_INDEX_DECREASE
+  SET_WINNER_LETTER_INDEX_DECREASE,
+  SET_SCREEN_TOP
 } = require("../constants/actions");
 
 const {
@@ -81,6 +82,10 @@ module.exports = (state = initialState, action) => {
         ...state,
         nickName: nickNameArray.join("")
       };
+    }
+
+    case SET_SCREEN_TOP: {
+      return initialState;
     }
 
     default: {

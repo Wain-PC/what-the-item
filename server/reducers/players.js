@@ -1,6 +1,7 @@
 const {
   SET_PLAYERS_NUMBER,
   SET_PLAYER_READY,
+  SET_SCREEN_TOP,
   SET_SCREEN_GAME,
   START_GAME_ROUND,
   MOVE_ROUND_ANSWER_UP,
@@ -167,6 +168,13 @@ module.exports = (state = initialState, action) => {
       return {
         ...state,
         list
+      };
+    }
+
+    case SET_SCREEN_TOP: {
+      return {
+        ...initialState,
+        list: generatePlayers(state.list.length)
       };
     }
 

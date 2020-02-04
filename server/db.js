@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 const { MONGODB_CONNECTION_STRING } = require("./constants/db");
-const { GAME_SCREEN_TIMER } = require("./constants/gameplay");
+const {
+  GAME_SCREEN_TIMER,
+  ROUNDS_IN_GAME,
+  TOP_PLAYERS
+} = require("./constants/gameplay");
 
 const { Schema } = mongoose;
 
@@ -23,9 +27,10 @@ const roundSchema = new Schema({
 
 const gameSchema = new Schema({
   finished: Boolean,
-  players: { type: [playerSchema], default: [] },
-  round: { type: [roundSchema], default: [] },
+  players: [playerSchema],
+  rounds: [roundSchema],
   timeToSolve: Number,
+  roundsInGame: Number,
   winner: playerSchema
 });
 
@@ -53,10 +58,11 @@ const startGame = async ({ players }) => {
   const game = new Game({
     players: playersToSave,
     finished: false,
-    timeToSolve: GAME_SCREEN_TIMER
+    timeToSolve: GAME_SCREEN_TIMER,
+    roundsInGame: ROUNDS_IN_GAME
   });
   const { _id } = await game.save();
-  return _id;
+  return _id.toString();
 };
 
 const startRound = async ({ gameId, index, pictures, answer, answerIndex }) => {
@@ -76,14 +82,15 @@ const endRound = async ({
   const game = await Game.findOne({ _id: gameId });
   const lastRoundIndex = game.rounds.length - 1;
   const round = game.rounds[lastRoundIndex];
-  const updatedRound = {
-    ...round,
-    answered,
-    answeredBy,
-    timeLeft,
-    pointsReceived
-  };
-  game.rounds.splice(game.rounds.length - 1, 1, updatedRound);
+  round.answered = answered;
+  round.answeredBy = answeredBy;
+  round.timeLeft = timeLeft;
+  round.pointsReceived = pointsReceived;
+
+  if (game.players[answeredBy]) {
+    game.players[answeredBy].score += pointsReceived;
+  }
+
   await game.save();
 };
 
@@ -99,4 +106,31 @@ const endGame = async ({ gameId, winner: { index, score, name } }) => {
   await game.save();
 };
 
-module.exports = { connect, startGame, startRound, endRound, endGame };
+const getTopPlayers = async () => {
+  const query = Game.find()
+    .select({ "winner.name": true, "winner.score": true })
+    .sort({ "winner.score": -1 })
+    .limit(TOP_PLAYERS);
+
+  const documents = await query.exec();
+  return documents.map(doc => ({
+    name: doc.winner.name,
+    score: doc.winner.score
+  }));
+};
+
+const isInTop5 = async ({ gameId }) => {
+  const {
+    winner: { score }
+  } = await Game.findOne({ _id: gameId });
+};
+
+module.exports = {
+  connect,
+  startGame,
+  startRound,
+  endRound,
+  endGame,
+  isInTop5,
+  getTopPlayers
+};
