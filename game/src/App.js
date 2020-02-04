@@ -1,6 +1,7 @@
 import React, { PureComponent } from "react";
 import Socket from "./socket";
 import GamepadController from "./gamepadController";
+import KeyboardController from "./keyboardController";
 import * as screens from "./screens";
 import "./App.css";
 
@@ -21,7 +22,10 @@ export default class App extends PureComponent {
     // Start gamepads listener
     this.gamepadController = new GamepadController();
     this.gamepadController.onPress(this.onButtonPress);
-    // this.gamepadController.onRelease(this.onButtonRelease);
+
+    // Start keyboard listener
+    this.keyboardController = new KeyboardController();
+    this.keyboardController.onPress(this.onButtonPress);
   }
 
   onMessage = message => {
