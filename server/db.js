@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { MONGODB_CONNECTION_STRING } = require("./constants/db");
+const { GAME_SCREEN_TIMER } = require("./constants/gameplay");
 
 const { Schema } = mongoose;
 
@@ -13,10 +14,9 @@ const roundSchema = new Schema({
   index: Number,
   pictures: [String],
   answer: String,
-  answered: Boolean,
+  answered: { type: Boolean, default: false },
   answerIndex: Number,
   answeredBy: { type: Number, default: -1 },
-  timeToSolve: Number,
   timeLeft: Number,
   pointsReceived: Number
 });
@@ -25,6 +25,7 @@ const gameSchema = new Schema({
   finished: Boolean,
   players: { type: [playerSchema], default: [] },
   round: { type: [roundSchema], default: [] },
+  timeToSolve: Number,
   winner: playerSchema
 });
 
@@ -49,21 +50,18 @@ const startGame = async ({ players }) => {
     score
   }));
 
-  const game = new Game({ players: playersToSave, finished: false });
+  const game = new Game({
+    players: playersToSave,
+    finished: false,
+    timeToSolve: GAME_SCREEN_TIMER
+  });
   const { _id } = await game.save();
   return _id;
 };
 
-const startRound = async ({
-  gameId,
-  index,
-  pictures,
-  answer,
-  answerIndex,
-  timeToSolve
-}) => {
+const startRound = async ({ gameId, index, pictures, answer, answerIndex }) => {
   const game = await Game.findOne({ _id: gameId });
-  const round = { index, pictures, answer, answerIndex, timeToSolve };
+  const round = { index, pictures, answer, answerIndex };
   game.rounds.push(round);
   await game.save();
 };
@@ -89,4 +87,16 @@ const endRound = async ({
   await game.save();
 };
 
-module.exports = { connect, startGame, startRound, endRound };
+const endGame = async ({ gameId, winner: { index, score, name } }) => {
+  const game = await Game.findOne({ _id: gameId });
+  const winnerToSave = {
+    index,
+    score,
+    name
+  };
+  game.finished = true;
+  game.winner = winnerToSave;
+  await game.save();
+};
+
+module.exports = { connect, startGame, startRound, endRound, endGame };
