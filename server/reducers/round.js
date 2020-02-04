@@ -30,16 +30,33 @@ module.exports = (state = initialState, action) => {
     }
 
     case SELECT_ROUND_ANSWER: {
-      const { answerIndex, answered } = state;
+      const { answerIndex, answered, pictures } = state;
+      const { playerIndex, selectedAnswer } = action.payload;
+      const isCorrectAnswer = answerIndex === selectedAnswer;
 
-      // One cannot select an answer in a finished round
-      if (answered) {
+      // One cannot select an answer in a finished round or if this answer has been previously selected by someone else.
+      if (answered || pictures[selectedAnswer].selected) {
         return state;
       }
 
+      const newPictures = pictures.map((picture, pictureIndex) => {
+        if (pictureIndex === selectedAnswer) {
+          return {
+            ...picture,
+            correct: isCorrectAnswer,
+            selected: true,
+            selectedBy: playerIndex
+          };
+        }
+        return {
+          ...picture
+        };
+      });
+
       return {
         ...state,
-        answered: answerIndex === action.payload
+        answered: isCorrectAnswer,
+        pictures: newPictures
       };
     }
 

@@ -198,7 +198,12 @@ const startRound = () => async (dispatch, getState) => {
   dispatch({
     type: START_GAME_ROUND,
     payload: {
-      pictures,
+      pictures: pictures.map(picture => ({
+        picture,
+        selected: false,
+        selectedBy: -1,
+        correct: null
+      })),
       answerIndex
     }
   });
@@ -243,9 +248,15 @@ const moveAnswerDown = playerIndex => ({
 });
 
 const selectAnswer = playerIndex => async (dispatch, getState) => {
+  const {
+    players: { list }
+  } = getState();
+
+  const { selectedAnswer } = list[playerIndex];
+
   dispatch({
     type: SELECT_ROUND_ANSWER,
-    payload: playerIndex
+    payload: { playerIndex, selectedAnswer }
   });
 
   // If the answer was correct, recalculate the points and start a new round
