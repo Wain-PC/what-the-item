@@ -8,7 +8,7 @@ const {
 
 const initialState = {
   pictures: [],
-  answer: "",
+  answerIndex: 0,
   answered: false
 };
 
@@ -20,18 +20,17 @@ module.exports = (state = initialState, action) => {
       };
     }
     case START_GAME_ROUND: {
-      const { pictures, answer } = action.payload;
+      const { pictures, answerIndex } = action.payload;
       return {
         ...state,
         pictures,
-        answer,
+        answerIndex,
         answered: false
       };
     }
 
     case SELECT_ROUND_ANSWER: {
-      const answerIndex = action.payload;
-      const { pictures, answer, answered } = state;
+      const { answerIndex, answered } = state;
 
       // One cannot select an answer in a finished round
       if (answered) {
@@ -40,7 +39,7 @@ module.exports = (state = initialState, action) => {
 
       return {
         ...state,
-        answered: pictures[answerIndex] === answer
+        answered: answerIndex === action.payload
       };
     }
 

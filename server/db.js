@@ -17,7 +17,6 @@ const playerSchema = new Schema({
 const roundSchema = new Schema({
   index: Number,
   pictures: [String],
-  answer: String,
   answered: { type: Boolean, default: false },
   answerIndex: Number,
   answeredBy: { type: Number, default: -1 },
@@ -65,9 +64,9 @@ const startGame = async ({ players }) => {
   return _id.toString();
 };
 
-const startRound = async ({ gameId, index, pictures, answer, answerIndex }) => {
+const startRound = async ({ gameId, index, pictures, answerIndex }) => {
   const game = await Game.findOne({ _id: gameId });
-  const round = { index, pictures, answer, answerIndex };
+  const round = { index, pictures, answerIndex };
   game.rounds.push(round);
   await game.save();
 };

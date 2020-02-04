@@ -193,14 +193,13 @@ const startRound = () => async (dispatch, getState) => {
   }
 
   const pictures = await getPictures();
-  const answerIndex = 0;
-  const answer = pictures[answerIndex];
+  const answerIndex = Math.floor(Math.random() * pictures.length);
 
   dispatch({
     type: START_GAME_ROUND,
     payload: {
       pictures,
-      answer: pictures[0]
+      answerIndex
     }
   });
 
@@ -228,7 +227,6 @@ const startRound = () => async (dispatch, getState) => {
     gameId,
     index,
     pictures,
-    answer,
     answerIndex,
     timeToSolve: GAME_SCREEN_TIMER
   });
@@ -262,13 +260,12 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
   const {
     players: { list },
     timer: { timer: timeLeft },
-    round: { pictures, answer, answered: roundFinished },
+    round: { answerIndex, answered: roundFinished },
     game: { id: gameId }
   } = getState();
 
   const winner = list.find(
-    ({ answered, selectedAnswer }) =>
-      answered && pictures[selectedAnswer] === answer
+    ({ answered, selectedAnswer }) => answered && selectedAnswer === answerIndex
   );
 
   // No winner in this round, still save the stats.
