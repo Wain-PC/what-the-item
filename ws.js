@@ -1,8 +1,8 @@
 const WebSocket = require("ws");
 const Game = require("./server/game");
 
-module.exports = () => {
-  const wss = new WebSocket.Server({ port: "3334" });
+module.exports = options => {
+  const wss = new WebSocket.Server(options);
 
   wss.on("connection", ws => {
     const game = new Game(ws.send.bind(ws));

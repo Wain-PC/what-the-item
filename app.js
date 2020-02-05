@@ -1,36 +1,25 @@
+const http = require("http");
 const express = require("express");
 const path = require("path");
-const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const proxy = require("http-proxy-middleware");
 const ws = require("./ws");
 const db = require("./server/db");
+const config = require("./server/config");
 
-const indexRouter = require("./routes/index");
-const adminRouter = require("./routes/admin");
+/**
+ * Listen on provided port, on all network interfaces.
+ */
 
 const app = express();
+const server = http.createServer(app);
+server.listen(config.system.port);
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter);
-app.use("/admin", adminRouter);
-
 db.connect();
-ws();
-
-app.use(
-  "/ws",
-  proxy({
-    target: {
-      port: 3334
-    },
-    ws: true
-  })
-);
+ws({ server, path: "/ws" });
 
 module.exports = app;

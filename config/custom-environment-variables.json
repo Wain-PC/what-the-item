@@ -1,5 +1,8 @@
 {
   "game": {
+    "system": {
+      "port": "PORT"
+    },
     "db": {
       "mongoConnectionLine": "MONGODB_URI"
     }

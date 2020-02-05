@@ -6,8 +6,8 @@
     "node": "12.x"
   },
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "node-dev --no-notify ./bin/www",
+    "start": "node app.js",
+    "dev": "node-dev --no-notify app.js",
     "build": "cd game && yarn && yarn build && cp -rf build/* ../public"
   },
   "dependencies": {
@@ -15,7 +15,6 @@
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
-    "http-proxy-middleware": "^0.20.0",
     "mongoose": "^5.8.11",
     "morgan": "~1.9.1",
     "redux": "^4.0.5",

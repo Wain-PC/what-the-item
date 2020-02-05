@@ -1,5 +1,8 @@
 {
   "game": {
+    "system": {
+      "port": 3333
+    },
     "db": {
       "mongoConnectionLine": "mongodb://localhost/db"
     },
