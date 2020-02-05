@@ -23,6 +23,14 @@ app.use("/admin", adminRouter);
 db.connect();
 ws();
 
-app.use("/ws", proxy({ target: "http://localhost:3334", ws: true }));
+app.use(
+  "/ws",
+  proxy({
+    target: {
+      port: 3334
+    },
+    ws: true
+  })
+);
 
 module.exports = app;
