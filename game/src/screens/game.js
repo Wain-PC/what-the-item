@@ -1,11 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+import Message from "../components/message";
 
 const Game = props => {
   const {
     timer: { timer },
     round: { pictures, answerIndex },
-    players: { list }
+    players: { list },
+    game: { message }
   } = props;
 
   const options = pictures.map(({ picture }, index) => {
@@ -44,6 +46,7 @@ const Game = props => {
         Time left:
         <strong>{timer}</strong>
       </div>
+      <Message message={message} />
       <br />
       {players}
       <br />

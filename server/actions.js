@@ -21,13 +21,15 @@ const {
   SET_WINNER_LETTER_INDEX_DECREASE,
   SET_WINNER_LETTER_INCREASE,
   SET_WINNER_LETTER_DECREASE,
-  SET_WINNER_NICKNAME
+  SET_WINNER_NICKNAME,
+  SET_GAME_MESSAGE
 } = require("./constants/actions");
 
 const {
   CONTROLS_SCREEN_TIMER,
   GAME_SCREEN_TIMER,
-  POINTS_PER_ROUND
+  POINTS_PER_ROUND,
+  ROUND_END_TIMER
 } = require("./constants/gameplay");
 
 const db = require("./db");
@@ -113,28 +115,29 @@ const runTimer = (initialTimerValue, onTimerFinish = () => {}) => (
   dispatch,
   getState
 ) => {
-  let timer = initialTimerValue || getState().timer.timer; // initial timer
+  return new Promise(resolve => {
+    let timer = initialTimerValue || getState().timer.timer; // initial timer
 
-  // Stop any timer from previous screen/rounds
-  dispatch(stopTimer());
-  dispatch(setTimer(timer));
+    // Stop any timer from previous screen/rounds
+    dispatch(stopTimer());
+    dispatch(setTimer(timer));
 
-  const interval = setInterval(() => {
-    timer -= 1;
-    if (timer >= 1) {
-      dispatch(setTimer(timer));
-    } else {
-      dispatch(stopTimer());
-      onTimerFinish();
-    }
-  }, 1000);
+    const interval = setInterval(() => {
+      timer -= 1;
+      if (timer >= 1) {
+        dispatch(setTimer(timer));
+      } else {
+        dispatch(stopTimer());
+        onTimerFinish();
+        resolve();
+      }
+    }, 1000);
 
-  dispatch({
-    type: SET_TIMER_INTERVAL_ID,
-    payload: interval
+    dispatch({
+      type: SET_TIMER_INTERVAL_ID,
+      payload: interval
+    });
   });
-
-  return interval;
 };
 
 const setWinner = () => async (dispatch, getState) => {
@@ -192,12 +195,15 @@ const setScreenGameEnd = () => async (dispatch, getState) => {
 const startRound = () => async (dispatch, getState) => {
   // This is the data for the the previous round.
   const {
-    game: { round }
+    game: { round },
+    round: { answered }
   } = getState();
 
   // Recalculate points after each round (except the first one, obviously)
   if (round !== 0) {
     await dispatch(calculateRoundPoints());
+    // Show correct/incorrect answer message for N seconds
+    await dispatch(setMessage({ answered }, ROUND_END_TIMER));
   }
 
   const pictures = (await getPictures()).map(picture => ({
@@ -228,7 +234,7 @@ const startRound = () => async (dispatch, getState) => {
   dispatch(
     runTimer(GAME_SCREEN_TIMER, () => {
       // If the timer is here, no one has answered correctly.
-      // Show failure message for 3 seconds, then switch to the next round.
+      // Start the next round
       dispatch(startRound());
     })
   );
@@ -371,10 +377,29 @@ const setNickName = () => async (dispatch, getState) => {
 
   const nickName = winner.nickName.replace(/_/g, " ").trim();
 
+  if (!nickName) {
+    return;
+  }
+
   await db.saveNickName({ gameId, nickName });
 
   await dispatch(setScreenTop());
 };
+
+const setMessage = (message, seconds = 0) => async dispatch => {
+  dispatch({
+    type: SET_GAME_MESSAGE,
+    payload: message
+  });
+  if (seconds > 0) {
+    await dispatch(runTimer(seconds));
+    dispatch(clearMessage());
+  }
+};
+
+const clearMessage = () => ({
+  type: SET_GAME_MESSAGE
+});
 
 module.exports = {
   setScreenTop,
@@ -396,5 +421,6 @@ module.exports = {
   setNickNameLetterIncrease,
   setNickNameLetterDecrease,
   setWinner,
-  setNickName
+  setNickName,
+  setMessage
 };

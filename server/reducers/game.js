@@ -1,7 +1,8 @@
 const {
   SET_SCREEN_GAME,
   START_GAME_ROUND,
-  SET_SCREEN_TOP
+  SET_SCREEN_TOP,
+  SET_GAME_MESSAGE
 } = require("../constants/actions");
 
 const { ROUNDS_IN_GAME } = require("../constants/gameplay");
@@ -9,7 +10,8 @@ const { ROUNDS_IN_GAME } = require("../constants/gameplay");
 const initialState = {
   id: "",
   round: 0,
-  finished: false
+  finished: false,
+  message: ""
 };
 
 module.exports = (state = initialState, action) => {
@@ -21,6 +23,7 @@ module.exports = (state = initialState, action) => {
         id
       };
     }
+
     case START_GAME_ROUND: {
       const { round } = state;
 
@@ -37,8 +40,16 @@ module.exports = (state = initialState, action) => {
         round: round + 1
       };
     }
+
     case SET_SCREEN_TOP: {
       return initialState;
+    }
+
+    case SET_GAME_MESSAGE: {
+      return {
+        ...state,
+        message: action.payload || initialState.message
+      };
     }
     default: {
       return state;
