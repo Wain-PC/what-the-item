@@ -84,6 +84,9 @@ Game.propTypes = {
         selectedAnswer: PropTypes.number.isRequired
       })
     ).isRequired
+  }).isRequired,
+  game: PropTypes.shape({
+    message: PropTypes.object.isRequired
   }).isRequired
 };
 
