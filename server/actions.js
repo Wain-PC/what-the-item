@@ -247,15 +247,34 @@ const startRound = () => async (dispatch, getState) => {
   });
 };
 
-const moveAnswerUp = playerIndex => ({
-  type: MOVE_ROUND_ANSWER_UP,
-  payload: { playerIndex }
-});
+const moveAnswerUp = playerIndex => (dispatch, getState) => {
+  const {
+    players: { list }
+  } = getState();
 
-const moveAnswerDown = playerIndex => ({
-  type: MOVE_ROUND_ANSWER_DOWN,
-  payload: { playerIndex }
-});
+  if (list[playerIndex].answered) {
+    return;
+  }
+
+  dispatch({
+    type: MOVE_ROUND_ANSWER_UP,
+    payload: { playerIndex }
+  });
+};
+const moveAnswerDown = playerIndex => (dispatch, getState) => {
+  const {
+    players: { list }
+  } = getState();
+
+  if (list[playerIndex].answered) {
+    return;
+  }
+
+  dispatch({
+    type: MOVE_ROUND_ANSWER_DOWN,
+    payload: { playerIndex }
+  });
+};
 
 const selectAnswer = playerIndex => async (dispatch, getState) => {
   const {
