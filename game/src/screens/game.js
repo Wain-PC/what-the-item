@@ -10,26 +10,26 @@ const Game = props => {
     game: { message }
   } = props;
 
-  const options = pictures.map(({ picture }, index) => {
+  const playerColors = ["blue", "pink", "brown", "white"];
+
+  const options = pictures.map(({ picture, correct }, pictureIndex) => {
     const text = <span>{picture}</span>;
-    const selectionLeft =
-      list[0] && list[0].selectedAnswer === index ? (
-        <span>
-          <strong>→</strong>
-        </span>
-      ) : null;
-    const selectionRight =
-      list[1] && list[1].selectedAnswer === index ? (
-        <span>
-          <strong>←</strong>
-        </span>
-      ) : null;
+    const style = {};
+    list.forEach(({ index: playerIndex, selectedAnswer }) => {
+      if (selectedAnswer === pictureIndex) {
+        style.border = `5px solid ${playerColors[playerIndex]}`;
+      }
+    });
+
+    if (correct === true) {
+      style.backgroundColor = "green";
+    } else if (correct === false) {
+      style.backgroundColor = "red";
+    }
 
     return (
-      <div key={picture}>
-        {selectionLeft}
+      <div key={picture} style={style}>
         {text}
-        {selectionRight}
       </div>
     );
   });
