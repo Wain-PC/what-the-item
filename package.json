@@ -11,6 +11,7 @@
     "build": "cd game && yarn && yarn build && cp -rf build/* ../public"
   },
   "dependencies": {
+    "config": "^3.2.5",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",

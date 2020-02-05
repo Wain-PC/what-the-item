@@ -1,29 +1,17 @@
-const CONTROLS_SCREEN_TIMER = 1;
-const GAME_SCREEN_TIMER = 10;
-const ROUND_END_TIMER = 3;
-const INITIAL_PLAYERS = 1;
-const MIN_PLAYERS = 1;
-const MAX_PLAYERS = 2;
-const ROUNDS_IN_GAME = 5;
-const ANSWERS_IN_ROUND = 4;
-const POINTS_PER_ROUND = 10;
-const WINNER_NICKNAME_MAX_LETTERS = 10;
-const NICKNAME_LETTER_TABLE = "0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-const TOP_PLAYERS = 5;
-const PLAYERS_COLORS = ["aquamarine", "coral", "brown", "teal"];
+const config = require("../config");
 
 module.exports = {
-  INITIAL_PLAYERS,
-  MIN_PLAYERS,
-  MAX_PLAYERS,
-  CONTROLS_SCREEN_TIMER,
-  GAME_SCREEN_TIMER,
-  ROUNDS_IN_GAME,
-  ANSWERS_IN_ROUND,
-  POINTS_PER_ROUND,
-  WINNER_NICKNAME_MAX_LETTERS,
-  NICKNAME_LETTER_TABLE,
-  TOP_PLAYERS,
-  ROUND_END_TIMER,
-  PLAYERS_COLORS
+  INITIAL_PLAYERS: config.gameplay.defaultPlayers,
+  MIN_PLAYERS: config.gameplay.minPlayers,
+  MAX_PLAYERS: config.gameplay.maxPlayers,
+  CONTROLS_SCREEN_TIMER: config.timers.controls,
+  GAME_SCREEN_TIMER: config.timers.round,
+  ROUND_END_TIMER: config.timers.roundEnd,
+  ROUNDS_IN_GAME: config.gameplay.roundsInGame,
+  ANSWERS_IN_ROUND: config.gameplay.answersInRound,
+  POINTS_PER_ROUND: config.gameplay.pointsMultiplier,
+  WINNER_NICKNAME_MAX_LETTERS: config.gameplay.winnerNickNameMaxLetters,
+  NICKNAME_LETTER_TABLE: config.gameplay.winnerNickNameLetterTable,
+  TOP_PLAYERS: config.gameplay.topPlayers,
+  PLAYERS_COLORS: config.gameplay.playersColors
 };
