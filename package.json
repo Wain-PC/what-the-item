@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "node-dev --no-notify ./bin/www"
+    "dev": "node-dev --no-notify ./bin/www",
+    "build": "cd game && yarn && cp -rf build/* ../public"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
