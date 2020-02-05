@@ -20,7 +20,8 @@ const {
   SET_WINNER_LETTER_INDEX_INCREASE,
   SET_WINNER_LETTER_INDEX_DECREASE,
   SET_WINNER_LETTER_INCREASE,
-  SET_WINNER_LETTER_DECREASE
+  SET_WINNER_LETTER_DECREASE,
+  SET_WINNER_NICKNAME
 } = require("./constants/actions");
 
 const {
@@ -175,10 +176,17 @@ const setScreenGameEnd = () => async (dispatch, getState) => {
   } = getState();
   const topPlayers = await db.getTopPlayersWithCurrent({ gameId });
 
-  dispatch({
-    type: SET_SCREEN_GAME_END,
-    payload: topPlayers
-  });
+  // If the player is in top N players,
+  const isInTop = topPlayers.some(player => player.gameId === gameId);
+
+  if (isInTop) {
+    dispatch({
+      type: SET_SCREEN_GAME_END,
+      payload: topPlayers
+    });
+  } else {
+    dispatch(setScreenTop());
+  }
 };
 
 const startRound = () => async (dispatch, getState) => {
@@ -332,6 +340,23 @@ const setNickNameLetterDecrease = () => ({
   type: SET_WINNER_LETTER_DECREASE
 });
 
+const setNickName = () => async (dispatch, getState) => {
+  dispatch({
+    type: SET_WINNER_NICKNAME
+  });
+
+  const {
+    winner,
+    game: { id: gameId }
+  } = getState();
+
+  const nickName = winner.nickName.replace(/_/g, " ").trim();
+
+  await db.saveNickName({ gameId, nickName });
+
+  await dispatch(setScreenTop());
+};
+
 module.exports = {
   setScreenTop,
   setScreenReady,
@@ -351,5 +376,6 @@ module.exports = {
   setNickNameLetterIndexDecrease,
   setNickNameLetterIncrease,
   setNickNameLetterDecrease,
-  setWinner
+  setWinner,
+  setNickName
 };

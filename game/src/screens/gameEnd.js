@@ -1,21 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import TopTable from "../components/topTable";
-
-const renderNickName = (nickName, activeLetter) => {
-  const word = nickName.split("").map((letter, index) => {
-    if (index === activeLetter) {
-      return (
-        <span key={letter} style={{ textDecoration: "underline" }}>
-          <strong>{letter}</strong>
-        </span>
-      );
-    }
-    return <span key={letter}>{letter}</span>;
-  });
-
-  return <div>{word}</div>;
-};
+import NickName from "../components/nickName";
 
 const GameEnd = props => {
   const {
@@ -25,12 +11,15 @@ const GameEnd = props => {
 
   return (
     <>
-      <div>Игра окончена!</div>
+      <div>Поздравляем! Вы попали в топ игроков:</div>
       <TopTable players={players} />
       <br />
-      <div>Введите никнейм: {renderNickName(nickName, activeLetter)}</div>
       <div>
-        <strong>Нажмите X, чтобы закончить</strong>
+        Введите никнейм:
+        <NickName activeLetter={activeLetter} nickName={nickName} />
+      </div>
+      <div>
+        <strong>Нажмите X или Enter, чтобы сохранить</strong>
       </div>
     </>
   );

@@ -139,6 +139,12 @@ const getTopPlayersWithCurrent = async ({ gameId }) => {
   });
 };
 
+const saveNickName = async ({ gameId, nickName }) => {
+  const game = await Game.findOne({ _id: gameId });
+  game.winner.name = nickName;
+  await game.save();
+};
+
 module.exports = {
   connect,
   startGame,
@@ -146,5 +152,6 @@ module.exports = {
   endRound,
   endGame,
   getTopPlayers,
-  getTopPlayersWithCurrent
+  getTopPlayersWithCurrent,
+  saveNickName
 };

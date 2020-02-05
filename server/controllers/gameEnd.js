@@ -5,7 +5,7 @@ const controller = ({ actions, message, state }) => {
   if (message.type === "button" && message.gamepad === index) {
     switch (message.button) {
       case "ok": {
-        actions.setScreenTop();
+        actions.setNickName();
         break;
       }
       case "left": {
