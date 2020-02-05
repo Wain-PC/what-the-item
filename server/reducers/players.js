@@ -142,6 +142,11 @@ module.exports = (state = initialState, action) => {
 
     case SELECT_ROUND_ANSWER: {
       const { playerIndex } = action.payload;
+
+      if (state.list[playerIndex].answered) {
+        return state;
+      }
+
       const list = getNewList(state, playerIndex);
       if (!list) {
         return state;

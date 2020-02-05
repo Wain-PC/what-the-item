@@ -14,9 +14,15 @@ const playerSchema = new Schema({
   name: { type: String, default: "Player" }
 });
 
+const pictureSchema = new Schema({
+  picture: String,
+  selected: Boolean,
+  selectedBy: { type: Number, default: -1 }
+});
+
 const roundSchema = new Schema({
   index: Number,
-  pictures: [String],
+  pictures: [pictureSchema],
   answered: { type: Boolean, default: false },
   answerIndex: Number,
   answeredBy: { type: Number, default: -1 },
@@ -76,7 +82,8 @@ const endRound = async ({
   answered,
   answeredBy,
   timeLeft,
-  pointsReceived
+  pointsReceived,
+  pictures
 }) => {
   const game = await Game.findOne({ _id: gameId });
   const lastRoundIndex = game.rounds.length - 1;
@@ -85,6 +92,7 @@ const endRound = async ({
   round.answeredBy = answeredBy;
   round.timeLeft = timeLeft;
   round.pointsReceived = pointsReceived;
+  round.pictures = pictures;
 
   if (game.players[answeredBy]) {
     game.players[answeredBy].score += pointsReceived;

@@ -192,18 +192,19 @@ const startRound = () => async (dispatch, getState) => {
     await dispatch(calculateRoundPoints());
   }
 
-  const pictures = await getPictures();
+  const pictures = (await getPictures()).map(picture => ({
+    picture,
+    selected: false,
+    selectedBy: -1,
+    correct: null
+  }));
+
   const answerIndex = Math.floor(Math.random() * pictures.length);
 
   dispatch({
     type: START_GAME_ROUND,
     payload: {
-      pictures: pictures.map(picture => ({
-        picture,
-        selected: false,
-        selectedBy: -1,
-        correct: null
-      })),
+      pictures,
       answerIndex
     }
   });
@@ -259,9 +260,14 @@ const selectAnswer = playerIndex => async (dispatch, getState) => {
     payload: { playerIndex, selectedAnswer }
   });
 
-  // If the answer was correct, recalculate the points and start a new round
+  // If the answer was correct, recalculate the points and start a new round.
+  // Do the same thing if every player has answered at this point.
+
+  const everyPlayerHasAnswered = getState().players.list.every(
+    player => player.answered
+  );
   const { answered } = getState().round;
-  if (answered === true) {
+  if (answered || everyPlayerHasAnswered) {
     await dispatch(startRound());
   }
 };
@@ -271,7 +277,7 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
   const {
     players: { list },
     timer: { timer: timeLeft },
-    round: { answerIndex, answered: roundFinished },
+    round: { answerIndex, answered: roundAnswered, pictures },
     game: { id: gameId }
   } = getState();
 
@@ -285,7 +291,8 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
       gameId,
       answered: false,
       timeLeft: 0,
-      pointsReceived: 0
+      pointsReceived: 0,
+      pictures
     });
     return;
   }
@@ -296,10 +303,11 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
   // Winner found, save round stats to DB.
   await db.endRound({
     gameId,
-    answered: roundFinished,
+    answered: roundAnswered,
     answeredBy: winner.index,
     timeLeft,
-    pointsReceived: points
+    pointsReceived: points,
+    pictures
   });
 
   dispatch({
