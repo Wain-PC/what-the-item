@@ -1,13 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+const PLAYERS_COLORS = ["aquamarine", "coral", "brown", "teal"];
+
 const Ready = props => {
   const {
     players: { list }
   } = props;
 
   const playersDivs = list.map(({ name, ready, index }) => (
-    <div key={index}>
+    <div key={index} style={{ color: PLAYERS_COLORS[index] }}>
       {name}: <strong>{ready ? "Готов" : "Не готов"}</strong>
     </div>
   ));

@@ -2,6 +2,8 @@ import React from "react";
 import PropTypes from "prop-types";
 import Message from "../components/message";
 
+const PLAYERS_COLORS = ["aquamarine", "coral", "brown", "teal"];
+
 const Game = props => {
   const {
     timer: { timer },
@@ -10,14 +12,12 @@ const Game = props => {
     game: { message }
   } = props;
 
-  const playerColors = ["blue", "pink", "brown", "white"];
-
   const options = pictures.map(({ picture, correct }, pictureIndex) => {
     const text = <span>{picture}</span>;
     const style = {};
     list.forEach(({ index: playerIndex, selectedAnswer }) => {
       if (selectedAnswer === pictureIndex) {
-        style.border = `5px solid ${playerColors[playerIndex]}`;
+        style.border = `5px solid ${PLAYERS_COLORS[playerIndex]}`;
       }
     });
 
@@ -34,8 +34,8 @@ const Game = props => {
     );
   });
 
-  const players = list.map(({ name, score }) => (
-    <div key={name}>
+  const players = list.map(({ index, name, score }) => (
+    <div key={name} style={{ color: PLAYERS_COLORS[index] }}>
       <strong>{name}:</strong> {score} очков
     </div>
   ));
