@@ -1,12 +1,15 @@
 export default class Socket {
   constructor() {
     this.socket = null;
-    this.address = "ws://localhost:3334";
+    this.address =
+      window.location.hostname === "localhost"
+        ? "ws://localhost:3334"
+        : `wss://${window.location.host}/ws`;
     this.connect();
   }
 
   connect(reconnect = false) {
-    this.socket = new WebSocket("ws://localhost:3334");
+    this.socket = new WebSocket(this.address);
     this.socket.onopen = this._onOpen;
     this.socket.onclose = this._onClose;
     this.socket.onerror = this._onError;
