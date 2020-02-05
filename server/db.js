@@ -43,7 +43,7 @@ const Game = mongoose.model("Game", gameSchema);
 
 const connect = () => {
   return new Promise((resolve, reject) => {
-    mongoose.connect(MONGODB_CONNECTION_STRING);
+    mongoose.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true });
     const db = mongoose.connection;
     db.on("error", reject);
     db.once("open", () => {
