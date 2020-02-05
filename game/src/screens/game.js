@@ -4,11 +4,11 @@ import PropTypes from "prop-types";
 const Game = props => {
   const {
     timer: { timer },
-    round: { pictures, answer },
+    round: { pictures, answerIndex },
     players: { list }
   } = props;
 
-  const options = pictures.map((picture, index) => {
+  const options = pictures.map(({ picture }, index) => {
     const text = <span>{picture}</span>;
     const selectionLeft =
       list[0] && list[0].selectedAnswer === index ? (
@@ -47,11 +47,14 @@ const Game = props => {
       <br />
       {players}
       <br />
-      <img
-        src={`/pictures/${answer}.jpg`}
-        alt="Что здесь изображено?"
-        style={{ maxHeight: "400px" }}
-      />
+      {pictures[answerIndex] ? (
+        <img
+          src={`/pictures/${pictures[answerIndex].picture}.jpg`}
+          alt="Что здесь изображено?"
+          style={{ maxHeight: "400px" }}
+        />
+      ) : null}
+
       {options}
     </>
   );
@@ -62,8 +65,15 @@ Game.propTypes = {
     timer: PropTypes.number.isRequired
   }).isRequired,
   round: PropTypes.shape({
-    pictures: PropTypes.arrayOf(PropTypes.string).isRequired,
-    answer: PropTypes.string.isRequired
+    pictures: PropTypes.arrayOf(
+      PropTypes.shape({
+        picture: PropTypes.string.isRequired,
+        selected: PropTypes.bool.isRequired,
+        selectedBy: PropTypes.number.isRequired,
+        correct: PropTypes.oneOf([true, false, null])
+      })
+    ).isRequired,
+    answerIndex: PropTypes.number.isRequired
   }).isRequired,
   players: PropTypes.shape({
     list: PropTypes.arrayOf(

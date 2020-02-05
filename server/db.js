@@ -108,6 +108,7 @@ const endGame = async ({ gameId, winner: { index, score, name } }) => {
 const getTopPlayers = async () => {
   const documents = await Game.find()
     .select({ "winner.name": true, "winner.score": true })
+    .where({ finished: true })
     .sort({ "winner.score": -1, _id: 1 })
     .limit(TOP_PLAYERS)
     .exec();

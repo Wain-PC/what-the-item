@@ -4,29 +4,31 @@ import PropTypes from "prop-types";
 const TopTable = props => {
   const { players } = props;
 
-  const tableRows = players.map(({ name, score, currentGame }, index) => {
-    const nameStr = currentGame ? (
-      <td>
-        <strong>{name}</strong>
-      </td>
-    ) : (
-      <td>{name}</td>
-    );
-    const scoreStr = currentGame ? (
-      <td>
-        <strong>{score}</strong>
-      </td>
-    ) : (
-      <td>{score}</td>
-    );
-    return (
-      // eslint-disable-next-line react/no-array-index-key
-      <tr key={index + name + score}>
-        {nameStr}
-        {scoreStr}
-      </tr>
-    );
-  });
+  const tableRows = players.map(
+    ({ name, score, currentGame = false }, index) => {
+      const nameStr = currentGame ? (
+        <td>
+          <strong>{name}</strong>
+        </td>
+      ) : (
+        <td>{name}</td>
+      );
+      const scoreStr = currentGame ? (
+        <td>
+          <strong>{score}</strong>
+        </td>
+      ) : (
+        <td>{score}</td>
+      );
+      return (
+        // eslint-disable-next-line react/no-array-index-key
+        <tr key={index + name + score}>
+          {nameStr}
+          {scoreStr}
+        </tr>
+      );
+    }
+  );
 
   return (
     <div>
@@ -49,7 +51,7 @@ TopTable.propTypes = {
     PropTypes.shape({
       name: PropTypes.string.isRequired,
       score: PropTypes.number.isRequired,
-      currentGame: PropTypes.bool.isRequired
+      currentGame: PropTypes.bool
     })
   ).isRequired
 };
