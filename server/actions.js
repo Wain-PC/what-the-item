@@ -287,7 +287,11 @@ const selectAnswer = playerIndex => async (dispatch, getState) => {
     players: { list }
   } = getState();
 
-  const { selectedAnswer } = list[playerIndex];
+  const { selectedAnswer, answered: playerAnswered } = list[playerIndex];
+
+  if (playerAnswered) {
+    return;
+  }
 
   dispatch({
     type: SELECT_ROUND_ANSWER,
