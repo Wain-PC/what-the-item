@@ -184,7 +184,7 @@ const setScreenGameEnd = () => async (dispatch, getState) => {
 const startRound = () => async (dispatch, getState) => {
   // This is the data for the the previous round.
   const {
-    game: { round, finished }
+    game: { round }
   } = getState();
 
   // Recalculate points after each round (except the first one, obviously)
@@ -210,7 +210,7 @@ const startRound = () => async (dispatch, getState) => {
   });
 
   // If we've just had a final round, switch to 'final' screen
-  if (finished) {
+  if (getState().game.finished) {
     await dispatch(stopTimer());
     await dispatch(setScreenWinner());
     return;
@@ -229,6 +229,7 @@ const startRound = () => async (dispatch, getState) => {
   const {
     game: { id: gameId, round: index }
   } = getState();
+
   await db.startRound({
     gameId,
     index,

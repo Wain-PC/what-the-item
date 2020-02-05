@@ -86,8 +86,7 @@ const endRound = async ({
   pictures
 }) => {
   const game = await Game.findOne({ _id: gameId });
-  const lastRoundIndex = game.rounds.length - 1;
-  const round = game.rounds[lastRoundIndex];
+  const [round] = game.rounds.slice(-1);
   round.answered = answered;
   round.answeredBy = answeredBy;
   round.timeLeft = timeLeft;
