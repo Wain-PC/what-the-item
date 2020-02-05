@@ -2,10 +2,13 @@
   "name": "what-the-item",
   "version": "0.0.1",
   "private": true,
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "start": "node ./bin/www",
     "dev": "node-dev --no-notify ./bin/www",
-    "build": "cd game && yarn && cp -rf build/* ../public"
+    "build": "cd game && yarn && yarn build && cp -rf build/* ../public"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
