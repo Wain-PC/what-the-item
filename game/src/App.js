@@ -7,6 +7,7 @@ import KeyboardController from "./keyboardController";
 import Player from "./components/player";
 import * as screens from "./screens";
 import logo from "./avito.svg";
+import Controls from "./components/controls";
 
 export default class App extends PureComponent {
   constructor(props) {
@@ -59,7 +60,10 @@ export default class App extends PureComponent {
 
   render() {
     // eslint-disable-next-line react/destructuring-assignment
-    const { players: { list = [] } = {} } = this.state;
+    const {
+      players: { list = [] } = {},
+      screen: { id }
+    } = this.state;
 
     return (
       <Grommet theme={grommet} style={{ height: "100%" }}>
@@ -69,12 +73,12 @@ export default class App extends PureComponent {
             align="stretch"
             alignSelf="stretch"
             columns={["medium", "auto", "medium"]}
-            rows={["xxsmall", "flex", "xxsmall"]}
+            rows={["xxsmall", "flex", "small"]}
             gap="small"
             areas={[
               ["header", "header", "header"],
               ["left", "main", "right"],
-              ["footer", "footer", "footer"]
+              ["left", "footer", "right"]
             ]}
           >
             <Box gridArea="header" background="light-3">
@@ -106,10 +110,13 @@ export default class App extends PureComponent {
               <Player player={list[1] || {}} />
             </Box>
             <Box
+              align="center"
               gridArea="footer"
               background="light-3"
               margin={{ horizontal: "medium" }}
-            />
+            >
+              <Controls screen={id} />
+            </Box>
           </Grid>
         </Box>
       </Grommet>

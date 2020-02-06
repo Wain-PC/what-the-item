@@ -7,9 +7,9 @@
       "mongoConnectionLine": "mongodb://localhost/db"
     },
     "timers": {
-      "controls": 3,
-      "round": 10,
-      "roundEnd": 2
+      "controls": 1000,
+      "round": 1000,
+      "roundEnd": 1000
     },
     "gameplay": {
       "defaultPlayers": 1,
