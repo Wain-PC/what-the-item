@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Box, Heading } from "grommet";
 
 const Winner = props => {
   const {
@@ -7,17 +8,16 @@ const Winner = props => {
   } = props;
 
   return (
-    <>
-      <h3>Победитель</h3>
-      <div>
-        <strong>{name}</strong>
-      </div>
-      <br />
-      <h3>Набрано очков</h3>
-      <div>
-        <strong>{score}</strong>
-      </div>
-    </>
+    <Box fill align="center">
+      <Heading level={1}>Победитель</Heading>
+      <Heading level={2} color="status-ok">
+        {name}
+      </Heading>
+      <Heading level={1}>Набрано очков</Heading>
+      <Heading level={2} color="status-ok">
+        {score}
+      </Heading>
+    </Box>
   );
 };
 
