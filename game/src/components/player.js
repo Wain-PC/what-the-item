@@ -2,21 +2,19 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Box, Text, Heading } from "grommet";
 
-const Player = ({ player: { name, score, ready, gameStarted } = {} }) => {
+const Player = ({ player: { name, score, ready } = {}, gameStarted }) => {
   if (!name) {
     return null;
   }
 
   const readyText = gameStarted ? null : (
-    <Heading
-      level={3}
-      size="medium"
-      color={ready ? "status-ok" : "status-error"}
-    >
+    <Heading level={2} color={ready ? "status-ok" : "status-error"}>
       {ready ? "Готов" : "Не готов"}
     </Heading>
   );
-  const scoreText = gameStarted ? <Text>{score} очков</Text> : null;
+  const scoreText = gameStarted ? (
+    <Heading level={2}>{score} очков</Heading>
+  ) : null;
 
   return (
     <Box fill pad={{ horizontal: "medium" }}>
@@ -33,9 +31,9 @@ Player.propTypes = {
   player: PropTypes.shape({
     name: PropTypes.string.isRequired,
     score: PropTypes.number.isRequired,
-    ready: PropTypes.bool.isRequired,
-    gameStarted: PropTypes.bool.isRequired
-  }).isRequired
+    ready: PropTypes.bool.isRequired
+  }).isRequired,
+  gameStarted: PropTypes.bool.isRequired
 };
 
 export default Player;

@@ -10,6 +10,7 @@ const { ROUNDS_IN_GAME } = require("../constants/gameplay");
 const initialState = {
   id: "",
   round: 0,
+  rounds: ROUNDS_IN_GAME,
   finished: false,
   message: "",
   pictures: []
@@ -27,10 +28,10 @@ module.exports = (state = initialState, action) => {
     }
 
     case START_GAME_ROUND: {
-      const { round } = state;
+      const { round, rounds } = state;
 
       // Current round was the last one
-      if (round === ROUNDS_IN_GAME) {
+      if (round === rounds) {
         return {
           ...state,
           finished: true

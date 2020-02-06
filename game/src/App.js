@@ -15,6 +15,9 @@ export default class App extends PureComponent {
     super(props);
 
     this.state = {
+      game: {
+        round: 0
+      },
       screen: {
         id: null
       },
@@ -68,6 +71,7 @@ export default class App extends PureComponent {
   render() {
     // eslint-disable-next-line react/destructuring-assignment
     const {
+      game: { round },
       players: { list = [] } = {},
       screen: { id },
       timer: { timer }
@@ -112,7 +116,7 @@ export default class App extends PureComponent {
               background="light-1"
               margin={{ horizontal: "medium" }}
             >
-              <Player player={list[0] || {}} />
+              <Player player={list[0] || {}} gameStarted={round > 0} />
             </Box>
             <Box gridArea="main">{this.renderScreen()}</Box>
             <Box
