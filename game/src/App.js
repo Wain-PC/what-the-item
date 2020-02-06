@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { Grommet, Box, Main, Header, Heading, Image, Grid } from "grommet";
+import { Grommet, Box, Header, Heading, Image, Grid } from "grommet";
 import { grommet } from "grommet/themes";
 import Socket from "./socket";
 import GamepadController from "./gamepadController";
@@ -8,6 +8,7 @@ import Player from "./components/player";
 import * as screens from "./screens";
 import logo from "./avito.svg";
 import Controls from "./components/controls";
+import Timer from "./components/timer";
 
 export default class App extends PureComponent {
   constructor(props) {
@@ -16,6 +17,12 @@ export default class App extends PureComponent {
     this.state = {
       screen: {
         id: null
+      },
+      timer: {
+        timer: -1
+      },
+      players: {
+        list: []
       }
     };
 
@@ -62,7 +69,8 @@ export default class App extends PureComponent {
     // eslint-disable-next-line react/destructuring-assignment
     const {
       players: { list = [] } = {},
-      screen: { id }
+      screen: { id },
+      timer: { timer }
     } = this.state;
 
     return (
@@ -73,15 +81,16 @@ export default class App extends PureComponent {
             align="stretch"
             alignSelf="stretch"
             columns={["medium", "auto", "medium"]}
-            rows={["xxsmall", "flex", "small"]}
-            gap="small"
+            rows={["xxsmall", "xxsmall", "flex", "small"]}
+            gap="none"
             areas={[
-              ["header", "header", "header"],
+              ["header_left", "header_center", "header_right"],
+              [".", ".", "."],
               ["left", "main", "right"],
               ["left", "footer", "right"]
             ]}
           >
-            <Box gridArea="header" background="light-3">
+            <Box gridArea="header_left" background="light-3">
               <Header
                 pad={{ horizontal: "medium", vertical: "xsmall" }}
                 gap="small"
@@ -94,6 +103,10 @@ export default class App extends PureComponent {
                 </Heading>
               </Header>
             </Box>
+            <Box gridArea="header_center" align="center" background="light-3">
+              <Timer timer={timer} />
+            </Box>
+            <Box gridArea="header_right" background="light-3" />
             <Box
               gridArea="left"
               background="light-1"

@@ -1,65 +1,60 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Message from "../components/message";
+import { Box, Image, Heading, List } from "grommet";
 
-const PLAYERS_COLORS = ["aquamarine", "coral", "brown", "teal"];
+const PLAYERS_COLORS = ["accent-3", "accent-4", "accent-1", "accent-2"];
 
 const Game = props => {
   const {
-    timer: { timer },
     round: { pictures, answerIndex },
     players: { list },
-    game: { message }
+    game: { round }
   } = props;
 
-  const options = pictures.map(({ picture, correct }, pictureIndex) => {
-    const text = <span>{picture}</span>;
-    const style = {};
+  const itemProps = {};
+
+  pictures.forEach(({ correct }, pictureIndex) => {
     list.forEach(({ index: playerIndex, selectedAnswer }) => {
       if (selectedAnswer === pictureIndex) {
-        style.border = `5px solid ${PLAYERS_COLORS[playerIndex]}`;
+        itemProps[pictureIndex] = {
+          background: PLAYERS_COLORS[playerIndex]
+        };
       }
     });
 
     if (correct === true) {
-      style.backgroundColor = "green";
+      itemProps[pictureIndex] = {
+        background: "status-ok"
+      };
     } else if (correct === false) {
-      style.backgroundColor = "red";
+      itemProps[pictureIndex] = {
+        background: "status-error"
+      };
     }
-
-    return (
-      <div key={picture} style={style}>
-        {text}
-      </div>
-    );
   });
 
-  const players = list.map(({ index, name, score }) => (
-    <div key={name} style={{ color: PLAYERS_COLORS[index] }}>
-      <strong>{name}:</strong> {score} очков
-    </div>
-  ));
+  const options = (
+    <Box pad="medium" style={{ minHeight: 400 }}>
+      <List
+        data={pictures.map(({ picture }) => picture)}
+        itemProps={itemProps}
+      />
+    </Box>
+  );
+
+  const picture = pictures[answerIndex] ? pictures[answerIndex].picture : null;
+  const image = picture ? (
+    <Box round="small" fill>
+      <Image src={`/pictures/${picture}.jpg`} fill fit="contain" />
+    </Box>
+  ) : null;
 
   return (
-    <>
-      <div>
-        Time left:
-        <strong>{timer}</strong>
-      </div>
-      <Message message={message} />
-      <br />
-      {players}
-      <br />
-      {pictures[answerIndex] ? (
-        <img
-          src={`/pictures/${pictures[answerIndex].picture}.jpg`}
-          alt="Что здесь изображено?"
-          style={{ maxHeight: "400px" }}
-        />
-      ) : null}
-
+    <Box align="center">
+      <Heading level={1}>Раунд {round}</Heading>
+      {image}
       {options}
-    </>
+    </Box>
   );
 };
 
@@ -86,7 +81,7 @@ Game.propTypes = {
     ).isRequired
   }).isRequired,
   game: PropTypes.shape({
-    message: PropTypes.object.isRequired
+    round: PropTypes.number.isRequired
   }).isRequired
 };
 

@@ -7,18 +7,19 @@ const Controls = ({ screen }) => {
 
   switch (screen) {
     case "top": {
-      message = ["X/Enter - Начать игру"];
+      message = ["A/Enter - Начать игру"];
       break;
     }
     case "ready": {
-      message = ["X/Enter - Начать игру", "◯/Esc - Вернуться назад"];
+      message = ["A/Enter - Начать игру", "B/Esc - Вернуться назад"];
       break;
     }
-    case "game": {
+    case "game":
+    case "controls": {
       message = [
         "↑/W - Предыдущий вариант",
         "↓/S - Следующий вариант",
-        "X/Enter - Подтвердить ответ"
+        "A/Enter - Подтвердить ответ"
       ];
       break;
     }

@@ -1,27 +1,14 @@
 import React from "react";
-import PropTypes from "prop-types";
+import { Box, Image, Heading } from "grommet";
+import gamepad from "./gamepad.jpg";
 
-const Controls = props => {
-  const {
-    timer: { timer }
-  } = props;
-
+const Controls = () => {
   return (
-    <>
-      <div>Картинка с контроллером и управлением здесь</div>
-      <div>Mеханика игры объясняется здесь</div>
-      <div>
-        Игра начинается через:
-        <strong>{timer}</strong>
-      </div>
-    </>
+    <Box fill align="center">
+      <Heading level={1}>Управление</Heading>
+      <Image src={gamepad} fill fit="contain" />
+    </Box>
   );
-};
-
-Controls.propTypes = {
-  timer: PropTypes.shape({
-    timer: PropTypes.number.isRequired
-  }).isRequired
 };
 
 export default Controls;

@@ -12,7 +12,7 @@ const Ready = props => {
 
   return (
     <Box fill align="center">
-      <Heading level={1}>Готово игроков</Heading>
+      <Heading level={1}>Готовность игроков</Heading>
       <Heading level={1}>
         {readyLength}/{length}
       </Heading>
