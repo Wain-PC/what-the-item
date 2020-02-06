@@ -8,7 +8,7 @@ const Game = props => {
   const {
     round: { pictures, answerIndex },
     players: { list },
-    game: { round }
+    game: { round, rounds }
   } = props;
 
   const itemProps = {};
@@ -51,7 +51,9 @@ const Game = props => {
 
   return (
     <Box align="center">
-      <Heading level={1}>Раунд {round}</Heading>
+      <Heading level={1}>
+        Раунд {round}/{rounds}
+      </Heading>
       {image}
       {options}
     </Box>

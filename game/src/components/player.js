@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box, Text, Heading } from "grommet";
+import { Box, Heading } from "grommet";
 
 const Player = ({ player: { name, score, ready } = {}, gameStarted }) => {
   if (!name) {
