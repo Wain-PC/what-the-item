@@ -7,27 +7,44 @@ const PICTURES_FOLDER = "../../public/pictures";
 
 const readdir = promisify(fs.readdir);
 
-module.exports = async () => {
-  // Get all files from the directory (relative to project root).
-  const picturesFolderAbsolutePath = resolve(__dirname, PICTURES_FOLDER);
-  const files = (await readdir(picturesFolderAbsolutePath)).filter(file =>
-    file.endsWith(".jpg")
-  );
+const shuffle = array => {
+  let counter = array.length;
 
-  // TODO: save used pictures & exclude them from the next rounds.
-  // TODO: switch to while cycle, should be better.
-  // TODO: rotate the output array.
-  // TODO: return correct answer
-  const filesToReturn = [];
-  for (let i = 0; i < ANSWERS_IN_ROUND; i += 1) {
-    const index = Math.floor(Math.random() * files.length);
-    const file = files[index].slice(0, -4);
-    if (filesToReturn.includes(file)) {
-      i -= 1;
-    } else {
-      filesToReturn.push(files[index].slice(0, -4));
-    }
+  // While there are elements in the array
+  while (counter > 0) {
+    // Pick a random index
+    const index = Math.floor(Math.random() * counter);
+
+    // Decrease counter by 1
+    counter -= 1;
+
+    // And swap the last element with it
+    const temp = array[counter];
+    // eslint-disable-next-line no-param-reassign
+    array[counter] = array[index];
+    // eslint-disable-next-line no-param-reassign
+    array[index] = temp;
   }
 
-  return filesToReturn;
+  return array;
+};
+
+const getShuffledPictures = async () => {
+  const picturesFolderAbsolutePath = resolve(__dirname, PICTURES_FOLDER);
+  return shuffle(
+    (await readdir(picturesFolderAbsolutePath))
+      .filter(file => file.endsWith(".jpg"))
+      .map(file => file.slice(0, -4))
+  );
+};
+
+const getPicturesForRound = (pictures, roundIndex) => {
+  const start = ANSWERS_IN_ROUND * roundIndex;
+  const end = start + ANSWERS_IN_ROUND;
+  return pictures.slice(start, end);
+};
+
+module.exports = {
+  getShuffledPictures,
+  getPicturesForRound
 };

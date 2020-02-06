@@ -11,16 +11,18 @@ const initialState = {
   id: "",
   round: 0,
   finished: false,
-  message: ""
+  message: "",
+  pictures: []
 };
 
 module.exports = (state = initialState, action) => {
   switch (action.type) {
     case SET_SCREEN_GAME: {
-      const id = action.payload;
+      const { id, pictures } = action.payload;
       return {
         ...initialState,
-        id
+        id,
+        pictures
       };
     }
 

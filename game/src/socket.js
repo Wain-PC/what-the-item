@@ -3,7 +3,7 @@ export default class Socket {
     this.socket = null;
     this.address =
       window.location.hostname === "localhost"
-        ? "ws://localhost:3334"
+        ? "ws://localhost:3333/ws"
         : `wss://${window.location.host}/ws`;
     this.connect();
   }

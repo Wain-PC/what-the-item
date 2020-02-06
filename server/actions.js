@@ -34,7 +34,10 @@ const {
 
 const db = require("./db");
 
-const getPictures = require("./utils/getPictures");
+const {
+  getShuffledPictures,
+  getPicturesForRound
+} = require("./utils/getPictures");
 
 const setScreenTop = () => async dispatch => {
   const topPlayers = await db.getTopPlayers();
@@ -59,11 +62,14 @@ const setScreenGame = () => async (dispatch, getState) => {
     players: { list: players }
   } = getState();
   // Start the game in DB and get gameId
-  const gameId = await db.startGame({ players });
-  // Set the screen
+  const id = await db.startGame({ players });
+  const pictures = await getShuffledPictures();
   dispatch({
     type: SET_SCREEN_GAME,
-    payload: gameId
+    payload: {
+      id,
+      pictures
+    }
   });
 
   dispatch(startRound());
@@ -195,7 +201,7 @@ const setScreenGameEnd = () => async (dispatch, getState) => {
 const startRound = () => async (dispatch, getState) => {
   // This is the data for the the previous round.
   const {
-    game: { round },
+    game: { round, pictures: allPictures },
     round: { answered }
   } = getState();
 
@@ -206,12 +212,14 @@ const startRound = () => async (dispatch, getState) => {
     await dispatch(setMessage({ answered }, ROUND_END_TIMER));
   }
 
-  const pictures = (await getPictures()).map(picture => ({
-    picture,
-    selected: false,
-    selectedBy: -1,
-    correct: null
-  }));
+  const pictures = (await getPicturesForRound(allPictures, round)).map(
+    picture => ({
+      picture,
+      selected: false,
+      selectedBy: -1,
+      correct: null
+    })
+  );
 
   const answerIndex = Math.floor(Math.random() * pictures.length);
 
