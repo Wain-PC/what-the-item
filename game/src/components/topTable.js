@@ -1,48 +1,53 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+  Text
+} from "grommet";
 
 const TopTable = props => {
   const { players } = props;
 
   const tableRows = players.map(
     ({ name, score, currentGame = false }, index) => {
-      const nameStr = currentGame ? (
-        <td>
-          <strong>{name}</strong>
-        </td>
-      ) : (
-        <td>{name}</td>
-      );
-      const scoreStr = currentGame ? (
-        <td>
-          <strong>{score}</strong>
-        </td>
-      ) : (
-        <td>{score}</td>
-      );
       return (
         // eslint-disable-next-line react/no-array-index-key
-        <tr key={index + name + score}>
-          {nameStr}
-          {scoreStr}
-        </tr>
+        <TableRow key={index + name + score}>
+          <TableCell>
+            <Text>{index + 1}</Text>
+          </TableCell>
+          <TableCell>
+            <Text>{name}</Text>
+          </TableCell>
+          <TableCell>
+            <Text>{score}</Text>
+          </TableCell>
+        </TableRow>
       );
     }
   );
 
   return (
-    <div>
-      <h3>Текущий ТОП</h3>
-      <table border={2}>
-        <thead>
-          <tr>
-            <th>Имя</th>
-            <th>Счёт</th>
-          </tr>
-        </thead>
-        <tbody>{tableRows}</tbody>
-      </table>
-    </div>
+    <Table alignSelf="stretch">
+      <TableHeader>
+        <TableRow>
+          <TableCell>
+            <Text>#</Text>
+          </TableCell>
+          <TableCell>
+            <Text>Имя</Text>
+          </TableCell>
+          <TableCell>
+            <Text>Счёт</Text>
+          </TableCell>
+        </TableRow>
+      </TableHeader>
+      <TableBody>{tableRows}</TableBody>
+    </Table>
   );
 };
 
