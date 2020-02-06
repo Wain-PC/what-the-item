@@ -4,6 +4,7 @@ import { grommet } from "grommet/themes";
 import Socket from "./socket";
 import GamepadController from "./gamepadController";
 import KeyboardController from "./keyboardController";
+import Player from "./components/player";
 import * as screens from "./screens";
 import logo from "./avito.svg";
 
@@ -57,6 +58,9 @@ export default class App extends PureComponent {
   }
 
   render() {
+    // eslint-disable-next-line react/destructuring-assignment
+    const { players: { list = [] } = {} } = this.state;
+
     return (
       <Grommet theme={grommet} style={{ height: "100%" }}>
         <Box align="center" alignSelf="stretch" fill>
@@ -90,13 +94,17 @@ export default class App extends PureComponent {
               gridArea="left"
               background="light-1"
               margin={{ horizontal: "medium" }}
-            />
+            >
+              <Player player={list[0] || {}} />
+            </Box>
             <Box gridArea="main">{this.renderScreen()}</Box>
             <Box
               gridArea="right"
               background="light-1"
               margin={{ horizontal: "medium" }}
-            />
+            >
+              <Player player={list[1] || {}} />
+            </Box>
             <Box
               gridArea="footer"
               background="light-3"

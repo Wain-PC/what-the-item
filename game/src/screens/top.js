@@ -1,31 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
 import TopTable from "../components/topTable";
+import { Box, Heading } from "grommet";
 
 const Top = props => {
   const {
-    players: { list },
     top: { players }
   } = props;
 
   return (
-    <>
+    <Box fill>
+      <Heading level={1}>Топ игроков</Heading>
       <TopTable players={players} />
-      <br />
-      <div>Количество игроков: {list.length}</div>
-      <br />
-      <br />
-      <div>
-        <strong>Нажмите X, чтобы начать игру</strong>
-      </div>
-    </>
+    </Box>
   );
 };
 
 Top.propTypes = {
-  players: PropTypes.shape({
-    list: PropTypes.array.isRequired
-  }).isRequired,
   top: PropTypes.shape({
     players: PropTypes.arrayOf(
       PropTypes.shape({

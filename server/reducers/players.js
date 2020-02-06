@@ -19,7 +19,7 @@ const {
 
 const initialPlayer = {
   index: 0,
-  name: "Player 1",
+  name: "Игрок 1",
   ready: false,
   answered: false,
   score: 0,
@@ -32,7 +32,7 @@ const generatePlayers = n => {
     .map((player, index) => {
       return {
         ...player,
-        name: `Player ${index + 1}`,
+        name: `Игрок ${index + 1}`,
         index
       };
     });

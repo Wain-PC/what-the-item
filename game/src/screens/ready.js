@@ -1,25 +1,22 @@
 import React from "react";
 import PropTypes from "prop-types";
-
-const PLAYERS_COLORS = ["aquamarine", "coral", "brown", "teal"];
+import { Box, Heading } from "grommet";
 
 const Ready = props => {
   const {
     players: { list }
   } = props;
 
-  const playersDivs = list.map(({ name, ready, index }) => (
-    <div key={index} style={{ color: PLAYERS_COLORS[index] }}>
-      {name}: <strong>{ready ? "Готов" : "Не готов"}</strong>
-    </div>
-  ));
+  const { length } = list;
+  const readyLength = list.filter(({ ready }) => ready).length;
+
   return (
-    <>
-      <div>Готовность пользователей</div>
-      <div>
-        <div>{playersDivs}</div>
-      </div>
-    </>
+    <Box fill align="center">
+      <Heading level={1}>Готово игроков</Heading>
+      <Heading level={1}>
+        {readyLength}/{length}
+      </Heading>
+    </Box>
   );
 };
 
@@ -27,7 +24,6 @@ Ready.propTypes = {
   players: PropTypes.shape({
     list: PropTypes.arrayOf(
       PropTypes.shape({
-        name: PropTypes.string.isRequired,
         ready: PropTypes.bool.isRequired
       })
     ).isRequired
