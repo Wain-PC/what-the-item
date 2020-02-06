@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import TopTable from "../components/topTable";
 import { Box, Heading } from "grommet";
+import TopTable from "../components/topTable";
 
 const Top = props => {
   const {
@@ -9,7 +9,7 @@ const Top = props => {
   } = props;
 
   return (
-    <Box fill>
+    <Box fill align="center">
       <Heading level={1}>Топ игроков</Heading>
       <TopTable players={players} />
     </Box>
