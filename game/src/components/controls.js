@@ -7,7 +7,7 @@ const Controls = ({ screen }) => {
 
   switch (screen) {
     case "top": {
-      message = ["A/Enter - Начать игру"];
+      message = ["A/Enter - Начать игру", "↑/W - 2 игрока", "↓/S - 1 игрок"];
       break;
     }
     case "ready": {
@@ -20,6 +20,19 @@ const Controls = ({ screen }) => {
         "↑/W - Предыдущий вариант",
         "↓/S - Следующий вариант",
         "A/Enter - Подтвердить ответ"
+      ];
+      break;
+    }
+    case "winner": {
+      message = ["A/Enter - Продолжить"];
+      break;
+    }
+    case "gameEnd": {
+      message = [
+        "↑/W - Следующий символ",
+        "↓/S - Предыдущий символ",
+        "←/→ / A/D - Смена позиции",
+        "A/Enter - Сохранить никнейм"
       ];
       break;
     }
