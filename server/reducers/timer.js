@@ -26,12 +26,7 @@ module.exports = (state = initialState, action) => {
     }
 
     case CANCEL_TIMER_INTERVAL_ID: {
-      const { timerId } = initialState;
-
-      return {
-        ...state,
-        timerId
-      };
+      return initialState;
     }
     default: {
       return state;
