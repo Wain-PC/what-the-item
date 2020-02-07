@@ -1,8 +1,10 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Grommet, Box, Header, Heading, Image, Grid } from "grommet";
+import { Box, Grid, Grommet, Header, Heading, Image } from "grommet";
 import { grommet } from "grommet/themes";
 import * as actions from "./actions";
+import * as controllers from "./controllers";
 import GamepadController from "./gamepadController";
 import KeyboardController from "./keyboardController";
 import Player from "./components/player";
@@ -12,6 +14,23 @@ import Controls from "./components/controls";
 import Timer from "./components/timer";
 
 class App extends PureComponent {
+  // eslint-disable-next-line react/static-property-placement
+  static propTypes = {
+    screen: PropTypes.shape({
+      id: PropTypes.string.isRequired
+    }).isRequired,
+    game: PropTypes.shape({
+      round: PropTypes.number.isRequired
+    }).isRequired,
+    players: PropTypes.shape({
+      list: PropTypes.arrayOf(PropTypes.shape({}).isRequired).isRequired
+    }).isRequired,
+    timer: PropTypes.shape({
+      timer: PropTypes.number.isRequired
+    }).isRequired,
+    setScreenTop: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
 
@@ -22,14 +41,33 @@ class App extends PureComponent {
     // Start keyboard listener
     this.keyboardController = new KeyboardController();
     this.keyboardController.onPress(this.onButtonPress);
+  }
 
-    this.props.setScreenTop();
+  componentDidMount() {
+    // Acquire top players
+    const { setScreenTop } = this.props;
+    setScreenTop();
   }
 
   onButtonPress = button => {
     // Send every button press to backend.
     // It should process the input and return the updated state.
     console.log(button);
+    const state = this.props;
+    const {
+      screen: { id }
+    } = state;
+
+    if (controllers[id]) {
+      controllers[id]({
+        state,
+        actions: state,
+        message: {
+          type: "button",
+          ...button
+        }
+      });
+    }
   };
 
   renderScreen() {
