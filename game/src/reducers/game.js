@@ -1,11 +1,11 @@
-const {
+import {
   SET_SCREEN_GAME,
   START_GAME_ROUND,
   SET_SCREEN_TOP,
   SET_GAME_MESSAGE
-} = require("../constants/actions");
+} from "../constants/actions";
 
-const { ROUNDS_IN_GAME } = require("../constants/gameplay");
+import { ROUNDS_IN_GAME } from "../constants/gameplay";
 
 const initialState = {
   id: "",
@@ -16,7 +16,7 @@ const initialState = {
   pictures: []
 };
 
-module.exports = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
     case SET_SCREEN_GAME: {
       const { id, pictures } = action.payload;

@@ -31,4 +31,4 @@ const controller = ({ actions, message, state }) => {
   }
 };
 
-module.exports = { controller };
+export default controller;

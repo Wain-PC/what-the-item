@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-const {
+import {
   SET_SCREEN_TOP,
   SET_SCREEN_READY,
   SET_SCREEN_GAME,
@@ -23,21 +23,18 @@ const {
   SET_WINNER_LETTER_DECREASE,
   SET_WINNER_NICKNAME,
   SET_GAME_MESSAGE
-} = require("./constants/actions");
+} from "./constants/actions";
 
-const {
+import {
   CONTROLS_SCREEN_TIMER,
   GAME_SCREEN_TIMER,
   POINTS_PER_ROUND,
   ROUND_END_TIMER
-} = require("./constants/gameplay");
+} from "./constants/gameplay";
 
-const db = require("./db");
+import * as db from "./utils/db";
 
-const {
-  getShuffledPictures,
-  getPicturesForRound
-} = require("./utils/getPictures");
+import getPicturesForRound from "./utils/getPicturesForRound";
 
 const setScreenTop = () => async dispatch => {
   const topPlayers = await db.getTopPlayers();
@@ -63,7 +60,7 @@ const setScreenGame = () => async (dispatch, getState) => {
   } = getState();
   // Start the game in DB and get gameId
   const id = await db.startGame({ players });
-  const pictures = await getShuffledPictures();
+  const pictures = await db.getShuffledPictures();
   dispatch({
     type: SET_SCREEN_GAME,
     payload: {
@@ -183,7 +180,7 @@ const setScreenGameEnd = () => async (dispatch, getState) => {
   const {
     game: { id: gameId }
   } = getState();
-  const topPlayers = await db.getTopPlayersWithCurrent({ gameId });
+  const topPlayers = await db.getTopPlayers({ gameId });
 
   // If the player is in top N players,
   const isInTop = topPlayers.some(player => player.gameId === gameId);
@@ -413,7 +410,7 @@ const clearMessage = () => ({
   type: SET_GAME_MESSAGE
 });
 
-module.exports = {
+export {
   setScreenTop,
   setScreenReady,
   setScreenControls,

@@ -5,7 +5,7 @@ const SCREEN_GAME = "game";
 const SCREEN_WINNER = "winner";
 const SCREEN_GAME_END = "gameEnd";
 
-module.exports = {
+export {
   SCREEN_TOP,
   SCREEN_READY,
   SCREEN_CONTROLS,

@@ -1,4 +1,4 @@
-const {
+import {
   SET_PLAYERS_NUMBER,
   SET_PLAYER_READY,
   SET_SCREEN_TOP,
@@ -8,14 +8,14 @@ const {
   MOVE_ROUND_ANSWER_DOWN,
   SELECT_ROUND_ANSWER,
   CALCULATE_ROUND_POINTS
-} = require("../constants/actions");
+} from "../constants/actions";
 
-const {
+import {
   MIN_PLAYERS,
   MAX_PLAYERS,
   INITIAL_PLAYERS,
   ANSWERS_IN_ROUND
-} = require("../constants/gameplay");
+} from "../constants/gameplay";
 
 const initialPlayer = {
   index: 0,
@@ -55,7 +55,7 @@ const initialState = {
   list: generatePlayers(INITIAL_PLAYERS)
 };
 
-module.exports = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
     case SET_PLAYERS_NUMBER: {
       const number = action.payload;

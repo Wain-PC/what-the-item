@@ -23,4 +23,4 @@ const controller = ({ state, actions, message }) => {
   }
 };
 
-module.exports = { controller };
+export default controller;

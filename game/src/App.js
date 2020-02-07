@@ -1,7 +1,8 @@
 import React, { PureComponent } from "react";
+import { connect } from "react-redux";
 import { Grommet, Box, Header, Heading, Image, Grid } from "grommet";
 import { grommet } from "grommet/themes";
-import Socket from "./socket";
+import * as actions from "./actions";
 import GamepadController from "./gamepadController";
 import KeyboardController from "./keyboardController";
 import Player from "./components/player";
@@ -10,28 +11,9 @@ import logo from "./avito.svg";
 import Controls from "./components/controls";
 import Timer from "./components/timer";
 
-export default class App extends PureComponent {
+class App extends PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = {
-      game: {
-        round: 0
-      },
-      screen: {
-        id: null
-      },
-      timer: {
-        timer: -1
-      },
-      players: {
-        list: []
-      }
-    };
-
-    // Start Websocket connection
-    this.socket = new Socket();
-    this.socket.onMessage(this.onMessage);
 
     // Start gamepads listener
     this.gamepadController = new GamepadController();
@@ -40,24 +22,21 @@ export default class App extends PureComponent {
     // Start keyboard listener
     this.keyboardController = new KeyboardController();
     this.keyboardController.onPress(this.onButtonPress);
-  }
 
-  onMessage = message => {
-    console.log("received message", message);
-    this.setState(message);
-  };
+    this.props.setScreenTop();
+  }
 
   onButtonPress = button => {
     // Send every button press to backend.
     // It should process the input and return the updated state.
-    this.socket.send({ type: "button", ...button });
+    console.log(button);
   };
 
   renderScreen() {
     const {
       screen: { id },
       ...restProps
-    } = this.state;
+    } = this.props;
 
     const Screen = screens[id];
 
@@ -72,10 +51,10 @@ export default class App extends PureComponent {
     // eslint-disable-next-line react/destructuring-assignment
     const {
       game: { round },
-      players: { list = [] } = {},
+      players: { list },
       screen: { id },
       timer: { timer }
-    } = this.state;
+    } = this.props;
 
     return (
       <Grommet theme={grommet} style={{ height: "100%" }}>
@@ -140,3 +119,7 @@ export default class App extends PureComponent {
     );
   }
 }
+
+const mapStateToProps = state => state;
+const mapDispatchToProps = actions;
+export default connect(mapStateToProps, mapDispatchToProps)(App);

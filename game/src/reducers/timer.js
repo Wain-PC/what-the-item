@@ -1,15 +1,15 @@
-const {
+import {
   SET_TIMER,
   SET_TIMER_INTERVAL_ID,
   CANCEL_TIMER_INTERVAL_ID
-} = require("../constants/actions");
+} from "../constants/actions";
 
 const initialState = {
   timer: 0,
   timerId: 0
 };
 
-module.exports = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
     case SET_TIMER: {
       return {

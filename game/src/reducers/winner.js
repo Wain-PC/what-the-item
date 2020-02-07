@@ -1,16 +1,16 @@
-const {
+import {
   SET_WINNER,
   SET_WINNER_LETTER_INCREASE,
   SET_WINNER_LETTER_DECREASE,
   SET_WINNER_LETTER_INDEX_INCREASE,
   SET_WINNER_LETTER_INDEX_DECREASE,
   SET_SCREEN_TOP
-} = require("../constants/actions");
+} from "../constants/actions";
 
-const {
+import {
   WINNER_NICKNAME_MAX_LETTERS,
   NICKNAME_LETTER_TABLE
-} = require("../constants/gameplay");
+} from "../constants/gameplay";
 
 const initialState = {
   index: 0,
@@ -22,7 +22,7 @@ const initialState = {
     .join("")
 };
 
-module.exports = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
     case SET_WINNER: {
       const { index, name, score } = action.payload;

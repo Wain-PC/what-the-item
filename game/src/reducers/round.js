@@ -1,10 +1,10 @@
-const {
+import {
   START_GAME_ROUND,
   SELECT_ROUND_ANSWER,
   SET_SCREEN_GAME,
   SET_SCREEN_TOP,
   SET_SCREEN_GAME_END
-} = require("../constants/actions");
+} from "../constants/actions";
 
 const initialState = {
   pictures: [],
@@ -12,7 +12,7 @@ const initialState = {
   answered: false
 };
 
-module.exports = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
     case SET_SCREEN_GAME: {
       return {

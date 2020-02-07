@@ -1,10 +1,10 @@
-const { SET_SCREEN_TOP, SET_SCREEN_GAME_END } = require("../constants/actions");
+import { SET_SCREEN_TOP, SET_SCREEN_GAME_END } from "../constants/actions";
 
 const initialState = {
   players: []
 };
 
-module.exports = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
     case SET_SCREEN_TOP:
     case SET_SCREEN_GAME_END: {

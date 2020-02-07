@@ -1,11 +1,11 @@
-const {
+import {
   SET_SCREEN_TOP,
   SET_SCREEN_READY,
   SET_SCREEN_CONTROLS,
   SET_SCREEN_GAME,
   SET_SCREEN_WINNER,
   SET_SCREEN_GAME_END
-} = require("../constants/actions");
+} from "../constants/actions";
 
 const {
   SCREEN_TOP,
@@ -20,7 +20,7 @@ const initialState = {
   id: SCREEN_TOP
 };
 
-module.exports = (state = initialState, action) => {
+export default (state = initialState, action) => {
   switch (action.type) {
     case SET_SCREEN_TOP: {
       return {

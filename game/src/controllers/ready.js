@@ -18,4 +18,4 @@ const controller = ({ actions, message }) => {
   }
 };
 
-module.exports = { controller };
+export default controller;

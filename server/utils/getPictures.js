@@ -1,7 +1,6 @@
 const { promisify } = require("util");
 const { resolve } = require("path");
 const fs = require("fs");
-const { ANSWERS_IN_ROUND } = require("../constants/gameplay");
 
 const PICTURES_FOLDER = "../../public/pictures";
 
@@ -38,13 +37,4 @@ const getShuffledPictures = async () => {
   );
 };
 
-const getPicturesForRound = (pictures, roundIndex) => {
-  const start = ANSWERS_IN_ROUND * roundIndex;
-  const end = start + ANSWERS_IN_ROUND;
-  return pictures.slice(start, end);
-};
-
-module.exports = {
-  getShuffledPictures,
-  getPicturesForRound
-};
+module.exports = getShuffledPictures;
