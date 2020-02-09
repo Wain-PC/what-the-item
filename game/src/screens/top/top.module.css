@@ -1,0 +1,69 @@
+:root {
+    --rotation-angle: 1deg;
+    --scale: 1.05;
+    --animation: 2s;
+}
+
+.shapes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: inherit;
+    height: inherit;
+    background-image: url("../../images/Shapes.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    animation:spin var(--animation) ease-in-out infinite;
+}
+
+.title {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: inherit;
+    text-align: center;
+}
+
+.headerAnimation {
+    animation:scale var(--animation) ease-in-out infinite;
+}
+
+.header {
+    width: 100%;
+    height: 700px;
+    background-image: url("../../images/text/title_1.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.table {
+    display: flex;
+    justify-content: center;
+    color: #ffffff;
+}
+
+
+
+@keyframes spin {
+    0% {
+        transform:rotate(calc(var(--rotation-angle) * -1));
+    }
+    50% {
+        transform:rotate(var(--rotation-angle));
+    }
+    100% {
+        transform:rotate(calc(var(--rotation-angle) * -1));
+    }
+}
+
+@keyframes scale {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(var(--scale), var(--scale));
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}

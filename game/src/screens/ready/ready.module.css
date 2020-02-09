@@ -1,0 +1,36 @@
+.root {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.header {
+    width: 100%;
+    height: 700px;
+    background-image: url("../../images/text/02.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container > * {
+    margin-bottom: 40px;
+}
+
+.image {
+    width: 59px;
+    height: 59px;
+}
+
+.players {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 400px;
+    align-self: center;
+}

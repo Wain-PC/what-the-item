@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid {
+    width: 400px;
+    display: grid;
+    place-items: center;
+    grid-template-columns: 0.2fr 1.5fr 1.5fr 0.8fr;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+            "first second third fourth"
+}
+
+
+.icon {
+    grid-area: first;
+}
+
+.name {
+    grid-area: second;
+}
+
+.spacer {
+    grid-area: third;
+}
+
+.spacer::after {
+    content: ". . . . .";
+}
+
+.score {
+    grid-area: fourth;
+}

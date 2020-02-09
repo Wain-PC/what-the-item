@@ -1,8 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Box, Heading } from "grommet";
-import TopTable from "../components/topTable";
-import NickName from "../components/nickName";
+import TopTable from "../../components/topTable";
+import NickName from "../../components/nickName";
 
 const GameEnd = props => {
   const {

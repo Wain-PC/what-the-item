@@ -1,54 +1,27 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableCell,
-  Text
-} from "grommet";
+import styles from "./topTable.module.css";
 
 const TopTable = props => {
   const { players } = props;
 
   const tableRows = players.map(
     ({ name, score, currentGame = false }, index) => {
+      const avatar = `../images/Avatar/0${index + 1}.png`;
       return (
-        // eslint-disable-next-line react/no-array-index-key
-        <TableRow key={index + name + score}>
-          <TableCell>
-            <Text>{index + 1}</Text>
-          </TableCell>
-          <TableCell>
-            <Text>{name}</Text>
-          </TableCell>
-          <TableCell>
-            <Text>{score}</Text>
-          </TableCell>
-        </TableRow>
+        <div key={name + score} className={styles.grid}>
+          <div className={styles.icon}>
+            <img src={avatar} alt="avatar" />
+          </div>
+          <div className={styles.name}>{name}</div>
+          <div className={styles.spacer} />
+          <div className={styles.score}>{score}</div>
+        </div>
       );
     }
   );
 
-  return (
-    <Table alignSelf="stretch">
-      <TableHeader>
-        <TableRow>
-          <TableCell>
-            <Text>#</Text>
-          </TableCell>
-          <TableCell>
-            <Text>Имя</Text>
-          </TableCell>
-          <TableCell>
-            <Text>Счёт</Text>
-          </TableCell>
-        </TableRow>
-      </TableHeader>
-      <TableBody>{tableRows}</TableBody>
-    </Table>
-  );
+  return <div className={styles.container}>{tableRows}</div>;
 };
 
 TopTable.propTypes = {
