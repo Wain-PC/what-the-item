@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./controls.module.css";
-import Button from "../../components/button";
+import Button from "../../components/button/button";
 
 const Controls = ({ timer: { timer } }) => {
   return (

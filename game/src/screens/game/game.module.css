@@ -1,0 +1,67 @@
+.root {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+
+}
+
+.main {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: start;
+    padding: 100px;
+}
+
+.screen {
+    position: relative;
+    background-image: url("../../images/elements/frame.svg");
+    width: 1000px;
+    height: 656px;
+}
+
+.image {
+    position: relative;
+    left: 11px;
+    width: 978px;
+    top: 104px;
+    height: 540px;
+}
+
+.screenText {
+    font-family: Contra;
+    font-size: 78px;
+}
+
+.screenHeaderContainer {
+    position: absolute;
+    left: 244px;
+    width: 512px;
+    height: 100px;
+
+    font-family: Contra;
+    font-size: 39px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.screenTextRound {
+    display: inline-block;
+    color: var(--color-black);
+}
+.screenTextTimer {
+    display: inline-block;
+    color: var(--color-red);
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+

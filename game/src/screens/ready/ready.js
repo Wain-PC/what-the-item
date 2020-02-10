@@ -3,27 +3,7 @@ import PropTypes from "prop-types";
 import cn from "classnames";
 import topStyles from "../top/top.module.css";
 import styles from "./ready.module.css";
-import Avatar from "../../components/avatar";
-
-const Player = ({ player: { ready, name, index } }) => {
-  return (
-    <div className={styles.container}>
-      <Avatar index={index} size="large" />
-      <div className={styles.name}>{name}</div>
-      <div className={cn(styles.ready, { [styles.notReady]: !ready })}>
-        {ready ? "READY" : "PRESS START"}
-      </div>
-    </div>
-  );
-};
-
-Player.propTypes = {
-  player: PropTypes.shape({
-    index: PropTypes.number.isRequired,
-    name: PropTypes.string.isRequired,
-    ready: PropTypes.bool.isRequired
-  }).isRequired
-};
+import Player from "../../components/player/player";
 
 const Ready = props => {
   const {
@@ -34,8 +14,20 @@ const Ready = props => {
     <div className={styles.root}>
       <div className={cn(styles.header, topStyles.headerAnimation)} />
       <div className={styles.players}>
-        {list[0] && <Player player={list[0]} />}
-        {list[1] && <Player player={list[1]} />}
+        {list[0] && (
+          <Player
+            index={list[0].index}
+            name={list[0].name}
+            ready={list[0].ready}
+          />
+        )}
+        {list[1] && (
+          <Player
+            index={list[1].index}
+            name={list[1].name}
+            ready={list[1].ready}
+          />
+        )}
       </div>
     </div>
   );

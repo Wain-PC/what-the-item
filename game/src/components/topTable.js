@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./topTable.module.css";
-import Avatar from "./avatar";
+import Avatar from "./avatar/avatar";
 
 const TopTable = props => {
   const { players } = props;

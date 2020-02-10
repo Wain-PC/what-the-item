@@ -13,16 +13,6 @@
     padding-top: 200px;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.container > * {
-    margin-bottom: 40px;
-}
-
 .image {
     width: 59px;
     height: 59px;
@@ -35,18 +25,4 @@
     width: 800px;
     align-self: center;
     padding-top: 100px;
-}
-
-.name {
-    font-size: 70px;
-}
-
-.ready {
-    font-family: Contra;
-    color: var(--color-green);
-    font-size: 30px;
-}
-
-.notReady {
-    color: var(--color-red);
 }

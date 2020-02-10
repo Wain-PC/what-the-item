@@ -1,62 +1,54 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box, Image, Heading, List } from "grommet";
-
-const PLAYERS_COLORS = ["accent-3", "accent-4", "accent-1", "accent-2"];
+import styles from "./game.module.css";
+import Player from "../../components/player/player";
+import Button from "../../components/button/button";
 
 const Game = props => {
   const {
     round: { pictures, answerIndex },
     players: { list },
-    game: { round, rounds }
+    game: { round },
+    timer: { timer }
   } = props;
 
-  const itemProps = {};
-
-  pictures.forEach(({ correct }, pictureIndex) => {
-    list.forEach(({ index: playerIndex, selectedAnswer }) => {
-      if (selectedAnswer === pictureIndex) {
-        itemProps[pictureIndex] = {
-          background: PLAYERS_COLORS[playerIndex]
-        };
-      }
-    });
-
-    if (correct === true) {
-      itemProps[pictureIndex] = {
-        background: "status-ok"
-      };
-    } else if (correct === false) {
-      itemProps[pictureIndex] = {
-        background: "status-error"
-      };
-    }
-  });
-
-  const options = (
-    <Box pad="medium" style={{ minHeight: 400 }}>
-      <List
-        data={pictures.map(({ picture }) => picture)}
-        itemProps={itemProps}
-      />
-    </Box>
-  );
-
-  const picture = pictures[answerIndex] ? pictures[answerIndex].picture : null;
-  const image = picture ? (
-    <Box round="small" fill>
-      <Image src={`/pictures/${picture}.jpg`} fill fit="contain" />
-    </Box>
-  ) : null;
-
   return (
-    <Box align="center">
-      <Heading level={1}>
-        Раунд {round}/{rounds}
-      </Heading>
-      {image}
-      {options}
-    </Box>
+    <div className={styles.root}>
+      <div className={styles.main}>
+        {list[0] && (
+          <Player
+            index={list[0].index}
+            name={list[0].name}
+            score={list[0].score}
+          />
+        )}
+        <div className={styles.screen}>
+          <div className={styles.screenHeaderContainer}>
+            <div className={styles.screenTextRound}>Round-{round}:</div>
+            <div className={styles.screenTextTimer}>{timer}</div>
+          </div>
+          <img
+            className={styles.image}
+            src={`/pictures/${
+              pictures[answerIndex] ? pictures[answerIndex].picture : ""
+            }.jpg`}
+            alt="round picture"
+          />
+        </div>
+        {list[1] && (
+          <Player
+            index={list[1].index}
+            name={list[1].name}
+            score={list[1].score}
+          />
+        )}
+      </div>
+      <div className={styles.buttons}>
+        {pictures.map(({ picture }, index) => (
+          <Button key={picture} index={index} text={picture} />
+        ))}
+      </div>
+    </div>
   );
 };
 
