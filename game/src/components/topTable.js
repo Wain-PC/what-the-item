@@ -1,17 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styles from "./topTable.module.css";
+import Avatar from "./avatar";
 
 const TopTable = props => {
   const { players } = props;
 
   const tableRows = players.map(
     ({ name, score, currentGame = false }, index) => {
-      const avatar = `../images/Avatar/0${index + 1}.png`;
       return (
         <div key={name + score} className={styles.grid}>
           <div className={styles.icon}>
-            <img src={avatar} alt="avatar" />
+            <Avatar index={index} />
           </div>
           <div className={styles.name}>{name}</div>
           <div className={styles.spacer} />

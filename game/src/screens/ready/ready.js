@@ -3,15 +3,12 @@ import PropTypes from "prop-types";
 import cn from "classnames";
 import topStyles from "../top/top.module.css";
 import styles from "./ready.module.css";
+import Avatar from "../../components/avatar";
 
 const Player = ({ player: { ready, name, index } }) => {
   return (
     <div className={styles.container}>
-      <img
-        className={styles.image}
-        src={`../../images/Avatar/0${index + 1}.png`}
-        alt="avatar"
-      />
+      <Avatar index={index} />
       <div className={styles.name}>{name}</div>
       <div className={styles.ready}>{ready ? "READY" : "PRESS START"}</div>
     </div>
