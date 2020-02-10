@@ -12,8 +12,6 @@ import {
   SET_TIMER_INTERVAL_ID,
   CANCEL_TIMER_INTERVAL_ID,
   START_GAME_ROUND,
-  MOVE_ROUND_ANSWER_UP,
-  MOVE_ROUND_ANSWER_DOWN,
   SELECT_ROUND_ANSWER,
   CALCULATE_ROUND_POINTS,
   SET_WINNER,
@@ -258,45 +256,21 @@ const startRound = () => async (dispatch, getState) => {
   });
 };
 
-const moveAnswerUp = playerIndex => (dispatch, getState) => {
+const selectAnswer = (playerIndex, selectedAnswer) => async (
+  dispatch,
+  getState
+) => {
   const {
     players: { list }
   } = getState();
 
-  if (list[playerIndex].answered) {
-    return;
-  }
-
-  dispatch({
-    type: MOVE_ROUND_ANSWER_UP,
-    payload: { playerIndex }
-  });
-};
-const moveAnswerDown = playerIndex => (dispatch, getState) => {
-  const {
-    players: { list }
-  } = getState();
-
-  if (list[playerIndex].answered) {
-    return;
-  }
-
-  dispatch({
-    type: MOVE_ROUND_ANSWER_DOWN,
-    payload: { playerIndex }
-  });
-};
-
-const selectAnswer = playerIndex => async (dispatch, getState) => {
-  const {
-    players: { list }
-  } = getState();
-
-  const { selectedAnswer, answered: playerAnswered } = list[playerIndex];
+  const { answered: playerAnswered } = list[playerIndex];
 
   if (playerAnswered) {
     return;
   }
+
+  console.log(playerIndex, selectedAnswer);
 
   dispatch({
     type: SELECT_ROUND_ANSWER,
@@ -324,9 +298,7 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
     game: { id: gameId }
   } = getState();
 
-  const winner = list.find(
-    ({ answered, selectedAnswer }) => answered && selectedAnswer === answerIndex
-  );
+  const winner = list[pictures[answerIndex].selectedBy];
 
   // No winner in this round, still save the stats.
   if (!winner) {
@@ -421,8 +393,6 @@ export {
   setPlayerReady,
   setTimer,
   startRound,
-  moveAnswerUp,
-  moveAnswerDown,
   selectAnswer,
   calculateRoundPoints,
   setNickNameLetterIndexIncrease,

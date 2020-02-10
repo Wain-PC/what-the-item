@@ -32,7 +32,7 @@ const Game = props => {
             src={`/pictures/${
               pictures[answerIndex] ? pictures[answerIndex].picture : ""
             }.jpg`}
-            alt="round picture"
+            alt="round"
           />
         </div>
         {list[1] && (
@@ -70,7 +70,9 @@ Game.propTypes = {
   players: PropTypes.shape({
     list: PropTypes.arrayOf(
       PropTypes.shape({
-        selectedAnswer: PropTypes.number.isRequired
+        index: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
+        score: PropTypes.number.isRequired
       })
     ).isRequired
   }).isRequired,

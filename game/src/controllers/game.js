@@ -2,19 +2,24 @@ const controller = ({ actions, message }) => {
   const { type, gamepad, button } = message;
   if (type === "button") {
     switch (button) {
-      // Select answer above
+      case "triangle":
       case "up": {
-        actions.moveAnswerUp(gamepad);
+        actions.selectAnswer(gamepad, 0);
         break;
       }
-      // Select answer below
-      case "down": {
-        actions.moveAnswerDown(gamepad);
+      case "right":
+      case "back": {
+        actions.selectAnswer(gamepad, 1);
         break;
       }
-      // Confirm answer selection
+      case "down":
       case "ok": {
-        actions.selectAnswer(gamepad);
+        actions.selectAnswer(gamepad, 2);
+        break;
+      }
+      case "left":
+      case "square": {
+        actions.selectAnswer(gamepad, 3);
         break;
       }
       default: {
