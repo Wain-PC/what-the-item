@@ -6,16 +6,17 @@
 .grid {
     width: 400px;
     display: grid;
-    place-items: center;
-    grid-template-columns: 0.2fr 1.5fr 1.5fr 0.8fr;
+    place-items: start;
+    grid-template-columns: 0.1fr 2fr 1.8fr 1.3fr;
     grid-template-rows: 1fr;
     grid-template-areas:
-            "first second third fourth"
+            "first second third fourth";
 }
 
 
 .icon {
     grid-area: first;
+    margin: 0 15px 15px 0;
 }
 
 .name {
@@ -24,10 +25,11 @@
 
 .spacer {
     grid-area: third;
+    place-self: start;
 }
 
 .spacer::after {
-    content: ". . . . .";
+    content: "......";
 }
 
 .score {

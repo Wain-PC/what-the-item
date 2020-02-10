@@ -1,0 +1,31 @@
+.root {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+}
+
+.timer {
+    color: var(--color-red);
+    font-family: Contra;
+    font-size: 170px;
+    padding-top: 100px;
+}
+
+.controls {
+    width: 470px;
+    height: 322px;
+    background-image: url("../../images/elements/joypad.svg");
+    background-repeat: no-repeat;
+}
+
+.heading {
+    font-size: 80px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: row;
+}

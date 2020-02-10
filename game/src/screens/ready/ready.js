@@ -8,9 +8,11 @@ import Avatar from "../../components/avatar";
 const Player = ({ player: { ready, name, index } }) => {
   return (
     <div className={styles.container}>
-      <Avatar index={index} />
+      <Avatar index={index} size="large" />
       <div className={styles.name}>{name}</div>
-      <div className={styles.ready}>{ready ? "READY" : "PRESS START"}</div>
+      <div className={cn(styles.ready, { [styles.notReady]: !ready })}>
+        {ready ? "READY" : "PRESS START"}
+      </div>
     </div>
   );
 };

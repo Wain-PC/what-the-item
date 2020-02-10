@@ -13,11 +13,17 @@ const Top = props => {
     <>
       <div className={styles.shapes} />
       <div className={styles.title}>
-        <a href="https://avito.tech">avito.tech</a>
+        <a href="https://avito.tech" target="_blank" rel="noopener noreferrer">
+          avito.tech
+        </a>
       </div>
       <div className={cn(styles.header, styles.headerAnimation)} />
       <div className={styles.table}>
+        <div className={styles.text}>TOP-5</div>
         <TopTable players={players} />
+      </div>
+      <div className={cn(styles.text, styles.footer)}>
+        - PRESS START TO CONTINUE -
       </div>
     </>
   );

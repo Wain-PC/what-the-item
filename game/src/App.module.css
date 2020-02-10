@@ -1,4 +1,10 @@
+:root {
+    --color-red: #FF6163;
+    --color-green: #97CF26;
+}
+
 .app {
+    position: relative;
     width: 1920px;
     height: 1080px;
     background-image: url("./images/elements/Background.png");

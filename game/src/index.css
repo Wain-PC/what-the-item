@@ -1,5 +1,17 @@
+@font-face {
+    font-family: "BK0010";
+    src: url("./fonts/BK0010.ttf");
+}
+
+@font-face {
+    font-family: "Contra";
+    src: url("./fonts/Contra.ttf");
+}
+
 html, body, #root {
     margin: 0;
     height: 100%;
     overflow: hidden;
+    font-family: BK0010, monospace;
+    font-size: 47px;
 }

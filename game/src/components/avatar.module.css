@@ -1,4 +1,18 @@
 .avatar {
+    display: block;
+}
+
+.small {
+    width: 37px;
+    height: 37px;
+}
+
+.medium {
     width: 59px;
     height: 59px;
+}
+
+.large {
+    width: 120px;
+    height: 120px;
 }

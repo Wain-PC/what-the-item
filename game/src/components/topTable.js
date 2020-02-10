@@ -11,7 +11,7 @@ const TopTable = props => {
       return (
         <div key={name + score} className={styles.grid}>
           <div className={styles.icon}>
-            <Avatar index={index} />
+            <Avatar index={index} size="small" />
           </div>
           <div className={styles.name}>{name}</div>
           <div className={styles.spacer} />
