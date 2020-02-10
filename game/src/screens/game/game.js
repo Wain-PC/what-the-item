@@ -44,9 +44,20 @@ const Game = props => {
         )}
       </div>
       <div className={styles.buttons}>
-        {pictures.map(({ picture }, index) => (
-          <Button key={picture} index={index} text={picture} />
-        ))}
+        {pictures.map(({ picture, selectedBy }, index) => {
+          let correct;
+          if (selectedBy !== -1) {
+            correct = index === answerIndex;
+          }
+          return (
+            <Button
+              key={picture}
+              index={index}
+              text={picture}
+              correct={correct}
+            />
+          );
+        })}
       </div>
     </div>
   );

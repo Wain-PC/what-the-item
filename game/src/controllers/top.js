@@ -6,16 +6,6 @@ const controller = ({ state, actions, message }) => {
         actions.setScreenReady();
         break;
       }
-      case "up":
-      case "right": {
-        actions.setPlayersNumber(state.players.list.length + 1);
-        break;
-      }
-      case "down":
-      case "left": {
-        actions.setPlayersNumber(state.players.list.length - 1);
-        break;
-      }
       default: {
         // do nothing
       }

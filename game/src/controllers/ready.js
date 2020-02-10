@@ -1,4 +1,4 @@
-const controller = ({ actions, message }) => {
+const controller = ({ actions, message, state }) => {
   if (message.type === "button") {
     switch (message.button) {
       // Toggle player readiness
@@ -9,6 +9,17 @@ const controller = ({ actions, message }) => {
       // Switch back to 'top' screen when 'back' button is pressed
       case "back": {
         actions.setScreenTop();
+        break;
+      }
+
+      case "up":
+      case "right": {
+        actions.setPlayersNumber(state.players.list.length + 1);
+        break;
+      }
+      case "down":
+      case "left": {
+        actions.setPlayersNumber(state.players.list.length - 1);
         break;
       }
       default: {

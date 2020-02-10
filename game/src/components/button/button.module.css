@@ -14,3 +14,11 @@
 .text {
     width: 370px;
 }
+
+.correct {
+    color: var(--color-green);
+}
+
+.incorrect {
+    color: var(--color-red);
+}

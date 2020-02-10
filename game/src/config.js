@@ -7,7 +7,7 @@ const config = {
     },
     gameplay: {
       defaultPlayers: 2,
-      minPlayers: 2,
+      minPlayers: 1,
       maxPlayers: 2,
       roundsInGame: 10,
       answersInRound: 4,
