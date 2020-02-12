@@ -1,0 +1,40 @@
+.root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 100px;
+}
+
+.header {
+    width: 100%;
+    height: 337px;
+    background-repeat: no-repeat;
+    background-position: bottom center;
+    padding-top: 130px;
+}
+
+.winner1 {
+    background-image: url("../../images/text/03.png");
+}
+
+.winner2 {
+    background-image: url("../../images/text/04.png");
+}
+
+.scoreContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-top: 100px;
+}
+
+.score {
+    color: var(--color-red);
+    font-family: Contra;
+    font-size: 120px;
+}
+
+.scoreText {
+    font-size: 78px;
+}
