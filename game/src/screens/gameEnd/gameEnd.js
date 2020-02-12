@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box, Heading } from "grommet";
 import TopTable from "../../components/topTable";
 import NickName from "../../components/nickName";
+
+import styles from "./gameEnd.module.css";
 
 const GameEnd = props => {
   const {
@@ -11,13 +12,13 @@ const GameEnd = props => {
   } = props;
 
   return (
-    <Box fill align="center">
-      <Heading level={1}>Поздравляем! Вы попали в топ игроков:</Heading>
-      <TopTable players={players} />
-
-      <Heading level={3}>Введите никнейм</Heading>
+    <div className={styles.root}>
+      <div className={styles.text}>Top-5</div>
+      <TopTable players={players} avatarSize="medium" />
+      <div className={styles.nickNameHeader}>Enter Your Nickname:</div>
       <NickName activeLetter={activeLetter} nickName={nickName} />
-    </Box>
+      <div className={styles.controlsHeader}>Press Start to Finish</div>
+    </div>
   );
 };
 

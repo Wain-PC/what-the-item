@@ -17,6 +17,7 @@
 .icon {
     grid-area: first;
     margin: 0 15px 15px 0;
+    text-align: center;
 }
 
 .name {
@@ -34,4 +35,9 @@
 
 .score {
     grid-area: fourth;
+}
+
+.selected {
+    background-color: var(--color-white);
+    color: var(--color-red);
 }

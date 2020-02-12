@@ -1,19 +1,23 @@
 import React from "react";
 import PropTypes from "prop-types";
+import cn from "classnames";
 import styles from "./topTable.module.css";
 import Avatar from "./avatar/avatar";
 
 const TopTable = props => {
-  const { players } = props;
+  const { players, avatarSize } = props;
 
   const tableRows = players.map(
     ({ name, score, currentGame = false }, index) => {
       return (
-        <div key={name + score} className={styles.grid}>
+        <div
+          key={name + score}
+          className={cn(styles.grid, { [styles.selected]: currentGame })}
+        >
           <div className={styles.icon}>
-            <Avatar index={index} size="small" />
+            <Avatar index={index} size={avatarSize} />
           </div>
-          <div className={styles.name}>{name}</div>
+          <div className={styles.name}>{currentGame ? "You" : name}</div>
           <div className={styles.spacer} />
           <div className={styles.score}>{score}</div>
         </div>
@@ -31,7 +35,12 @@ TopTable.propTypes = {
       score: PropTypes.number.isRequired,
       currentGame: PropTypes.bool
     })
-  ).isRequired
+  ).isRequired,
+  avatarSize: PropTypes.oneOf(["small", "medium", "large"])
+};
+
+TopTable.defaultProps = {
+  avatarSize: "small"
 };
 
 export default TopTable;

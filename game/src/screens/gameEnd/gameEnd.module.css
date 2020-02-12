@@ -1,0 +1,21 @@
+.root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 112px;
+}
+
+.text {
+    font-family: Contra;
+    font-size: 24px;
+    color: var(--color-red);
+}
+
+.nickNameHeader {
+    font-size: 78px;
+    padding-top: 100px;
+}
+
+.controlsHeader {
+    color: var(--color-red);
+}
