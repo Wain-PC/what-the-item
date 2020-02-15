@@ -39,19 +39,23 @@ export default class KeyboardController {
         return "back";
       }
       case "ArrowUp":
-      case "KeyW": {
+      case "KeyW":
+      case "Digit1": {
         return "up";
       }
       case "ArrowDown":
-      case "KeyS": {
+      case "KeyS":
+      case "Digit3": {
         return "down";
       }
       case "ArrowLeft":
-      case "KeyA": {
+      case "KeyA":
+      case "Digit4": {
         return "left";
       }
       case "ArrowRight":
-      case "KeyD": {
+      case "KeyD":
+      case "Digit2": {
         return "right";
       }
       default: {

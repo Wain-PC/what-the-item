@@ -270,8 +270,6 @@ const selectAnswer = (playerIndex, selectedAnswer) => async (
     return;
   }
 
-  console.log(playerIndex, selectedAnswer);
-
   dispatch({
     type: SELECT_ROUND_ANSWER,
     payload: { playerIndex, selectedAnswer }
