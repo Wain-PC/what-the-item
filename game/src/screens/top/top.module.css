@@ -72,8 +72,8 @@
 }
 
 .text {
-    font-family: Contra;
-    font-size: 24px;
+    font-family: var(--font-contra);
+    font-size: var(--font-size-xsmall);
     color: var(--color-red);
 }
 

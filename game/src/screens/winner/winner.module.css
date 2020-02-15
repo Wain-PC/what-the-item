@@ -31,10 +31,10 @@
 
 .score {
     color: var(--color-red);
-    font-family: Contra;
-    font-size: 120px;
+    font-family: var(--font-contra);
+    font-size: var(--font-size-large);
 }
 
 .scoreText {
-    font-size: 78px;
+    font-size: var(--font-size-medium);
 }

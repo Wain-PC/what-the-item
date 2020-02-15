@@ -13,7 +13,7 @@
 }
 
 .ready {
-    font-family: Contra;
+    font-family: var(--font-contra);
     color: var(--color-green);
     font-size: 30px;
 }
@@ -29,7 +29,7 @@
 }
 
 .score{
-    font-family: Contra;
+    font-family: var(--font-contra);
 }
 
 .scoreText {

@@ -31,8 +31,8 @@
 }
 
 .screenText {
-    font-family: Contra;
-    font-size: 78px;
+    font-family: var(--font-contra);
+    font-size: var(--font-size-medium);
 }
 
 .screenHeaderContainer {
@@ -41,8 +41,8 @@
     width: 512px;
     height: 100px;
 
-    font-family: Contra;
-    font-size: 39px;
+    font-family: var(--font-contra);
+    font-size: var(--font-size-small);
 
     display: flex;
     flex-direction: row;

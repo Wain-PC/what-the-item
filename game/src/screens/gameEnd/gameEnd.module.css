@@ -6,13 +6,13 @@
 }
 
 .text {
-    font-family: Contra;
-    font-size: 24px;
+    font-family: var(--font-contra);
+    font-size: var(--font-size-xsmall);
     color: var(--color-red);
 }
 
 .nickNameHeader {
-    font-size: 78px;
+    font-size: var(--font-size-medium);
     padding-top: 100px;
 }
 

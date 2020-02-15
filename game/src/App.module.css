@@ -3,6 +3,15 @@
     --color-white: #FFFFFF;
     --color-red: #FF6163;
     --color-green: #97CF26;
+
+    --font-size-xsmall: 24px;
+    --font-size-small: 39px;
+    --font-size-medium: 78px;
+    --font-size-large: 120px;
+    --font-size-xlarge: 170px;
+
+    --font-bk0010: BK0010, monospace;
+    --font-contra: Contra, monospace;
 }
 
 .app {

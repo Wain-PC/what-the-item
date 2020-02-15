@@ -9,8 +9,8 @@
 
 .timer {
     color: var(--color-red);
-    font-family: Contra;
-    font-size: 170px;
+    font-family: var(--font-contra);
+    font-size: var(--font-size-xlarge);
     padding-top: 100px;
 }
 
@@ -22,7 +22,7 @@
 }
 
 .heading {
-    font-size: 80px;
+    font-size: var(--font-size-medium);
 }
 
 .buttons {
