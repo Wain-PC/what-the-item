@@ -202,7 +202,6 @@ const startRound = () => async (dispatch, getState) => {
 
   // Recalculate points after each round (except the first one, obviously)
   if (round !== 0) {
-    dispatch(setTimer(ROUND_END_TIMER));
     await dispatch(calculateRoundPoints());
     // Show correct/incorrect answer message for N seconds
     await dispatch(setMessage({ answered }, ROUND_END_TIMER));
@@ -314,21 +313,21 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
   }
 
   const { index } = winner;
-  const points = timeLeft * POINTS_PER_ROUND;
+  const points = Math.round(POINTS_PER_ROUND * (timeLeft / GAME_SCREEN_TIMER));
+
+  dispatch({
+    type: CALCULATE_ROUND_POINTS,
+    payload: { index, points }
+  });
 
   // Winner found, save round stats to DB.
-  await db.endRound({
+  db.endRound({
     gameId,
     answered: roundAnswered,
     answeredBy: winner.index,
     timeLeft,
     pointsReceived: points,
     pictures
-  });
-
-  dispatch({
-    type: CALCULATE_ROUND_POINTS,
-    payload: { index, points }
   });
 };
 

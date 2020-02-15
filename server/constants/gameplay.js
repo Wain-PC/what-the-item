@@ -9,7 +9,7 @@ module.exports = {
   ROUND_END_TIMER: config.timers.roundEnd,
   ROUNDS_IN_GAME: config.gameplay.roundsInGame,
   ANSWERS_IN_ROUND: config.gameplay.answersInRound,
-  POINTS_PER_ROUND: config.gameplay.pointsMultiplier,
+  POINTS_PER_ROUND: config.gameplay.maxPointsPerRound,
   WINNER_NICKNAME_MAX_LETTERS: config.gameplay.winnerNickNameMaxLetters,
   NICKNAME_LETTER_TABLE: config.gameplay.winnerNickNameLetterTable,
   TOP_PLAYERS: config.gameplay.topPlayers,

@@ -12,7 +12,7 @@ const TopTable = props => {
       return (
         <div
           key={name + score}
-          className={cn(styles.grid, { [styles.selected]: currentGame })}
+          className={cn(styles.grid, { [styles.selected]: index === 2 })}
         >
           <div className={styles.icon}>
             <Avatar index={index} size={avatarSize} />

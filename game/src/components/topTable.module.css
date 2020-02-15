@@ -6,7 +6,7 @@
 .grid {
     width: 400px;
     display: grid;
-    place-items: start;
+    place-items: center;
     grid-template-columns: 0.1fr 2fr 1.8fr 1.3fr;
     grid-template-rows: 1fr;
     grid-template-areas:
@@ -16,17 +16,17 @@
 
 .icon {
     grid-area: first;
-    margin: 0 15px 15px 0;
-    text-align: center;
+    padding: 10px;
 }
 
 .name {
     grid-area: second;
+    place-self: center start;
 }
 
 .spacer {
     grid-area: third;
-    place-self: start;
+    place-self: center end;
 }
 
 .spacer::after {
@@ -35,6 +35,7 @@
 
 .score {
     grid-area: fourth;
+    place-self: center start;
 }
 
 .selected {

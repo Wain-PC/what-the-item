@@ -11,8 +11,7 @@ import {
 import {
   MIN_PLAYERS,
   MAX_PLAYERS,
-  INITIAL_PLAYERS,
-  ANSWERS_IN_ROUND
+  INITIAL_PLAYERS
 } from "../constants/gameplay";
 
 const initialPlayer = {
