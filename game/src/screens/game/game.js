@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styles from "./game.module.css";
 import Player from "../../components/player/player";
 import Button from "../../components/button/button";
-import Thumb from "../../components/thumb/thumb";
+import Screen from "../../components/screen/screen";
 
 const Game = props => {
   const {
@@ -16,8 +16,9 @@ const Game = props => {
     timer: { timer }
   } = props;
 
-  const reaction =
-    answered !== undefined ? <Thumb down={answered === false} /> : null;
+  const imageURL = pictures[answerIndex]
+    ? pictures[answerIndex].picture
+    : undefined;
 
   const buttons = pictures.map(({ picture, selectedBy }, index) => {
     let correct;
@@ -41,18 +42,12 @@ const Game = props => {
         )}
       </div>
       <div className={styles.screen}>
-        <div className={styles.screenHeaderContainer}>
-          <div className={styles.screenTextRound}>Round-{round}:</div>
-          <div className={styles.screenTextTimer}>{timer}</div>
-        </div>
-        <img
-          className={styles.image}
-          src={`/pictures/${
-            pictures[answerIndex] ? pictures[answerIndex].picture : ""
-          }.jpg`}
-          alt="round"
+        <Screen
+          round={round}
+          timer={timer}
+          imageURL={imageURL}
+          isCorrectAnswer={answered}
         />
-        {reaction}
       </div>
       <div className={styles.player2}>
         {list[1] && (

@@ -1,0 +1,70 @@
+.root {
+    position: relative;
+    background-image: url("../../images/elements/frame.svg");
+    width: 1000px;
+    height: 656px;
+}
+
+.top {
+    position: absolute;
+    left: 244px;
+    width: 512px;
+    height: 100px;
+
+    font-family: var(--font-contra);
+    font-size: var(--font-size-small);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.top > * {
+    display: inline-block;
+}
+
+.image {
+    --side-border: 16px;
+    --top-border: 10px;
+    --width: 979px;
+    --height: 541px;
+    --top: 104px;
+    --left: 10px;
+
+
+    position: relative;
+    left: var(--left);
+    width: var(--width);
+    top: var(--top);
+    height: var(--height);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    /* DO NOT TRY THIS AT HOME! */
+    clip-path: polygon(
+            0 var(--top-border),
+            var(--side-border) var(--top-border),
+            var(--side-border) 0,
+            calc(var(--width) - var(--side-border)) 0,
+            calc(var(--width) - var(--side-border)) var(--side-border),
+            var(--width) var(--side-border),
+            var(--width) calc(var(--height) - var(--side-border)),
+            calc(var(--width) - var(--side-border)) calc(var(--height) - var(--side-border)),
+            calc(var(--width) - var(--side-border)) var(--height),
+            var(--side-border) var(--height),
+            var(--side-border) calc(var(--height) - var(--side-border)),
+            0 calc(var(--height) - var(--side-border)));
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer {
+    color: var(--color-black);
+}
+
+.round {
+    color: var(--color-red);
+}
