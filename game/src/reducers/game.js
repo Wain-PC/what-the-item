@@ -49,9 +49,15 @@ export default (state = initialState, action) => {
     }
 
     case SET_GAME_MESSAGE: {
+      const message = action.payload;
       return {
         ...state,
-        message: action.payload || initialState.message
+        message: message
+          ? {
+              ...state.message,
+              ...message
+            }
+          : initialState.message
       };
     }
     default: {

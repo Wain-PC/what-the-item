@@ -1,0 +1,13 @@
+.root {
+    display: block;
+    width: 214px;
+    height: 214px;
+}
+
+.up {
+    background-image: url("../../images/elements/hand 1.png");
+}
+
+.down {
+    background-image: url("../../images/elements/hand 2.png");
+}

@@ -3,14 +3,21 @@ import PropTypes from "prop-types";
 import styles from "./game.module.css";
 import Player from "../../components/player/player";
 import Button from "../../components/button/button";
+import Thumb from "../../components/thumb/thumb";
 
 const Game = props => {
   const {
     round: { pictures, answerIndex },
     players: { list },
-    game: { round },
+    game: {
+      round,
+      message: { answered }
+    },
     timer: { timer }
   } = props;
+
+  const reaction =
+    answered !== undefined ? <Thumb down={answered === false} /> : null;
 
   return (
     <div className={styles.root}>
@@ -34,6 +41,7 @@ const Game = props => {
             }.jpg`}
             alt="round"
           />
+          {reaction}
         </div>
         {list[1] && (
           <Player
@@ -88,7 +96,10 @@ Game.propTypes = {
     ).isRequired
   }).isRequired,
   game: PropTypes.shape({
-    round: PropTypes.number.isRequired
+    round: PropTypes.number.isRequired,
+    message: PropTypes.shape({
+      answered: PropTypes.bool
+    }).isRequired
   }).isRequired
 };
 
