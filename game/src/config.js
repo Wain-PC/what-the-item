@@ -1,12 +1,12 @@
 const config = {
   game: {
     timers: {
-      controls: 3,
+      controls: 10,
       round: 15,
       roundEnd: 3
     },
     gameplay: {
-      defaultPlayers: 1,
+      defaultPlayers: 2,
       minPlayers: 1,
       maxPlayers: 2,
       roundsInGame: 10,
