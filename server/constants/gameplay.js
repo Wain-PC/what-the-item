@@ -12,6 +12,5 @@ module.exports = {
   POINTS_PER_ROUND: config.gameplay.maxPointsPerRound,
   WINNER_NICKNAME_MAX_LETTERS: config.gameplay.winnerNickNameMaxLetters,
   NICKNAME_LETTER_TABLE: config.gameplay.winnerNickNameLetterTable,
-  TOP_PLAYERS: config.gameplay.topPlayers,
-  PLAYERS_COLORS: config.gameplay.playersColors
+  TOP_PLAYERS: config.gameplay.topPlayers
 };

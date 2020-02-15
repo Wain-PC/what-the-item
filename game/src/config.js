@@ -12,10 +12,9 @@ const config = {
       roundsInGame: 10,
       answersInRound: 4,
       maxPointsPerRound: 100,
-      winnerNickNameMaxLetters: 10,
+      winnerNickNameMaxLetters: 8,
       winnerNickNameLetterTable: "0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-      topPlayers: 5,
-      playersColors: ["aquamarine", "coral", "brown", "teal"]
+      topPlayers: 5
     }
   }
 };

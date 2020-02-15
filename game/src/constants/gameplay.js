@@ -12,7 +12,6 @@ const POINTS_PER_ROUND = config.gameplay.maxPointsPerRound;
 const WINNER_NICKNAME_MAX_LETTERS = config.gameplay.winnerNickNameMaxLetters;
 const NICKNAME_LETTER_TABLE = config.gameplay.winnerNickNameLetterTable;
 const TOP_PLAYERS = config.gameplay.topPlayers;
-const PLAYERS_COLORS = config.gameplay.playersColors;
 
 export {
   INITIAL_PLAYERS,
@@ -26,6 +25,5 @@ export {
   POINTS_PER_ROUND,
   WINNER_NICKNAME_MAX_LETTERS,
   NICKNAME_LETTER_TABLE,
-  TOP_PLAYERS,
-  PLAYERS_COLORS
+  TOP_PLAYERS
 };
