@@ -5,7 +5,8 @@ import {
   SET_SCREEN_GAME,
   START_GAME_ROUND,
   SELECT_ROUND_ANSWER,
-  CALCULATE_ROUND_POINTS
+  CALCULATE_ROUND_POINTS,
+  SET_GAME_MESSAGE
 } from "../constants/actions";
 
 import {
@@ -19,7 +20,8 @@ const initialPlayer = {
   name: "Игрок 1",
   ready: false,
   answered: false,
-  score: 0
+  score: 0,
+  scoreAdd: undefined
 };
 
 const generatePlayers = n => {
@@ -40,8 +42,10 @@ const isPlayerInList = (state, index) => {
 };
 
 const getNewList = (state, index) => {
-  if (!isPlayerInList(state, index)) {
-    return null;
+  if (index !== undefined) {
+    if (!isPlayerInList(state, index)) {
+      return null;
+    }
   }
 
   return JSON.parse(JSON.stringify(state.list));
@@ -132,6 +136,7 @@ export default (state = initialState, action) => {
       }
 
       list[index].score += points;
+      list[index].scoreAdd = points;
 
       return {
         ...state,
@@ -144,6 +149,20 @@ export default (state = initialState, action) => {
         ...initialState,
         list: generatePlayers(state.list.length)
       };
+    }
+
+    case SET_GAME_MESSAGE: {
+      if (!action.payload) {
+        const list = state.list.map(player => ({
+          ...player,
+          scoreAdd: undefined
+        }));
+        return {
+          ...state,
+          list
+        };
+      }
+      return state;
     }
 
     default: {

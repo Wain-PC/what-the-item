@@ -38,6 +38,7 @@ const Game = props => {
             index={list[0].index}
             name={list[0].name}
             score={list[0].score}
+            scoreAdd={list[0].scoreAdd}
           />
         )}
       </div>
@@ -55,6 +56,7 @@ const Game = props => {
             index={list[1].index}
             name={list[1].name}
             score={list[1].score}
+            scoreAdd={list[1].scoreAdd}
           />
         )}
       </div>
@@ -83,7 +85,8 @@ Game.propTypes = {
       PropTypes.shape({
         index: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
-        score: PropTypes.number.isRequired
+        score: PropTypes.number.isRequired,
+        scoreAdd: PropTypes.number
       })
     ).isRequired
   }).isRequired,

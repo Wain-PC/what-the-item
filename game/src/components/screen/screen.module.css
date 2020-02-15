@@ -27,13 +27,14 @@
 .image {
     --side-border: 16px;
     --top-border: 10px;
-    --width: 979px;
+    --width: 980px;
     --height: 541px;
     --top: 104px;
     --left: 10px;
 
 
     position: relative;
+    background-color: var(--color-white);
     left: var(--left);
     width: var(--width);
     top: var(--top);

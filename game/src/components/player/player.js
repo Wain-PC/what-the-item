@@ -4,7 +4,7 @@ import cn from "classnames";
 import styles from "./player.module.css";
 import Avatar from "../avatar/avatar";
 
-const Player = ({ ready, name, index, score }) => {
+const Player = ({ ready, name, index, score, scoreAdd }) => {
   return (
     <div className={styles.container}>
       <Avatar index={index} size="large" />
@@ -21,6 +21,9 @@ const Player = ({ ready, name, index, score }) => {
           <div className={styles.scoreText}>Score</div>
         </div>
       ) : null}
+      {scoreAdd !== undefined ? (
+        <div className={styles.scoreAdd}>+{scoreAdd}</div>
+      ) : null}
     </div>
   );
 };
@@ -29,12 +32,14 @@ Player.propTypes = {
   index: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   ready: PropTypes.bool,
-  score: PropTypes.number
+  score: PropTypes.number,
+  scoreAdd: PropTypes.number
 };
 
 Player.defaultProps = {
   ready: undefined,
-  score: undefined
+  score: undefined,
+  scoreAdd: undefined
 };
 
 export default Player;
