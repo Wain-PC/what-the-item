@@ -19,9 +19,19 @@ const Game = props => {
   const reaction =
     answered !== undefined ? <Thumb down={answered === false} /> : null;
 
+  const buttons = pictures.map(({ picture, selectedBy }, index) => {
+    let correct;
+    if (selectedBy !== -1) {
+      correct = index === answerIndex;
+    }
+    return (
+      <Button key={picture} index={index} text={picture} correct={correct} />
+    );
+  });
+
   return (
-    <div className={styles.root}>
-      <div className={styles.main}>
+    <div className={styles.grid}>
+      <div className={styles.player1}>
         {list[0] && (
           <Player
             index={list[0].index}
@@ -29,20 +39,22 @@ const Game = props => {
             score={list[0].score}
           />
         )}
-        <div className={styles.screen}>
-          <div className={styles.screenHeaderContainer}>
-            <div className={styles.screenTextRound}>Round-{round}:</div>
-            <div className={styles.screenTextTimer}>{timer}</div>
-          </div>
-          <img
-            className={styles.image}
-            src={`/pictures/${
-              pictures[answerIndex] ? pictures[answerIndex].picture : ""
-            }.jpg`}
-            alt="round"
-          />
-          {reaction}
+      </div>
+      <div className={styles.screen}>
+        <div className={styles.screenHeaderContainer}>
+          <div className={styles.screenTextRound}>Round-{round}:</div>
+          <div className={styles.screenTextTimer}>{timer}</div>
         </div>
+        <img
+          className={styles.image}
+          src={`/pictures/${
+            pictures[answerIndex] ? pictures[answerIndex].picture : ""
+          }.jpg`}
+          alt="round"
+        />
+        {reaction}
+      </div>
+      <div className={styles.player2}>
         {list[1] && (
           <Player
             index={list[1].index}
@@ -51,22 +63,7 @@ const Game = props => {
           />
         )}
       </div>
-      <div className={styles.buttons}>
-        {pictures.map(({ picture, selectedBy }, index) => {
-          let correct;
-          if (selectedBy !== -1) {
-            correct = index === answerIndex;
-          }
-          return (
-            <Button
-              key={picture}
-              index={index}
-              text={picture}
-              correct={correct}
-            />
-          );
-        })}
-      </div>
+      <div className={styles.footer}>{buttons}</div>
     </div>
   );
 };

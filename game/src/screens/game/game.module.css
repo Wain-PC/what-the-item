@@ -1,20 +1,3 @@
-.root {
-    display: flex;
-    flex-direction: column;
-    justify-content: start;
-    align-items: center;
-
-}
-
-.main {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: start;
-    padding: 100px;
-}
-
 .screen {
     position: relative;
     background-image: url("../../images/elements/frame.svg");
@@ -58,7 +41,36 @@
     color: var(--color-red);
 }
 
-.buttons {
+
+/*------------Grid Styles---------------*/
+
+.grid {
+    display: grid;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: 400px auto 400px;
+    grid-template-rows: auto 230px;
+    grid-template-areas:
+            "player1 screen player2"
+            "footer footer footer";
+    align-items: center;
+    justify-items: center;
+}
+
+.player1 {
+    grid-area: player1;
+}
+
+.player2 {
+    grid-area: player2;
+}
+
+.screen {
+    grid-area: screen;
+}
+
+.footer {
+    grid-area: footer;
     display: flex;
     flex-direction: row;
     justify-content: center;
