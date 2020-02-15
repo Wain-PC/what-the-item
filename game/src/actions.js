@@ -202,6 +202,7 @@ const startRound = () => async (dispatch, getState) => {
 
   // Recalculate points after each round (except the first one, obviously)
   if (round !== 0) {
+    dispatch(setTimer(ROUND_END_TIMER));
     await dispatch(calculateRoundPoints());
     // Show correct/incorrect answer message for N seconds
     await dispatch(setMessage({ answered }, ROUND_END_TIMER));

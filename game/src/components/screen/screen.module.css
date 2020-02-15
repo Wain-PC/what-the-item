@@ -1,6 +1,6 @@
 .root {
     position: relative;
-    background-image: url("../../images/elements/frame.svg");
+    background-image: url("frame.svg");
     width: 1000px;
     height: 656px;
 }
