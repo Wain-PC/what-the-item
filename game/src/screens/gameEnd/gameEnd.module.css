@@ -16,6 +16,11 @@
     padding-top: 100px;
 }
 
+.nickName {
+    color: var(--color-red);
+}
+
 .controlsHeader {
     color: var(--color-red);
+    padding-top: 200px;
 }

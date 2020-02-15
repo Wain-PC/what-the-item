@@ -17,7 +17,7 @@ import {
 
 const initialPlayer = {
   index: 0,
-  name: "Игрок 1",
+  name: "Player-1",
   ready: false,
   answered: false,
   score: 0,
@@ -30,7 +30,7 @@ const generatePlayers = n => {
     .map((player, index) => {
       return {
         ...player,
-        name: `Игрок ${index + 1}`,
+        name: `Player-${index + 1}`,
         index
       };
     });

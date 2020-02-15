@@ -16,7 +16,10 @@ const GameEnd = props => {
       <div className={styles.text}>Top-5</div>
       <TopTable players={players} avatarSize="medium" />
       <div className={styles.nickNameHeader}>Enter Your Nickname:</div>
-      <NickName activeLetter={activeLetter} nickName={nickName} />
+      <div className={styles.nickName}>
+        <NickName activeLetter={activeLetter} nickName={nickName} />
+      </div>
+
       <div className={styles.controlsHeader}>Press Start to Finish</div>
     </div>
   );
