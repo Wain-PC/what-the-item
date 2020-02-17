@@ -2,10 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./controls.module.css";
 import Button from "../../components/button/button";
+import Audio from "../../components/audio/audio";
 
 const Controls = ({ timer: { timer } }) => {
   return (
     <div className={styles.root}>
+      <Audio src="controls" />
       <div className={styles.timer}>{timer}</div>
       <div className={styles.controls} />
       <div className={styles.heading}>Выбирайте ответ при помощи кнопок</div>

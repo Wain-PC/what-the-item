@@ -4,6 +4,7 @@ import styles from "./game.module.css";
 import Player from "../../components/player/player";
 import Button from "../../components/button/button";
 import Screen from "../../components/screen/screen";
+import Audio from "../../components/audio/audio";
 
 const Game = props => {
   const {
@@ -30,8 +31,15 @@ const Game = props => {
     );
   });
 
+  let audio = null;
+
+  if (answered !== undefined) {
+    audio = <Audio src={answered ? "correct" : "notAnswered"} />;
+  }
+
   return (
     <div className={styles.grid}>
+      {audio}
       <div className={styles.player1}>
         {list[0] && (
           <Player
