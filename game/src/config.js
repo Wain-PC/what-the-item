@@ -1,8 +1,8 @@
 const config = {
   game: {
     timers: {
-      controls: 10,
-      round: 15,
+      controls: 9,
+      round: 10,
       roundEnd: 3
     },
     gameplay: {
