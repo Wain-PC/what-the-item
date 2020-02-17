@@ -1,12 +1,13 @@
 .container {
     display: flex;
     flex-direction: column;
+    padding-top: 29px;
 }
 
 .grid {
     display: grid;
     place-items: center;
-    grid-template-columns: 0.1fr 2fr 1.8fr 1.3fr;
+    grid-template-columns: 0.1fr 2fr 1.8fr 1fr;
     grid-template-rows: 1fr;
     grid-template-areas:
             "first second third fourth";
@@ -30,6 +31,7 @@
 
 .spacer::after {
     content: "......";
+    padding-right: 10px;
 }
 
 .score {

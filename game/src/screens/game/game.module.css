@@ -7,7 +7,7 @@
     grid-template-areas:
             "player1 screen player2"
             "footer footer footer";
-    align-items: center;
+    align-items: start;
     justify-items: center;
 }
 
@@ -21,10 +21,12 @@
 
 .player1, .player2 {
     min-height: 650px;
+    padding-top: 78px;
 }
 
 .screen {
     grid-area: screen;
+    padding-top: 78px;
 }
 
 .footer {
@@ -33,5 +35,6 @@
     flex-direction: row;
     justify-content: center;
     width: 100%;
+    font-size: var(--font-size-medium);
 }
 

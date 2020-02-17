@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import cn from "classnames";
-import TopTable from "../../components/topTable";
+import TopTable from "../../components/topTable/topTable";
 import styles from "./top.module.css";
 
 const Top = props => {

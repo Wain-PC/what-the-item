@@ -9,13 +9,13 @@
 }
 
 .name {
-    font-size: 70px;
+    font-size: var(--font-size-medium);
 }
 
 .ready {
     font-family: var(--font-contra);
     color: var(--color-green);
-    font-size: 30px;
+    font-size: var(--font-size-small);
 }
 
 .notReady {
@@ -25,13 +25,13 @@
 .scoreContainer {
     color: var(--color-red);
     text-align: center;
-    font-size: 78px;
+    font-size: var(--font-size-medium);
 }
 .scoreAdd {
     font-family: var(--font-contra);
-    color: var(--color-green);
+    color: var(--color-red);
     text-align: center;
-    font-size: 78px;
+    font-size: var(--font-size-small);
 }
 .score{
     font-family: var(--font-contra);

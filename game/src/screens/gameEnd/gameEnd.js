@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import TopTable from "../../components/topTable";
-import NickName from "../../components/nickName";
+import TopTable from "../../components/topTable/topTable";
+import NickName from "../../components/nickName/nickName";
 
 import styles from "./gameEnd.module.css";
 

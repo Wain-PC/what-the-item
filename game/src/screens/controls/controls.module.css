@@ -1,7 +1,7 @@
 .root {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: start;
     align-items: center;
     text-align: center;
     height: 100%;
@@ -11,7 +11,7 @@
     color: var(--color-red);
     font-family: var(--font-contra);
     font-size: var(--font-size-xlarge);
-    padding-top: 100px;
+    padding-top: 101px;
 }
 
 .controls {
@@ -19,13 +19,16 @@
     height: 322px;
     background-image: url("../../images/elements/joypad.svg");
     background-repeat: no-repeat;
+    margin-top: 75px;
 }
 
 .heading {
     font-size: var(--font-size-medium);
+    padding-top: 65px;
 }
 
 .buttons {
     display: flex;
     flex-direction: row;
+    padding-top: 35px;
 }

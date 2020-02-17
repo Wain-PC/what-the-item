@@ -10,7 +10,7 @@
     background-image: url("../../images/text/02.png");
     background-repeat: no-repeat;
     background-position: center bottom;
-    padding-top: 200px;
+    padding-top: 214px;
 }
 
 .image {
@@ -22,11 +22,11 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 800px;
+    width: 1000px;
     align-self: center;
-    padding-top: 100px;
+    padding-top: 102px;
 }
 
 .players > * {
-    min-width: 400px;
+    min-width: 500px;
 }

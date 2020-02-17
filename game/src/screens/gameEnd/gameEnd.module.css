@@ -3,24 +3,26 @@
     flex-direction: column;
     align-items: center;
     padding-top: 112px;
+    font-size: var(--font-size-medium);
 }
 
 .text {
     font-family: var(--font-contra);
-    font-size: var(--font-size-xsmall);
+    font-size: var(--font-size-small);
     color: var(--color-red);
 }
 
 .nickNameHeader {
-    font-size: var(--font-size-medium);
-    padding-top: 100px;
+    padding-top: 73px;
 }
 
 .nickName {
     color: var(--color-red);
+    font-size: var(--font-size-xlarge);
 }
 
 .controlsHeader {
     color: var(--color-red);
-    padding-top: 200px;
+    font-size: var(--font-size-medium);
+    padding-top: 20px;
 }
