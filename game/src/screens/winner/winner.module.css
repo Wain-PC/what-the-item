@@ -1,3 +1,9 @@
+:root {
+    --rotation-angle: 1deg;
+    --scale: 1.05;
+    --animation: 2s;
+}
+
 .root {
     display: flex;
     flex-direction: column;
@@ -11,6 +17,7 @@
     background-repeat: no-repeat;
     background-position: bottom center;
     padding-top: 85px;
+    animation:scale var(--animation) ease-in-out infinite;
 }
 
 .winner1 {
@@ -37,4 +44,16 @@
 
 .scoreText {
     font-size: var(--font-size-medium);
+}
+
+@keyframes scale {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(var(--scale), var(--scale));
+    }
+    100% {
+        transform: scale(1, 1);
+    }
 }
