@@ -1,9 +1,12 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { Grid, Menu, Sidebar, Icon } from "semantic-ui-react";
 import * as actions from "./actions";
 import * as screens from "./screens";
 import styles from "./App.module.css";
+import "semantic-ui-css/semantic.min.css";
+import AdminMenu from "./components/menu/menu";
 
 class App extends PureComponent {
   // eslint-disable-next-line react/static-property-placement
@@ -36,7 +39,19 @@ class App extends PureComponent {
   }
 
   render() {
-    return <div className={styles.app}>{this.renderScreen()}</div>;
+    const {
+      screen: { id },
+      ...restProps
+    } = this.props;
+
+    return (
+      <Grid padded columns={2}>
+        <Grid.Column width={4}>
+          <AdminMenu actions={restProps} screenId={id} />
+        </Grid.Column>
+        <Grid.Column width={12}>{this.renderScreen()}</Grid.Column>
+      </Grid>
+    );
   }
 }
 

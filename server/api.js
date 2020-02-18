@@ -4,9 +4,11 @@ const {
   startRound,
   endRound,
   endGame,
+  getPlayers,
   getTopPlayers,
   getTopPlayersWithCurrent,
-  saveNickName
+  saveNickName,
+  getGames
 } = require("./db");
 
 const getShuffledPictures = require("./utils/getPictures");
@@ -69,5 +71,23 @@ router.post("/pictures/shuffled", async (req, res) => {
   const data = await getShuffledPictures();
   res.json(data);
 });
+
+// ------ADMIN APIs----------
+
+const adminRouter = express.Router();
+
+adminRouter.post("/players", async (req, res) => {
+  const { limit, page } = req.body;
+  const data = await getPlayers({ limit, page });
+  res.json(data);
+});
+
+adminRouter.post("/games", async (req, res) => {
+  const { limit, page } = req.body;
+  const data = await getGames({ limit, page });
+  res.json(data);
+});
+
+router.use("/admin", adminRouter);
 
 module.exports = router;

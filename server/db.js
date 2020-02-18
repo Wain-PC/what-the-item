@@ -112,12 +112,13 @@ const endGame = async ({ gameId, winner: { index, score, name } }) => {
   await game.save();
 };
 
-const getTopPlayers = async () => {
+const getTopPlayers = async (limit = 100, page = 1) => {
   const documents = await Game.find()
     .select({ "winner.name": true, "winner.score": true })
     .where({ finished: true })
     .sort({ "winner.score": -1, _id: 1 })
-    .limit(TOP_PLAYERS)
+    .skip((page - 1) * limit)
+    .limit(limit)
     .exec();
 
   return documents.map(doc => ({
@@ -129,7 +130,7 @@ const getTopPlayers = async () => {
 
 const getTopPlayersWithCurrent = async ({ gameId }) => {
   // Get the last player that qualifies for topN board
-  const topPlayers = await getTopPlayers();
+  const topPlayers = await getTopPlayers(TOP_PLAYERS);
 
   return topPlayers.map(player => {
     return {
@@ -145,13 +146,48 @@ const saveNickName = async ({ gameId, nickName }) => {
   await game.save();
 };
 
+const getPlayers = async ({ page = 1, limit = 100 }) => {
+  const players = await getTopPlayers(limit, page);
+  const total = await Game.where({ finished: true })
+    .count()
+    .exec();
+  return {
+    players,
+    total,
+    pages: Math.ceil(total / limit),
+    page
+  };
+};
+
+const getGames = async ({ page = 1, limit = 100 }) => {
+  const games = await Game.find()
+    .skip((page - 1) * limit)
+    .limit(limit)
+    .exec();
+
+  const total = await Game.count().exec();
+  const finished = await Game.where({ finished: true })
+    .count()
+    .exec();
+
+  return {
+    games,
+    total,
+    finished,
+    pages: Math.ceil(total / limit),
+    page
+  };
+};
+
 module.exports = {
   connect,
   startGame,
   startRound,
   endRound,
   endGame,
+  getPlayers,
   getTopPlayers,
   getTopPlayersWithCurrent,
-  saveNickName
+  saveNickName,
+  getGames
 };
