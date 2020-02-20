@@ -36,7 +36,9 @@ const gameSchema = new Schema({
   rounds: [roundSchema],
   timeToSolve: Number,
   roundsInGame: Number,
-  winner: playerSchema
+  winner: playerSchema,
+  startedOn: Date,
+  finishedOn: Date
 });
 
 const Game = mongoose.model("Game", gameSchema);
@@ -64,7 +66,8 @@ const startGame = async ({ players }) => {
     players: playersToSave,
     finished: false,
     timeToSolve: GAME_SCREEN_TIMER,
-    roundsInGame: ROUNDS_IN_GAME
+    roundsInGame: ROUNDS_IN_GAME,
+    startedOn: new Date()
   });
   const { _id } = await game.save();
   return _id.toString();
@@ -109,10 +112,11 @@ const endGame = async ({ gameId, winner: { index, score, name } }) => {
   };
   game.finished = true;
   game.winner = winnerToSave;
+  game.finishedOn = new Date();
   await game.save();
 };
 
-const getTopPlayers = async (limit = 100, page = 1) => {
+const getTopPlayers = async (limit = TOP_PLAYERS, page = 1) => {
   const documents = await Game.find()
     .select({ "winner.name": true, "winner.score": true })
     .where({ finished: true })
@@ -130,7 +134,7 @@ const getTopPlayers = async (limit = 100, page = 1) => {
 
 const getTopPlayersWithCurrent = async ({ gameId }) => {
   // Get the last player that qualifies for topN board
-  const topPlayers = await getTopPlayers(TOP_PLAYERS);
+  const topPlayers = await getTopPlayers();
 
   return topPlayers.map(player => {
     return {
@@ -146,7 +150,7 @@ const saveNickName = async ({ gameId, nickName }) => {
   await game.save();
 };
 
-const getPlayers = async ({ page = 1, limit = 100 }) => {
+const getPlayers = async ({ page = 1, limit = TOP_PLAYERS }) => {
   const players = await getTopPlayers(limit, page);
   const total = await Game.where({ finished: true })
     .count()
