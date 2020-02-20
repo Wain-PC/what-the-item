@@ -1,7 +1,8 @@
 {
   "game": {
     "system": {
-      "port": 3333
+      "port": 3333,
+      "graphql": "/graphql"
     },
     "db": {
       "mongoConnectionLine": "mongodb://localhost/db"
