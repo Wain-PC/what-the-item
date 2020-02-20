@@ -6,10 +6,6 @@ const config = require("./server/config");
 const api = require("./server/api");
 const apollo = require("./server/apollo");
 
-/**
- * Listen on provided port, on all network interfaces.
- */
-
 const app = express();
 
 app.use(logger("dev"));
@@ -19,12 +15,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api", api);
 
 const { graphql, port } = config.system;
-apollo(app, graphql);
+apollo(graphql, app);
 
 db.connect();
 
 app.listen(port, () => {
-  console.log(`🚀 Server ready at http://localhost:${port}/graphql`);
+  console.log(`🚀 Server ready at http://localhost:${port}${graphql}`);
 });
 
 module.exports = app;
