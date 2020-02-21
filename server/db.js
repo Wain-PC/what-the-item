@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 const { MONGODB_CONNECTION_STRING } = require("./constants/db");
-const {
-  GAME_SCREEN_TIMER,
-  ROUNDS_IN_GAME,
-  TOP_PLAYERS
-} = require("./constants/gameplay");
+const defaultConfig = require("./config");
 
 const { Schema } = mongoose;
 
@@ -30,18 +26,57 @@ const roundSchema = new Schema({
   pointsReceived: Number
 });
 
+const timersConfigSchema = new Schema({
+  controls: { type: Number, default: defaultConfig.timers.controls },
+  round: { type: Number, default: defaultConfig.timers.round },
+  roundEnd: { type: Number, default: defaultConfig.timers.roundEnd }
+});
+
+const gameplayConfigSchema = new Schema({
+  defaultPlayers: {
+    type: Number,
+    default: defaultConfig.gameplay.defaultPlayers
+  },
+  minPlayers: { type: Number, default: defaultConfig.gameplay.minPlayers },
+  maxPlayers: { type: Number, default: defaultConfig.gameplay.maxPlayers },
+  roundsInGame: { type: Number, default: defaultConfig.gameplay.roundsInGame },
+  answersInRound: {
+    type: Number,
+    default: defaultConfig.gameplay.answersInRound
+  },
+  maxPointsPerRound: {
+    type: Number,
+    default: defaultConfig.gameplay.maxPointsPerRound
+  },
+  winnerNickNameMaxLetters: {
+    type: Number,
+    default: defaultConfig.gameplay.winnerNickNameMaxLetters
+  },
+  winnerNickNameLetterTable: {
+    type: String,
+    default: defaultConfig.gameplay.winnerNickNameLetterTable
+  },
+  topPlayers: { type: Number, default: defaultConfig.gameplay.topPlayers }
+});
+
+const configSchema = new Schema({
+  timers: timersConfigSchema,
+  gameplay: gameplayConfigSchema
+});
+
 const gameSchema = new Schema({
   finished: Boolean,
   players: [playerSchema],
   rounds: [roundSchema],
-  timeToSolve: Number,
   roundsInGame: Number,
   winner: playerSchema,
   startedOn: Date,
-  finishedOn: Date
+  finishedOn: Date,
+  config: configSchema
 });
 
 const Game = mongoose.model("Game", gameSchema);
+const Config = mongoose.model("Config", configSchema);
 
 const connect = () => {
   return new Promise((resolve, reject) => {
@@ -62,12 +97,14 @@ const startGame = async ({ players }) => {
     score
   }));
 
+  // eslint-disable-next-line no-use-before-define
+  const config = await getConfig();
+
   const game = new Game({
     players: playersToSave,
     finished: false,
-    timeToSolve: GAME_SCREEN_TIMER,
-    roundsInGame: ROUNDS_IN_GAME,
-    startedOn: new Date()
+    startedOn: new Date(),
+    config
   });
   const { _id } = await game.save();
   return _id.toString();
@@ -116,13 +153,19 @@ const endGame = async ({ gameId, winner: { index, score, name } }) => {
   await game.save();
 };
 
-const getTopPlayers = async (limit = TOP_PLAYERS, page = 1) => {
+const getTopPlayers = async (limit, page = 1) => {
+  const {
+    gameplay: { topPlayers }
+  } = await getConfig(); // eslint-disable-line no-use-before-define
+
+  const realLimit = limit || topPlayers;
+
   const documents = await Game.find()
     .select({ "winner.name": true, "winner.score": true })
     .where({ finished: true })
     .sort({ "winner.score": -1, _id: 1 })
-    .skip((page - 1) * limit)
-    .limit(limit)
+    .skip((page - 1) * realLimit)
+    .limit(realLimit)
     .exec();
 
   return documents.map(doc => ({
@@ -150,20 +193,18 @@ const saveNickName = async ({ gameId, nickName }) => {
   await game.save();
 };
 
-const getPlayers = async ({ page = 1, limit = TOP_PLAYERS }) => {
+const getPlayers = async ({ limit, page = 1 } = {}) => {
   const players = await getTopPlayers(limit, page);
   const total = await Game.where({ finished: true })
     .count()
     .exec();
   return {
     players,
-    total,
-    pages: Math.ceil(total / limit),
-    page
+    total
   };
 };
 
-const getGames = async ({ page = 1, limit = 100 }) => {
+const getGames = async ({ page = 1, limit = 100 } = {}) => {
   const games = await Game.find()
     .skip((page - 1) * limit)
     .limit(limit)
@@ -177,11 +218,22 @@ const getGames = async ({ page = 1, limit = 100 }) => {
   return {
     games,
     total,
-    finished,
-    pages: Math.ceil(total / limit),
-    page
+    finished
   };
 };
+
+const setConfig = async (newConfig = {}) =>
+  Config.findOneAndUpdate({}, newConfig, {
+    new: true,
+    upsert: true,
+    setDefaultsOnInsert: true,
+    fields: {
+      gameplay: true,
+      timers: true
+    }
+  });
+
+const getConfig = () => Config.findOne() || setConfig();
 
 module.exports = {
   connect,
@@ -193,5 +245,7 @@ module.exports = {
   getTopPlayers,
   getTopPlayersWithCurrent,
   saveNickName,
-  getGames
+  getGames,
+  getConfig,
+  setConfig
 };

@@ -1,7 +1,11 @@
+const db = require("./db");
+
 // Provide resolver functions for your schema fields
 const resolvers = {
   Query: {
-    hello: () => "Hello world!"
+    topPlayers: db.getPlayers,
+    topGames: db.getGames,
+    config: db.getConfig
   }
 };
 
