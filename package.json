@@ -11,6 +11,7 @@
     "build": "cd game && yarn && yarn build && cp -rf build/* ../public && cd ../admin && yarn && yarn build && cp -rf build/* ../public/admin"
   },
   "dependencies": {
+    "apollo-datasource": "^0.7.0",
     "apollo-server-express": "^2.10.1",
     "config": "^3.2.5",
     "cookie-parser": "~1.4.4",
