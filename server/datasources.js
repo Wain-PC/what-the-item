@@ -26,8 +26,8 @@ class DBDataSource extends DataSource {
       startedOn: new Date(),
       config
     });
-    const { _id } = await game.save();
-    return _id.toString();
+    await game.save();
+    return game;
   }
 
   async startRound({ gameId, index, pictures, answerIndex }) {
@@ -35,15 +35,12 @@ class DBDataSource extends DataSource {
     const round = { index, pictures, answerIndex };
     game.rounds.push(round);
     await game.save();
+    return game;
   }
 
   async endRound({
     gameId,
-    answered,
-    answeredBy,
-    timeLeft,
-    pointsReceived,
-    pictures
+    round: { answered, answeredBy, timeLeft, pointsReceived, pictures }
   }) {
     const game = await this.models.Game.findOne({ _id: gameId });
     const [round] = game.rounds.slice(-1);
@@ -58,6 +55,7 @@ class DBDataSource extends DataSource {
     }
 
     await game.save();
+    return game;
   }
 
   async endGame({ gameId, winner: { index, score, name } }) {
@@ -71,6 +69,7 @@ class DBDataSource extends DataSource {
     game.winner = winnerToSave;
     game.finishedOn = new Date();
     await game.save();
+    return game;
   }
 
   async getTopPlayers(limit, page = 1) {
@@ -111,6 +110,7 @@ class DBDataSource extends DataSource {
     const game = await this.models.Game.findOne({ _id: gameId });
     game.winner.name = nickName;
     await game.save();
+    return game;
   }
 
   async getPlayers({ limit, page = 1 } = {}) {

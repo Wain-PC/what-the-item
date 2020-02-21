@@ -50,6 +50,7 @@ const schema = gql`
   }
 
   type Game {
+    _id: String!
     config: Config!
     finished: Boolean!
     players: [Player]!
@@ -74,6 +75,46 @@ const schema = gql`
     topPlayers: PlayersResponse!
     topGames: GamesResponse!
     config: Config!
+  }
+
+  input InputPlayer {
+    index: Int!
+    score: Int!
+    name: String!
+  }
+
+  input InputWinner {
+    score: Int!
+    name: String!
+  }
+
+  input InputPicture {
+    picture: String!
+    selected: Boolean!
+    selectedBy: Int!
+  }
+
+  input InputRound {
+    index: Int!
+    pictures: [InputPicture]!
+    answered: Boolean!
+    answerIndex: Int!
+    answeredBy: Boolean!
+    timeLeft: Int!
+    pointsReceived: Int!
+  }
+
+  type Mutation {
+    startGame(players: [InputPlayer]!): Game!
+    endGame(gameId: String, winner: InputWinner!): Game!
+    startRound(
+      gameId: String!
+      index: Int!
+      pictures: [InputPicture!]!
+      answerIndex: Int!
+    ): Game!
+    endRound(gameId: Int!, round: InputRound!): Game!
+    setNickName(nickName: String!): Game!
   }
 `;
 
