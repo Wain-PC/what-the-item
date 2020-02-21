@@ -1,12 +1,14 @@
 import {
   SET_SCREEN_DASHBOARD,
   SET_SCREEN_TOP_PLAYERS,
-  SET_SCREEN_GAMES
+  SET_SCREEN_GAMES,
+  SET_SCREEN_CONFIG
 } from "../constants/actions";
 import {
   SCREEN_DASHBOARD,
   SCREEN_TOP_PLAYERS,
-  SCREEN_GAMES
+  SCREEN_GAMES,
+  SCREEN_CONFIG
 } from "../constants/screens";
 
 const initialState = {
@@ -31,6 +33,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         id: SCREEN_GAMES
+      };
+    }
+    case SET_SCREEN_CONFIG: {
+      return {
+        ...state,
+        id: SCREEN_CONFIG
       };
     }
     default: {

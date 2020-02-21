@@ -64,12 +64,16 @@ const schema = gql`
   type PlayersResponse {
     players: [Player]!
     total: Int
+    page: Int!
+    pages: Int!
   }
 
   type GamesResponse {
     games: [Game]!
     total: Int
     finished: Int
+    page: Int!
+    pages: Int!
   }
 
   type Query {
@@ -105,6 +109,29 @@ const schema = gql`
     pointsReceived: Int!
   }
 
+  input InputConfigTimers {
+    controls: Int
+    round: Int
+    roundEnd: Int
+  }
+
+  input InputConfigGameplay {
+    defaultPlayers: Int
+    minPlayers: Int
+    maxPlayers: Int
+    roundsInGame: Int
+    answersInRound: Int
+    maxPointsPerRound: Int
+    winnerNickNameMaxLetters: Int
+    winnerNickNameLetterTable: String
+    topPlayers: Int
+  }
+
+  input InputConfig {
+    timers: InputConfigTimers
+    gameplay: InputConfigGameplay
+  }
+
   type Mutation {
     startGame(players: [InputPlayer]!): Game!
     endGame(gameId: String, winner: InputWinner!): Game!
@@ -116,6 +143,7 @@ const schema = gql`
     ): Game!
     endRound(gameId: Int!, round: InputRound!): Game!
     setNickName(nickName: String!): Game!
+    setConfig(config: InputConfig!): Config!
   }
 `;
 

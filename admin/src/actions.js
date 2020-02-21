@@ -5,7 +5,9 @@ import {
   SET_SCREEN_DASHBOARD,
   SET_SCREEN_TOP_PLAYERS,
   SET_SCREEN_GAMES,
-  LOAD_GAMES_SUCCESS
+  LOAD_GAMES_SUCCESS,
+  SET_SCREEN_CONFIG,
+  LOAD_CONFIG_SUCCESS
 } from "./constants/actions";
 
 import query from "./utils/request";
@@ -77,5 +79,41 @@ export const setScreenGames = () => async dispatch => {
   dispatch({
     type: LOAD_GAMES_SUCCESS,
     payload: games
+  });
+};
+export const setScreenConfig = () => async dispatch => {
+  dispatch({
+    type: SET_SCREEN_CONFIG
+  });
+
+  // DB request here
+  const {
+    data: { config }
+  } = await query(gql`
+    {
+      config {
+        gameplay {
+          answersInRound
+          defaultPlayers
+          maxPlayers
+          maxPointsPerRound
+          minPlayers
+          roundsInGame
+          topPlayers
+          winnerNickNameLetterTable
+          winnerNickNameMaxLetters
+        }
+        timers {
+          controls
+          round
+          roundEnd
+        }
+      }
+    }
+  `);
+
+  dispatch({
+    type: LOAD_CONFIG_SUCCESS,
+    payload: config
   });
 };

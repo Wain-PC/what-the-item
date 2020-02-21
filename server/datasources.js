@@ -72,7 +72,7 @@ class DBDataSource extends DataSource {
     return game;
   }
 
-  async getTopPlayers(limit, page = 1) {
+  async getTopPlayers({ limit, where = {} }) {
     const {
       gameplay: { topPlayers }
     } = await this.getConfig();
@@ -81,9 +81,8 @@ class DBDataSource extends DataSource {
 
     const documents = await this.models.Game.find()
       .select({ "winner.name": true, "winner.score": true })
-      .where({ finished: true })
+      .where(where)
       .sort({ "winner.score": -1, _id: 1 })
-      .skip((page - 1) * realLimit)
       .limit(realLimit)
       .exec();
 
@@ -126,6 +125,7 @@ class DBDataSource extends DataSource {
 
   async getGames({ page = 1, limit = 100 } = {}) {
     const games = await this.models.Game.find()
+      .sort({ _id: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
       .exec();
