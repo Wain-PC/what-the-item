@@ -1,13 +1,8 @@
-import axios from "axios";
+import ApolloClient from "apollo-boost";
 
-const request = async (endpoint, params = {}, options = {}) => {
-  const { data } = await axios.request({
-    method: "post",
-    url: `/api/admin/${endpoint}`,
-    data: params,
-    ...options
-  });
-  return data;
-};
+const client = new ApolloClient({
+  uri: "/graphql"
+});
 
-export default request;
+const query = async q => client.query({ query: q });
+export default query;

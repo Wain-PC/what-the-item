@@ -5,6 +5,7 @@ const schema = gql`
   scalar Date
 
   type Player {
+    gameId: String
     index: Int!
     score: Int!
     name: String!
@@ -51,7 +52,7 @@ const schema = gql`
 
   type Game {
     _id: String!
-    config: Config!
+    config: Config
     finished: Boolean!
     players: [Player]!
     rounds: [Round]!
@@ -72,8 +73,8 @@ const schema = gql`
   }
 
   type Query {
-    topPlayers: PlayersResponse!
-    topGames: GamesResponse!
+    players: PlayersResponse!
+    games: GamesResponse!
     config: Config!
   }
 

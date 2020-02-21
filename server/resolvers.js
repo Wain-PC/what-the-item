@@ -4,8 +4,8 @@ const call = dbMethodName => (parent, args, { dataSources: { db } }) =>
 
 const resolvers = {
   Query: {
-    topPlayers: call("getPlayers"),
-    topGames: call("getGames"),
+    players: call("getPlayers"),
+    games: call("getGames"),
     config: call("getConfig")
   },
   Mutation: {

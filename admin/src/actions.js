@@ -1,3 +1,5 @@
+import { gql } from "apollo-boost";
+
 import {
   LOAD_TOP_PLAYERS_SUCCESS,
   SET_SCREEN_DASHBOARD,
@@ -6,7 +8,7 @@ import {
   LOAD_GAMES_SUCCESS
 } from "./constants/actions";
 
-import * as db from "./utils/db";
+import query from "./utils/request";
 
 export const setScreenDashboard = () => dispatch => {
   dispatch({
@@ -20,11 +22,24 @@ export const setScreenTopPlayers = () => async dispatch => {
   });
 
   // DB request here
-  const data = await db.getPlayers();
+  const {
+    data: { players }
+  } = await query(gql`
+    {
+      players {
+        players {
+          gameId
+          name
+          score
+        }
+        total
+      }
+    }
+  `);
 
   dispatch({
     type: LOAD_TOP_PLAYERS_SUCCESS,
-    payload: data
+    payload: players
   });
 };
 
@@ -34,10 +49,33 @@ export const setScreenGames = () => async dispatch => {
   });
 
   // DB request here
-  const data = await db.getGames();
+  const {
+    data: { games }
+  } = await query(gql`
+    {
+      games {
+        games {
+          _id
+          finished
+          players {
+            name
+            score
+          }
+          config {
+            __typename
+            timers {
+              controls
+            }
+          }
+        }
+        total
+        finished
+      }
+    }
+  `);
 
   dispatch({
     type: LOAD_GAMES_SUCCESS,
-    payload: data
+    payload: games
   });
 };
