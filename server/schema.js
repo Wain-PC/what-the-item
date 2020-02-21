@@ -5,7 +5,8 @@ const schema = gql`
   scalar Date
 
   type Player {
-    gameId: String
+    _id: ID
+    gameId: ID
     index: Int!
     score: Int!
     name: String!
@@ -51,7 +52,7 @@ const schema = gql`
   }
 
   type Game {
-    _id: String!
+    _id: ID!
     config: Config
     finished: Boolean!
     players: [Player]!
@@ -134,14 +135,14 @@ const schema = gql`
 
   type Mutation {
     startGame(players: [InputPlayer]!): Game!
-    endGame(gameId: String, winner: InputWinner!): Game!
+    endGame(gameId: ID!, winner: InputWinner!): Game!
     startRound(
-      gameId: String!
+      gameId: ID!
       index: Int!
       pictures: [InputPicture!]!
       answerIndex: Int!
     ): Game!
-    endRound(gameId: Int!, round: InputRound!): Game!
+    endRound(gameId: ID!, round: InputRound!): Game!
     setNickName(nickName: String!): Game!
     setConfig(config: InputConfig!): Config!
   }

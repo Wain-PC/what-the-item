@@ -72,39 +72,6 @@ class DBDataSource extends DataSource {
     return game;
   }
 
-  async getTopPlayers({ limit, where = {} }) {
-    const {
-      gameplay: { topPlayers }
-    } = await this.getConfig();
-
-    const realLimit = limit || topPlayers;
-
-    const documents = await this.models.Game.find()
-      .select({ "winner.name": true, "winner.score": true })
-      .where(where)
-      .sort({ "winner.score": -1, _id: 1 })
-      .limit(realLimit)
-      .exec();
-
-    return documents.map(doc => ({
-      gameId: doc._id.toString(),
-      name: doc.winner.name,
-      score: doc.winner.score
-    }));
-  }
-
-  async getTopPlayersWithCurrent({ gameId }) {
-    // Get the last player that qualifies for topN board
-    const topPlayers = await this.getTopPlayers();
-
-    return topPlayers.map(player => {
-      return {
-        ...player,
-        currentGame: player.gameId === gameId
-      };
-    });
-  }
-
   async saveNickName({ gameId, nickName }) {
     const game = await this.models.Game.findOne({ _id: gameId });
     game.winner.name = nickName;
@@ -112,22 +79,11 @@ class DBDataSource extends DataSource {
     return game;
   }
 
-  async getPlayers({ limit, page = 1 } = {}) {
-    const players = await this.getTopPlayers(limit, page);
-    const total = await this.models.Game.where({ finished: true })
-      .countDocuments()
-      .exec();
-    return {
-      players,
-      total
-    };
-  }
+  // ---------------ADMINISTRATION METHODS---------------
 
-  async getGames({ page = 1, limit = 100 } = {}) {
+  async getGames() {
     const games = await this.models.Game.find()
       .sort({ _id: -1 })
-      .skip((page - 1) * limit)
-      .limit(limit)
       .exec();
 
     const total = await this.models.Game.countDocuments().exec();
@@ -139,6 +95,57 @@ class DBDataSource extends DataSource {
       games,
       total,
       finished
+    };
+  }
+
+  async getWinners({ where = {}, limit = 100, sort = {} }) {
+    const documentsModel = this.models.Game.find()
+      .where({ finished: true, winner: { $ne: null }, ...where })
+      .sort({ ...sort, _id: 1 });
+
+    const documents = await documentsModel.limit(limit).exec();
+    const total = await documentsModel.countDocuments().exec();
+
+    return {
+      players: documents.map(doc => ({
+        gameId: doc._id.toString(),
+        _id: doc.winner._id,
+        name: doc.winner.name,
+        score: doc.winner.score
+      })),
+      total
+    };
+  }
+
+  async getWinnersWithCurrentGameId({ gameId }) {
+    const {
+      gameplay: { topPlayers }
+    } = await this.getConfig();
+
+    const { players } = await this.getWinners({
+      limit: topPlayers,
+      sort: { "winner.score": -1 }
+    });
+
+    return players.map(player => {
+      return {
+        ...player,
+        currentGame: player.gameId === gameId
+      };
+    });
+  }
+
+  async getPlayers({ from = "" } = {}) {
+    const where = from
+      ? {
+          _id: { $gt: from }
+        }
+      : {};
+
+    const { players, total } = await this.getWinners({ where, limit: 10 });
+    return {
+      players,
+      total
     };
   }
 
