@@ -75,9 +75,16 @@ const gameSchema = new Schema({
   config: configSchema
 });
 
+const imageSchema = new Schema({
+  image: Buffer,
+  title: String,
+  incorrectTitles: [String]
+});
+
 const models = {
   Game: mongoose.model("Game", gameSchema),
-  Config: mongoose.model("Config", configSchema)
+  Config: mongoose.model("Config", configSchema),
+  Image: mongoose.model("Image", imageSchema)
 };
 
 const connect = () => {
