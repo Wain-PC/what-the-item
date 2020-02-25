@@ -77,8 +77,10 @@ const gameSchema = new Schema({
 
 const imageSchema = new Schema({
   image: Buffer,
+  extension: String,
   title: String,
-  incorrectTitles: [String]
+  incorrectTitles: [String],
+  active: { type: Boolean, default: true }
 });
 
 const models = {

@@ -77,6 +77,14 @@ const schema = gql`
     pages: Int!
   }
 
+  type Image {
+    image: String
+    extension: String
+    title: String
+    incorrectTitles: [String]
+    active: Boolean
+  }
+
   type Query {
     players: PlayersResponse!
     games: GamesResponse!
@@ -133,6 +141,13 @@ const schema = gql`
     gameplay: InputConfigGameplay
   }
 
+  input InputImage {
+    image: String
+    title: String
+    incorrectTitles: [String]
+    active: Boolean
+  }
+
   type Mutation {
     startGame(players: [InputPlayer]!): Game!
     endGame(gameId: ID!, winner: InputWinner!): Game!
@@ -144,7 +159,8 @@ const schema = gql`
     ): Game!
     endRound(gameId: ID!, round: InputRound!): Game!
     setNickName(nickName: String!): Game!
-    setConfig(config: InputConfig!): Config!
+    saveConfig(config: InputConfig!): Config!
+    saveImage(image: InputImage!): Image!
   }
 `;
 

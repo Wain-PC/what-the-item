@@ -13,7 +13,9 @@ const resolvers = {
     endGame: call("endGame"),
     startRound: call("startRound"),
     endRound: call("endRound"),
-    setNickName: call("setNickName")
+    setNickName: call("setNickName"),
+    saveConfig: call("saveConfig"),
+    saveImage: call("saveImage")
   }
 };
 module.exports = resolvers;

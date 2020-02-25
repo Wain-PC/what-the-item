@@ -1,4 +1,5 @@
 const { DataSource } = require("apollo-datasource");
+const { base64ToBinary, mapImage, mapImages } = require("./utils/base64");
 
 class DBDataSource extends DataSource {
   constructor(db) {
@@ -149,7 +150,7 @@ class DBDataSource extends DataSource {
     };
   }
 
-  async setConfig(newConfig = {}) {
+  async saveConfig(newConfig = {}) {
     this.models.Config.findOneAndUpdate({}, newConfig, {
       new: true,
       upsert: true,
@@ -162,7 +163,49 @@ class DBDataSource extends DataSource {
   }
 
   getConfig() {
-    return this.models.Config.findOne() || this.setConfig();
+    return this.models.Config.findOne() || this.saveConfig();
+  }
+
+  async saveImage({ image: { image, title, incorrectTitles, active } }) {
+    const { binary, extension } = base64ToBinary(image);
+
+    const img = new this.models.Image({
+      image: binary,
+      extension,
+      title,
+      incorrectTitles: incorrectTitles.filter(v => v),
+      active
+    });
+    await img.save();
+    return mapImage(img);
+  }
+
+  async getImages() {
+    const images = mapImages(
+      await this.models.Image.find()
+        .sort({ _id: -1 })
+        .exec()
+    );
+
+    const total = await this.models.Game.countDocuments().exec();
+    const active = await this.models.Game.where({ active: true })
+      .countDocuments()
+      .exec();
+
+    return {
+      images,
+      total,
+      active
+    };
+  }
+
+  async getNRandomImages({ n }) {
+    return mapImages(
+      await this.models.Image.aggregate([
+        { $match: { active: true } },
+        { $sample: { size: n } }
+      ]).exec()
+    );
   }
 }
 
