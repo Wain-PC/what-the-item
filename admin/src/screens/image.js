@@ -81,7 +81,6 @@ class ImageScreen extends PureComponent {
           <Checkbox
             toggle
             label="Активный"
-            positive
             checked={active}
             onChange={this.onActiveChange}
           />
