@@ -151,10 +151,12 @@ class DBDataSource extends DataSource {
   }
 
   async saveConfig(newConfig = {}) {
-    this.models.Config.findOneAndUpdate({}, newConfig, {
+    const { config = {} } = newConfig;
+    return this.models.Config.findOneAndUpdate({}, config, {
       new: true,
       upsert: true,
       setDefaultsOnInsert: true,
+      useFindAndModify: true,
       fields: {
         gameplay: true,
         timers: true

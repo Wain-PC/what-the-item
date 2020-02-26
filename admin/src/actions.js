@@ -16,7 +16,11 @@ import {
   LOAD_CONFIG_ERROR,
   SAVE_IMAGE_ERROR,
   LOAD_GAMES_START,
-  LOAD_GAMES_ERROR
+  LOAD_GAMES_ERROR,
+  SAVE_CONFIG_START,
+  SAVE_CONFIG_SUCCESS,
+  SAVE_CONFIG_ERROR,
+  CONFIG_PROPERTY_CHANGE
 } from "./constants/actions";
 
 import { query, mutation } from "./utils/request";
@@ -112,14 +116,10 @@ export const loadConfig = () => async dispatch => {
       {
         config {
           gameplay {
-            answersInRound
             defaultPlayers
-            maxPlayers
             maxPointsPerRound
-            minPlayers
             roundsInGame
             topPlayers
-            winnerNickNameLetterTable
             winnerNickNameMaxLetters
           }
           timers {
@@ -193,3 +193,51 @@ export const saveImage = () => async (dispatch, getState) => {
     });
   }
 };
+
+export const saveConfig = () => async (dispatch, getState) => {
+  const {
+    config: { timers, gameplay }
+  } = getState();
+  dispatch({
+    type: SAVE_CONFIG_START
+  });
+
+  try {
+    const newConfig = await mutation(
+      gql`
+        mutation saveConfig($config: InputConfig!) {
+          saveConfig(config: $config) {
+            gameplay {
+              defaultPlayers
+              maxPointsPerRound
+              roundsInGame
+              topPlayers
+              winnerNickNameMaxLetters
+            }
+            timers {
+              controls
+              round
+              roundEnd
+            }
+          }
+        }
+      `,
+      { config: { timers, gameplay } }
+    );
+
+    dispatch({
+      type: SAVE_CONFIG_SUCCESS,
+      payload: newConfig
+    });
+  } catch (e) {
+    dispatch({
+      type: SAVE_CONFIG_ERROR,
+      payload: e.message
+    });
+  }
+};
+
+export const changeConfig = (type, id, value) => ({
+  type: CONFIG_PROPERTY_CHANGE,
+  payload: { type, id, value }
+});

@@ -1,7 +1,10 @@
-import ApolloClient from "apollo-boost";
+import ApolloClient, { InMemoryCache } from "apollo-boost";
 
 const client = new ApolloClient({
-  uri: "/graphql"
+  uri: "/graphql",
+  cache: new InMemoryCache({
+    addTypename: false
+  })
 });
 
 const query = async q => client.query({ query: q });
