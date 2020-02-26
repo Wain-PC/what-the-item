@@ -6,7 +6,7 @@ const base64ToBinary = dataURI => {
   const base64 = dataURI.substring(base64Index);
   const regExpResult = extensionRegExp.exec(dataURI);
   const extension = regExpResult && regExpResult[1];
-  const binary = Buffer.from(base64, "base64").toString("binary");
+  const binary = Buffer.from(base64, "base64");
   return {
     binary,
     extension

@@ -17,10 +17,7 @@ class ImageScreen extends PureComponent {
   };
 
   onImageLoad = e => {
-    const {
-      imagePropertyChange,
-      image: { title }
-    } = this.props;
+    const { imagePropertyChange, title } = this.props;
     const reader = new FileReader();
     const file = e.target.files[0];
     reader.onload = () => {
@@ -50,10 +47,7 @@ class ImageScreen extends PureComponent {
   };
 
   onActiveChange = () => {
-    const {
-      imagePropertyChange,
-      image: { active }
-    } = this.props;
+    const { imagePropertyChange, active } = this.props;
     imagePropertyChange("active", !active);
   };
 
@@ -121,7 +115,6 @@ class ImageScreen extends PureComponent {
         </Form.Field>
         <Form.Field>
           <Checkbox
-            toggle
             label="Активный"
             checked={active}
             onChange={this.onActiveChange}

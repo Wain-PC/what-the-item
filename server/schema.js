@@ -78,17 +78,24 @@ const schema = gql`
   }
 
   type Image {
-    image: String
-    extension: String
-    title: String
-    incorrectTitles: [String]
-    active: Boolean
+    image: String!
+    extension: String!
+    title: String!
+    incorrectTitles: [String]!
+    active: Boolean!
+  }
+
+  type ImagesResponse {
+    images: [Image]!
+    total: Int!
+    active: Int!
   }
 
   type Query {
     players: PlayersResponse!
     games: GamesResponse!
     config: Config!
+    images: ImagesResponse!
   }
 
   input InputPlayer {

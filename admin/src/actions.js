@@ -20,7 +20,10 @@ import {
   SAVE_CONFIG_START,
   SAVE_CONFIG_SUCCESS,
   SAVE_CONFIG_ERROR,
-  CONFIG_PROPERTY_CHANGE
+  CONFIG_PROPERTY_CHANGE,
+  LOAD_IMAGES_START,
+  LOAD_IMAGES_SUCCESS,
+  LOAD_IMAGES_ERROR
 } from "./constants/actions";
 
 import { query, mutation } from "./utils/request";
@@ -241,3 +244,39 @@ export const changeConfig = (type, id, value) => ({
   type: CONFIG_PROPERTY_CHANGE,
   payload: { type, id, value }
 });
+
+export const loadImages = () => async dispatch => {
+  dispatch({
+    type: LOAD_IMAGES_START
+  });
+
+  try {
+    // DB request here
+    const {
+      data: { images }
+    } = await query(gql`
+      {
+        images {
+          images {
+            image
+            title
+            incorrectTitles
+            active
+          }
+          total
+          active
+        }
+      }
+    `);
+
+    dispatch({
+      type: LOAD_IMAGES_SUCCESS,
+      payload: images
+    });
+  } catch (e) {
+    dispatch({
+      type: LOAD_IMAGES_ERROR,
+      payload: e.message
+    });
+  }
+};

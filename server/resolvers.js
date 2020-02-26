@@ -6,7 +6,8 @@ const resolvers = {
   Query: {
     players: call("getPlayers"),
     games: call("getGames"),
-    config: call("getConfig")
+    config: call("getConfig"),
+    images: call("getImages")
   },
   Mutation: {
     startGame: call("startGame"),

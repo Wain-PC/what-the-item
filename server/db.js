@@ -95,7 +95,7 @@ const connect = () => {
     const db = mongoose.connection;
     db.on("error", reject);
     db.once("open", () => {
-      console.log("DB connection sucessful");
+      console.log("DB connection successful");
       resolve();
     });
   });
