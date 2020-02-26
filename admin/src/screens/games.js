@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Table, Label } from "semantic-ui-react";
-import Paginator from "../components/paginator/paginator";
 
-export default ({
-  games: { games, total, page, pages, finished: finishedCount } = {}
-}) => {
+const Games = ({ games, total, finished: finishedCount, loadGames }) => {
+  useEffect(() => {
+    loadGames();
+  }, []);
+
   const tableRows = games.map(({ _id, players, finished }) => {
     return (
       <Table.Row key={_id}>
@@ -32,10 +33,7 @@ export default ({
 
       <Table.Footer>
         <Table.Row>
-          <Table.HeaderCell>
-            <Paginator total={pages} onChange={console.log} current={page} />
-          </Table.HeaderCell>
-          <Table.HeaderCell>
+          <Table.HeaderCell colSpan={2}>
             <strong>Total: {total}</strong>
           </Table.HeaderCell>
           <Table.HeaderCell>
@@ -46,3 +44,18 @@ export default ({
     </Table>
   );
 };
+
+Games.propTypes = {
+  games: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      players: PropTypes.array.isRequired,
+      finished: PropTypes.number.isRequired
+    })
+  ).isRequired,
+  total: PropTypes.number.isRequired,
+  finished: PropTypes.number.isRequired,
+  loadGames: PropTypes.func.isRequired
+};
+
+export default Games;

@@ -1,18 +1,12 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Menu, Icon } from "semantic-ui-react";
+import { NavLink } from "react-router-dom";
 import { MENU_ITEMS } from "../../constants/system";
 
-const AdminMenu = ({ screenId, actions }) => {
-  const menuItems = MENU_ITEMS.map(({ id, icon, method }) => {
-    const { [method]: methodFn = () => {} } = actions;
+const AdminMenu = () => {
+  const menuItems = MENU_ITEMS.map(({ id, icon }) => {
     return (
-      <Menu.Item
-        as="a"
-        key={id}
-        active={id === screenId}
-        onClick={() => methodFn()}
-      >
+      <Menu.Item as={NavLink} key={id} to={`/${id}`} activeClassName="active">
         <Icon name={icon} />
         {id}
       </Menu.Item>
@@ -24,11 +18,6 @@ const AdminMenu = ({ screenId, actions }) => {
       {menuItems}
     </Menu>
   );
-};
-
-AdminMenu.propTypes = {
-  screenId: PropTypes.string.isRequired,
-  actions: PropTypes.objectOf(PropTypes.func).isRequired
 };
 
 export default AdminMenu;

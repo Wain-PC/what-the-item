@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Table, Label } from "semantic-ui-react";
-import Paginator from "../components/paginator/paginator";
 
-export default ({ topPlayers: { players, total, page, pages } = {} }) => {
+const TopPlayers = ({ players, total, loadTopPlayers }) => {
+  useEffect(() => {
+    loadTopPlayers();
+  }, []);
+
   const tableRows = players.map(({ gameId, name, score }) => {
     return (
       <Table.Row key={gameId}>
@@ -30,10 +33,7 @@ export default ({ topPlayers: { players, total, page, pages } = {} }) => {
 
       <Table.Footer>
         <Table.Row>
-          <Table.HeaderCell colSpan="2">
-            <Paginator total={pages} onChange={console.log} current={page} />
-          </Table.HeaderCell>
-          <Table.HeaderCell colSpan="1">
+          <Table.HeaderCell colSpan="3">
             <strong>Total: {total}</strong>
           </Table.HeaderCell>
         </Table.Row>
@@ -41,3 +41,17 @@ export default ({ topPlayers: { players, total, page, pages } = {} }) => {
     </Table>
   );
 };
+
+TopPlayers.propTypes = {
+  players: PropTypes.arrayOf(
+    PropTypes.shape({
+      gameId: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      score: PropTypes.number.isRequired
+    })
+  ).isRequired,
+  total: PropTypes.number.isRequired,
+  loadTopPlayers: PropTypes.func.isRequired
+};
+
+export default TopPlayers;

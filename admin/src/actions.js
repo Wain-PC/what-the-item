@@ -2,134 +2,145 @@ import { gql } from "apollo-boost";
 
 import {
   LOAD_TOP_PLAYERS_SUCCESS,
-  SET_SCREEN_DASHBOARD,
-  SET_SCREEN_TOP_PLAYERS,
-  SET_SCREEN_GAMES,
   LOAD_GAMES_SUCCESS,
-  SET_SCREEN_CONFIG,
   LOAD_CONFIG_SUCCESS,
-  SET_SCREEN_IMAGE,
   IMAGE_PROPERTY_CHANGE,
   ADD_INCORRECT_ANSWER,
   REMOVE_INCORRECT_ANSWER,
   CHANGE_INCORRECT_ANSWER,
   SAVE_IMAGE_START,
-  SAVE_IMAGE_SUCCESS
+  SAVE_IMAGE_SUCCESS,
+  LOAD_TOP_PLAYERS_START,
+  LOAD_TOP_PLAYERS_ERROR,
+  LOAD_CONFIG_START,
+  LOAD_CONFIG_ERROR,
+  SAVE_IMAGE_ERROR,
+  LOAD_GAMES_START,
+  LOAD_GAMES_ERROR
 } from "./constants/actions";
 
 import { query, mutation } from "./utils/request";
 
-export const setScreenDashboard = () => dispatch => {
+export const loadTopPlayers = () => async dispatch => {
   dispatch({
-    type: SET_SCREEN_DASHBOARD
-  });
-};
-
-export const setScreenTopPlayers = () => async dispatch => {
-  dispatch({
-    type: SET_SCREEN_TOP_PLAYERS
+    type: LOAD_TOP_PLAYERS_START
   });
 
-  // DB request here
-  const {
-    data: { players }
-  } = await query(gql`
-    {
-      players {
+  try {
+    // DB request here
+    const {
+      data: { players }
+    } = await query(gql`
+      {
         players {
-          gameId
-          name
-          score
-        }
-        total
-      }
-    }
-  `);
-
-  dispatch({
-    type: LOAD_TOP_PLAYERS_SUCCESS,
-    payload: players
-  });
-};
-
-export const setScreenGames = () => async dispatch => {
-  dispatch({
-    type: SET_SCREEN_GAMES
-  });
-
-  // DB request here
-  const {
-    data: { games }
-  } = await query(gql`
-    {
-      games {
-        games {
-          _id
-          finished
           players {
+            gameId
             name
             score
           }
-          config {
-            __typename
-            timers {
-              controls
+          total
+        }
+      }
+    `);
+
+    dispatch({
+      type: LOAD_TOP_PLAYERS_SUCCESS,
+      payload: players
+    });
+  } catch (e) {
+    dispatch({
+      type: LOAD_TOP_PLAYERS_ERROR,
+      payload: e.message
+    });
+  }
+};
+
+export const loadGames = () => async dispatch => {
+  dispatch({
+    type: LOAD_GAMES_START
+  });
+
+  try {
+    // DB request here
+    const {
+      data: { games }
+    } = await query(gql`
+      {
+        games {
+          games {
+            _id
+            finished
+            players {
+              name
+              score
+            }
+            config {
+              __typename
+              timers {
+                controls
+              }
             }
           }
-        }
-        total
-        finished
-      }
-    }
-  `);
-
-  dispatch({
-    type: LOAD_GAMES_SUCCESS,
-    payload: games
-  });
-};
-
-export const setScreenConfig = () => async dispatch => {
-  dispatch({
-    type: SET_SCREEN_CONFIG
-  });
-
-  // DB request here
-  const {
-    data: { config }
-  } = await query(gql`
-    {
-      config {
-        gameplay {
-          answersInRound
-          defaultPlayers
-          maxPlayers
-          maxPointsPerRound
-          minPlayers
-          roundsInGame
-          topPlayers
-          winnerNickNameLetterTable
-          winnerNickNameMaxLetters
-        }
-        timers {
-          controls
-          round
-          roundEnd
+          total
+          finished
         }
       }
-    }
-  `);
+    `);
 
-  dispatch({
-    type: LOAD_CONFIG_SUCCESS,
-    payload: config
-  });
+    dispatch({
+      type: LOAD_GAMES_SUCCESS,
+      payload: games
+    });
+  } catch (e) {
+    dispatch({
+      type: LOAD_GAMES_ERROR,
+      payload: e.message
+    });
+  }
 };
 
-export const setScreenImage = () => async dispatch => {
+export const loadConfig = () => async dispatch => {
   dispatch({
-    type: SET_SCREEN_IMAGE
+    type: LOAD_CONFIG_START
   });
+
+  try {
+    // DB request here
+    const {
+      data: { config }
+    } = await query(gql`
+      {
+        config {
+          gameplay {
+            answersInRound
+            defaultPlayers
+            maxPlayers
+            maxPointsPerRound
+            minPlayers
+            roundsInGame
+            topPlayers
+            winnerNickNameLetterTable
+            winnerNickNameMaxLetters
+          }
+          timers {
+            controls
+            round
+            roundEnd
+          }
+        }
+      }
+    `);
+
+    dispatch({
+      type: LOAD_CONFIG_SUCCESS,
+      payload: config
+    });
+  } catch (e) {
+    dispatch({
+      type: LOAD_CONFIG_ERROR,
+      payload: e.message
+    });
+  }
 };
 
 export const imagePropertyChange = (field, value) => ({
@@ -156,22 +167,29 @@ export const saveImage = () => async (dispatch, getState) => {
     type: SAVE_IMAGE_START
   });
 
-  await mutation(
-    gql`
-      mutation saveImage($image: InputImage!) {
-        saveImage(image: $image) {
-          image
-          title
-          incorrectTitles
-          active
+  try {
+    await mutation(
+      gql`
+        mutation saveImage($image: InputImage!) {
+          saveImage(image: $image) {
+            image
+            title
+            incorrectTitles
+            active
+          }
         }
-      }
-    `,
-    { image }
-  );
+      `,
+      { image }
+    );
 
-  dispatch({
-    type: SAVE_IMAGE_SUCCESS,
-    payload: image
-  });
+    dispatch({
+      type: SAVE_IMAGE_SUCCESS,
+      payload: image
+    });
+  } catch (e) {
+    dispatch({
+      type: SAVE_IMAGE_ERROR,
+      payload: e.message
+    });
+  }
 };

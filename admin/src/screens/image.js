@@ -3,14 +3,12 @@ import PropTypes from "prop-types";
 import { Button, Checkbox, Form, Image, Input } from "semantic-ui-react";
 
 class ImageScreen extends PureComponent {
+  // eslint-disable-next-line react/static-property-placement
   static propTypes = {
-    image: PropTypes.shape({
-      image: PropTypes.string.isRequired,
-      title: PropTypes.string.isRequired,
-      incorrectTitles: PropTypes.arrayOf(PropTypes.string.isRequired)
-        .isRequired,
-      active: PropTypes.bool.isRequired
-    }).isRequired,
+    image: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    incorrectTitles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+    active: PropTypes.bool.isRequired,
     addIncorrectAnswer: PropTypes.func.isRequired,
     removeIncorrectAnswer: PropTypes.func.isRequired,
     imagePropertyChange: PropTypes.func.isRequired,
@@ -18,9 +16,53 @@ class ImageScreen extends PureComponent {
     saveImage: PropTypes.func.isRequired
   };
 
+  onImageLoad = e => {
+    const {
+      imagePropertyChange,
+      image: { title }
+    } = this.props;
+    const reader = new FileReader();
+    const file = e.target.files[0];
+    reader.onload = () => {
+      imagePropertyChange("image", reader.result);
+      if (!title) {
+        imagePropertyChange(
+          "title",
+          file.name
+            .split(".")
+            .slice(0, -1)
+            .join(".")
+        );
+      }
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  onIncorrectTitleChange = index => event => {
+    const { changeIncorrectAnswer } = this.props;
+    changeIncorrectAnswer(index, event.target.value);
+  };
+
+  onImagePropertyChange = title => event => {
+    const { imagePropertyChange } = this.props;
+    imagePropertyChange(title, event.target.value);
+  };
+
+  onActiveChange = () => {
+    const {
+      imagePropertyChange,
+      image: { active }
+    } = this.props;
+    imagePropertyChange("active", !active);
+  };
+
   render() {
     const {
-      image: { image, title, incorrectTitles, active },
+      image,
+      title,
+      incorrectTitles,
+      active,
       addIncorrectAnswer,
       removeIncorrectAnswer,
       saveImage
@@ -94,47 +136,6 @@ class ImageScreen extends PureComponent {
       </Form>
     );
   }
-
-  onImageLoad = e => {
-    const {
-      imagePropertyChange,
-      image: { title }
-    } = this.props;
-    const reader = new FileReader();
-    const file = e.target.files[0];
-    reader.onload = () => {
-      imagePropertyChange("image", reader.result);
-      if (!title) {
-        imagePropertyChange(
-          "title",
-          file.name
-            .split(".")
-            .slice(0, -1)
-            .join(".")
-        );
-      }
-    };
-
-    reader.readAsDataURL(file);
-  };
-
-  onIncorrectTitleChange = index => event => {
-    const { changeIncorrectAnswer } = this.props;
-    changeIncorrectAnswer(index, event.target.value);
-  };
-
-  onImagePropertyChange = title => event => {
-    const { imagePropertyChange } = this.props;
-    imagePropertyChange(title, event.target.value);
-  };
-
-  onActiveChange = () => {
-    const {
-      imagePropertyChange,
-      image: { active }
-    } = this.props;
-    imagePropertyChange("active", !active);
-  };
 }
 
 export default ImageScreen;

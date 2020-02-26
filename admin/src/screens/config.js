@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Table, Input, Label } from "semantic-ui-react";
 
@@ -27,7 +27,11 @@ Row.defaultProps = {
   onChange: console.log
 };
 
-const Config = ({ config: { timers, gameplay } = {} }) => {
+const Config = ({ timers, gameplay, loadConfig }) => {
+  useEffect(() => {
+    loadConfig();
+  }, []);
+
   return (
     <Table celled>
       <Table.Header>
@@ -56,7 +60,6 @@ const Config = ({ config: { timers, gameplay } = {} }) => {
         <Row title="Мин. игроков" value={gameplay.minPlayers} />
         <Row title="Макс. игроков" value={gameplay.maxPlayers} />
         <Row title="Раундов в игре" value={gameplay.roundsInGame} />
-        <Row title="Ответов в раунде" value={gameplay.answersInRound} />
         <Row
           title="Множитель очков за раунд"
           value={gameplay.maxPointsPerRound}
@@ -76,10 +79,22 @@ const Config = ({ config: { timers, gameplay } = {} }) => {
 };
 
 Config.propTypes = {
-  config: PropTypes.shape({
-    timers: PropTypes.shape({}).isRequired,
-    gameplay: PropTypes.shape({}).isRequired
-  }).isRequired
+  timers: PropTypes.shape({
+    controls: PropTypes.number,
+    round: PropTypes.number,
+    roundEnd: PropTypes.number
+  }).isRequired,
+  gameplay: PropTypes.shape({
+    defaultPlayers: PropTypes.number,
+    minPlayers: PropTypes.number,
+    maxPlayers: PropTypes.number,
+    roundsInGame: PropTypes.number,
+    maxPointsPerRound: PropTypes.number,
+    winnerNickNameMaxLetters: PropTypes.number,
+    winnerNickNameLetterTable: PropTypes.number,
+    topPlayers: PropTypes.number
+  }).isRequired,
+  loadConfig: PropTypes.func.isRequired
 };
 
 export default Config;
