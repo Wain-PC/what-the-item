@@ -168,17 +168,25 @@ class DBDataSource extends DataSource {
     return this.models.Config.findOne() || this.saveConfig();
   }
 
-  async saveImage({ image: { image, title, incorrectTitles, active } }) {
-    const { binary, extension } = base64ToBinary(image);
+  async getImage({ _id }) {
+    return mapImage(await this.models.Image.findById(_id));
+  }
 
-    const img = new this.models.Image({
-      image: binary,
-      extension,
-      title,
-      incorrectTitles: incorrectTitles.filter(v => v),
-      active
-    });
-    await img.save();
+  async saveImage({ image }) {
+    const { _id, image: imageStr, ...rest } = image;
+    const { binary, extension } = base64ToBinary(imageStr);
+
+    const img = await this.models.Image.findOneAndUpdate(
+      _id ? { _id } : {},
+      { image: binary, extension, ...rest },
+      {
+        new: true,
+        upsert: true,
+        setDefaultsOnInsert: true,
+        useFindAndModify: true
+      }
+    );
+
     return mapImage(img);
   }
 

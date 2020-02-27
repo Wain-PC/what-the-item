@@ -97,6 +97,7 @@ const schema = gql`
     games: GamesResponse!
     config: Config!
     images: ImagesResponse!
+    image(_id: ID!): Image!
   }
 
   input InputPlayer {
@@ -150,10 +151,11 @@ const schema = gql`
   }
 
   input InputImage {
-    image: String
-    title: String
-    incorrectTitles: [String]
-    active: Boolean
+    _id: String
+    image: String!
+    title: String!
+    incorrectTitles: [String]!
+    active: Boolean!
   }
 
   type Mutation {

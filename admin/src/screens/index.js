@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
     match: { path }
   } = ownProps;
 
-  return state[path.slice(1)];
+  return state[path.split("/")[1]];
 };
 
 const mapDispatchToProps = actions;

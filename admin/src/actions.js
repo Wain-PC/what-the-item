@@ -26,7 +26,10 @@ import {
   LOAD_IMAGES_ERROR,
   REMOVE_IMAGE_START,
   REMOVE_IMAGE_SUCCESS,
-  REMOVE_IMAGE_ERROR
+  REMOVE_IMAGE_ERROR,
+  LOAD_IMAGE_START,
+  LOAD_IMAGE_SUCCESS,
+  LOAD_IMAGE_ERROR
 } from "./constants/actions";
 
 import { query, mutation } from "./utils/request";
@@ -178,6 +181,7 @@ export const saveImage = () => async (dispatch, getState) => {
       gql`
         mutation saveImage($image: InputImage!) {
           saveImage(image: $image) {
+            _id
             image
             title
             incorrectTitles
@@ -285,6 +289,41 @@ export const loadImages = () => async dispatch => {
   }
 };
 
+export const getImage = _id => async dispatch => {
+  dispatch({
+    type: LOAD_IMAGE_START
+  });
+
+  try {
+    // DB request here
+    const {
+      data: { image }
+    } = await query(
+      gql`
+        query getImage($_id: ID!) {
+          image(_id: $_id) {
+            image
+            title
+            incorrectTitles
+            active
+          }
+        }
+      `,
+      { _id }
+    );
+
+    dispatch({
+      type: LOAD_IMAGE_SUCCESS,
+      payload: image
+    });
+  } catch (e) {
+    dispatch({
+      type: LOAD_IMAGE_ERROR,
+      payload: e.message
+    });
+  }
+};
+
 export const removeImage = _id => async dispatch => {
   dispatch({
     type: REMOVE_IMAGE_START
@@ -292,7 +331,7 @@ export const removeImage = _id => async dispatch => {
 
   try {
     const {
-      data: { images }
+      data: { removeImage: images }
     } = await mutation(
       gql`
         mutation removeImage($_id: ID!) {

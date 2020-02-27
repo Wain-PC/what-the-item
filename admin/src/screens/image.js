@@ -9,12 +9,31 @@ class ImageScreen extends PureComponent {
     title: PropTypes.string.isRequired,
     incorrectTitles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
     active: PropTypes.bool.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        id: PropTypes.string
+      }).isRequired
+    }).isRequired,
     addIncorrectAnswer: PropTypes.func.isRequired,
     removeIncorrectAnswer: PropTypes.func.isRequired,
     imagePropertyChange: PropTypes.func.isRequired,
     changeIncorrectAnswer: PropTypes.func.isRequired,
-    saveImage: PropTypes.func.isRequired
+    saveImage: PropTypes.func.isRequired,
+    getImage: PropTypes.func.isRequired
   };
+
+  componentDidMount() {
+    const {
+      getImage,
+      match: {
+        params: { id }
+      }
+    } = this.props;
+
+    if (id) {
+      getImage(id);
+    }
+  }
 
   onImageLoad = e => {
     const { imagePropertyChange } = this.props;
@@ -125,8 +144,9 @@ class ImageScreen extends PureComponent {
             </Form.Field>
             <Button
               type="submit"
-              icon="submit"
-              content="Загрузить"
+              icon="save"
+              positive
+              content="Сохранить"
               onClick={saveImage}
             />
           </Form>

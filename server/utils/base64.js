@@ -30,7 +30,8 @@ const mapImage = ({
   image: binaryToBase64(image, extension),
   title,
   incorrectTitles,
-  active
+  active,
+  extension
 });
 
 const mapImages = images => images.map(mapImage);

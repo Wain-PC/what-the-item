@@ -25,6 +25,7 @@ class App extends PureComponent {
           <Grid.Column padded="relaxed" width={14}>
             <Switch>
               <Route exact path="/" component={screens.dashboard} />
+              <Route path="/image/:id" component={screens.image} />
               {routes}
             </Switch>
           </Grid.Column>
