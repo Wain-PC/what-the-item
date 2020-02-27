@@ -172,6 +172,8 @@ export const changeIncorrectAnswer = (index, value) => ({
 
 export const saveImage = () => async (dispatch, getState) => {
   const { image } = getState();
+  const isEdit = Boolean(image._id);
+
   dispatch({
     type: SAVE_IMAGE_START
   });
@@ -194,7 +196,7 @@ export const saveImage = () => async (dispatch, getState) => {
 
     dispatch({
       type: SAVE_IMAGE_SUCCESS,
-      payload: image
+      payload: { ...image, isEdit }
     });
   } catch (e) {
     dispatch({
@@ -302,6 +304,7 @@ export const getImage = _id => async dispatch => {
       gql`
         query getImage($_id: ID!) {
           image(_id: $_id) {
+            _id
             image
             title
             incorrectTitles

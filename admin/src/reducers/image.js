@@ -8,6 +8,7 @@ import {
 } from "../constants/actions";
 
 const initialState = {
+  _id: "",
   image: "",
   title: "",
   incorrectTitles: [""],
@@ -60,6 +61,18 @@ export default (state = initialState, action) => {
         ...state,
         ...action.payload
       };
+    }
+
+    case SAVE_IMAGE_SUCCESS: {
+      const { isEdit, ...image } = action.payload;
+
+      if (isEdit) {
+        return {
+          ...state,
+          ...image
+        };
+      }
+      return initialState;
     }
     default: {
       return state;

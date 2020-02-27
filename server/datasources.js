@@ -173,12 +173,17 @@ class DBDataSource extends DataSource {
   }
 
   async saveImage({ image }) {
-    const { _id, image: imageStr, ...rest } = image;
+    const { _id, image: imageStr, incorrectTitles, ...rest } = image;
     const { binary, extension } = base64ToBinary(imageStr);
 
     const img = await this.models.Image.findOneAndUpdate(
-      _id ? { _id } : {},
-      { image: binary, extension, ...rest },
+      _id ? { _id } : { title: "@@@@@@@@@@@@@@@@@@@@@@" },
+      {
+        image: binary,
+        extension,
+        incorrectTitles: incorrectTitles.filter(v => v),
+        ...rest
+      },
       {
         new: true,
         upsert: true,
@@ -186,6 +191,8 @@ class DBDataSource extends DataSource {
         useFindAndModify: true
       }
     );
+
+    console.log(img);
 
     return mapImage(img);
   }

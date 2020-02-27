@@ -122,18 +122,20 @@ class ImageScreen extends PureComponent {
             </Form.Field>
             {titles}
             <Form.Field>
-              <Button
-                icon="plus"
-                color="green"
-                content="Добавить неправильный ответ"
-                onClick={addIncorrectAnswer}
-              />
-              <Button
-                icon="minus"
-                color="red"
-                content="Убрать неправильный ответ"
-                onClick={removeIncorrectAnswer}
-              />
+              <Button.Group>
+                <Button
+                  icon="plus"
+                  color="green"
+                  content="1 неправильное название"
+                  onClick={addIncorrectAnswer}
+                />
+                <Button
+                  icon="minus"
+                  color="red"
+                  content="1 неправильное название"
+                  onClick={removeIncorrectAnswer}
+                />
+              </Button.Group>
             </Form.Field>
             <Form.Field>
               <Checkbox
