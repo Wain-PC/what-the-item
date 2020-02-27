@@ -192,8 +192,6 @@ class DBDataSource extends DataSource {
       }
     );
 
-    console.log(img);
-
     return mapImage(img);
   }
 
