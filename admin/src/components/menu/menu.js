@@ -14,7 +14,7 @@ const AdminMenu = () => {
   });
 
   return (
-    <Menu vertical fluid inverted>
+    <Menu fluid inverted>
       {menuItems}
     </Menu>
   );

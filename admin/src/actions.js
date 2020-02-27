@@ -23,7 +23,10 @@ import {
   CONFIG_PROPERTY_CHANGE,
   LOAD_IMAGES_START,
   LOAD_IMAGES_SUCCESS,
-  LOAD_IMAGES_ERROR
+  LOAD_IMAGES_ERROR,
+  REMOVE_IMAGE_START,
+  REMOVE_IMAGE_SUCCESS,
+  REMOVE_IMAGE_ERROR
 } from "./constants/actions";
 
 import { query, mutation } from "./utils/request";
@@ -258,6 +261,7 @@ export const loadImages = () => async dispatch => {
       {
         images {
           images {
+            _id
             image
             title
             incorrectTitles
@@ -276,6 +280,50 @@ export const loadImages = () => async dispatch => {
   } catch (e) {
     dispatch({
       type: LOAD_IMAGES_ERROR,
+      payload: e.message
+    });
+  }
+};
+
+export const removeImage = _id => async dispatch => {
+  dispatch({
+    type: REMOVE_IMAGE_START
+  });
+
+  try {
+    const {
+      data: { images }
+    } = await mutation(
+      gql`
+        mutation removeImage($_id: ID!) {
+          removeImage(_id: $_id) {
+            images {
+              _id
+              active
+              extension
+              image
+              incorrectTitles
+              title
+            }
+            active
+            total
+          }
+        }
+      `,
+      { _id }
+    );
+
+    dispatch({
+      type: REMOVE_IMAGE_SUCCESS
+    });
+
+    dispatch({
+      type: LOAD_IMAGES_SUCCESS,
+      payload: images
+    });
+  } catch (e) {
+    dispatch({
+      type: REMOVE_IMAGE_ERROR,
       payload: e.message
     });
   }

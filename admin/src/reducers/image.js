@@ -2,7 +2,8 @@ import {
   IMAGE_PROPERTY_CHANGE,
   ADD_INCORRECT_ANSWER,
   REMOVE_INCORRECT_ANSWER,
-  CHANGE_INCORRECT_ANSWER
+  CHANGE_INCORRECT_ANSWER,
+  SAVE_IMAGE_SUCCESS
 } from "../constants/actions";
 
 const initialState = {
@@ -51,6 +52,10 @@ export default (state = initialState, action) => {
           return title;
         })
       };
+    }
+
+    case SAVE_IMAGE_SUCCESS: {
+      return initialState;
     }
     default: {
       return state;

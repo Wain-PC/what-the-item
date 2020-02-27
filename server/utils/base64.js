@@ -18,7 +18,15 @@ const binaryToBase64 = (blob, extension) => {
   return `data:image/${extension};base64,${str}`;
 };
 
-const mapImage = ({ image, extension, title, incorrectTitles, active }) => ({
+const mapImage = ({
+  _id,
+  image,
+  extension,
+  title,
+  incorrectTitles,
+  active
+}) => ({
+  _id,
   image: binaryToBase64(image, extension),
   title,
   incorrectTitles,

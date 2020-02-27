@@ -78,6 +78,7 @@ const schema = gql`
   }
 
   type Image {
+    _id: ID!
     image: String!
     extension: String!
     title: String!
@@ -168,6 +169,7 @@ const schema = gql`
     setNickName(nickName: String!): Game!
     saveConfig(config: InputConfig!): Config!
     saveImage(image: InputImage!): Image!
+    removeImage(_id: ID!): ImagesResponse!
   }
 `;
 

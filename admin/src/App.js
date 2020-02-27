@@ -18,11 +18,11 @@ class App extends PureComponent {
 
     return (
       <BrowserRouter>
-        <Grid padded columns={2}>
-          <Grid.Column width={4}>
+        <Grid centered columns={1}>
+          <Grid.Column width={16}>
             <AdminMenu />
           </Grid.Column>
-          <Grid.Column width={12}>
+          <Grid.Column padded="relaxed" width={14}>
             <Switch>
               <Route exact path="/" component={screens.dashboard} />
               {routes}

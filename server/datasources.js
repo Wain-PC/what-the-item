@@ -182,6 +182,11 @@ class DBDataSource extends DataSource {
     return mapImage(img);
   }
 
+  async removeImage({ _id }) {
+    await this.models.Image.findByIdAndDelete(_id);
+    return this.getImages();
+  }
+
   async getImages() {
     const images = mapImages(
       await this.models.Image.find()
@@ -189,8 +194,8 @@ class DBDataSource extends DataSource {
         .exec()
     );
 
-    const total = await this.models.Game.countDocuments().exec();
-    const active = await this.models.Game.where({ active: true })
+    const total = await this.models.Image.countDocuments().exec();
+    const active = await this.models.Image.where({ active: true })
       .countDocuments()
       .exec();
 

@@ -16,7 +16,8 @@ const resolvers = {
     endRound: call("endRound"),
     setNickName: call("setNickName"),
     saveConfig: call("saveConfig"),
-    saveImage: call("saveImage")
+    saveImage: call("saveImage"),
+    removeImage: call("removeImage")
   }
 };
 module.exports = resolvers;
