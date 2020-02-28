@@ -1,6 +1,14 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { Card, Image, List, Table, Button, Label } from "semantic-ui-react";
+import {
+  Card,
+  Image,
+  List,
+  Table,
+  Button,
+  Label,
+  Header
+} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
 const Images = ({
@@ -47,22 +55,29 @@ const Images = ({
     </Card>
   ));
 
+  const totals = (
+    <Table celled>
+      <Table.Footer>
+        <Table.Row>
+          <Table.HeaderCell colSpan="2">
+            <strong>Активных: {totalActive}</strong>
+          </Table.HeaderCell>
+          <Table.HeaderCell>
+            <strong>Всего: {total}</strong>
+          </Table.HeaderCell>
+        </Table.Row>
+      </Table.Footer>
+    </Table>
+  );
+
+  const header = <Header as="h1">Изображения</Header>;
+
   return (
-    <div>
+    <>
+      {header}
+      {totals}
       <Card.Group>{imgs}</Card.Group>
-      <Table celled>
-        <Table.Footer>
-          <Table.Row>
-            <Table.HeaderCell colSpan="2">
-              <strong>Active: {totalActive}</strong>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <strong>Total: {total}</strong>
-            </Table.HeaderCell>
-          </Table.Row>
-        </Table.Footer>
-      </Table>
-    </div>
+    </>
   );
 };
 

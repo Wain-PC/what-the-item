@@ -29,7 +29,8 @@ import {
   REMOVE_IMAGE_ERROR,
   LOAD_IMAGE_START,
   LOAD_IMAGE_SUCCESS,
-  LOAD_IMAGE_ERROR
+  LOAD_IMAGE_ERROR,
+  IMAGE_DATA_CLEAR
 } from "./constants/actions";
 
 import { query, mutation } from "./utils/request";
@@ -179,7 +180,9 @@ export const saveImage = () => async (dispatch, getState) => {
   });
 
   try {
-    await mutation(
+    const {
+      data: { saveImage: updatedImage }
+    } = await mutation(
       gql`
         mutation saveImage($image: InputImage!) {
           saveImage(image: $image) {
@@ -196,7 +199,7 @@ export const saveImage = () => async (dispatch, getState) => {
 
     dispatch({
       type: SAVE_IMAGE_SUCCESS,
-      payload: { ...image, isEdit }
+      payload: { ...updatedImage, isEdit }
     });
   } catch (e) {
     dispatch({
@@ -290,6 +293,10 @@ export const loadImages = () => async dispatch => {
     });
   }
 };
+
+export const clearImageData = () => ({
+  type: IMAGE_DATA_CLEAR
+});
 
 export const getImage = _id => async dispatch => {
   dispatch({

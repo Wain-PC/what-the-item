@@ -19,16 +19,20 @@ class ImageScreen extends PureComponent {
     imagePropertyChange: PropTypes.func.isRequired,
     changeIncorrectAnswer: PropTypes.func.isRequired,
     saveImage: PropTypes.func.isRequired,
-    getImage: PropTypes.func.isRequired
+    getImage: PropTypes.func.isRequired,
+    clearImageData: PropTypes.func.isRequired
   };
 
   componentDidMount() {
     const {
       getImage,
+      clearImageData,
       match: {
         params: { id }
       }
     } = this.props;
+
+    clearImageData();
 
     if (id) {
       getImage(id);

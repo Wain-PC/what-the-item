@@ -3,8 +3,10 @@ import {
   ADD_INCORRECT_ANSWER,
   REMOVE_INCORRECT_ANSWER,
   CHANGE_INCORRECT_ANSWER,
+  REMOVE_IMAGE_SUCCESS,
   SAVE_IMAGE_SUCCESS,
-  LOAD_IMAGE_SUCCESS
+  LOAD_IMAGE_SUCCESS,
+  IMAGE_DATA_CLEAR
 } from "../constants/actions";
 
 const initialState = {
@@ -72,6 +74,11 @@ export default (state = initialState, action) => {
           ...image
         };
       }
+      return initialState;
+    }
+
+    case IMAGE_DATA_CLEAR:
+    case REMOVE_IMAGE_SUCCESS: {
       return initialState;
     }
     default: {
