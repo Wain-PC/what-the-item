@@ -95,6 +95,7 @@ const schema = gql`
   type Query {
     players: PlayersResponse!
     games: GamesResponse!
+    game(_id: ID!): Game!
     config: Config!
     images: ImagesResponse!
     image(_id: ID!): Image!

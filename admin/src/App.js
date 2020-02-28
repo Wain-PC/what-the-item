@@ -31,6 +31,7 @@ class App extends PureComponent {
               <Switch>
                 <Route exact path="/" component={screens.dashboard} />
                 <Route path="/image/:id" component={screens.image} />
+                <Route path="/game/:id" component={screens.game} />
                 {routes}
               </Switch>
             </Grid.Column>

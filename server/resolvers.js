@@ -6,6 +6,7 @@ const resolvers = {
   Query: {
     players: call("getPlayers"),
     games: call("getGames"),
+    game: call("getGame"),
     config: call("getConfig"),
     images: call("getImages"),
     image: call("getImage"),

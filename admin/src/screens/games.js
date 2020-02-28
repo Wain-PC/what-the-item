@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Table, Label } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 const Games = ({ games, total, finished: finishedCount, loadGames }) => {
   useEffect(() => {
@@ -11,7 +12,9 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
     return (
       <Table.Row key={_id}>
         <Table.Cell>
-          <Label>{_id}</Label>
+          <Link to={`/game/${_id}`}>
+            <Label>{_id}</Label>
+          </Link>
         </Table.Cell>
         <Table.Cell>{players.length}</Table.Cell>
         <Table.Cell>{finished ? "Закончена" : "Не закончена"}</Table.Cell>

@@ -32,7 +32,7 @@ class DBDataSource extends DataSource {
   }
 
   async startRound({ gameId, index, pictures, answerIndex }) {
-    const game = await this.models.Game.findOne({ _id: gameId });
+    const game = await this.models.Game.findById(gameId);
     const round = { index, pictures, answerIndex };
     game.rounds.push(round);
     await game.save();
@@ -43,7 +43,7 @@ class DBDataSource extends DataSource {
     gameId,
     round: { answered, answeredBy, timeLeft, pointsReceived, pictures }
   }) {
-    const game = await this.models.Game.findOne({ _id: gameId });
+    const game = await this.models.Game.findById(gameId);
     const [round] = game.rounds.slice(-1);
     round.answered = answered;
     round.answeredBy = answeredBy;
@@ -60,7 +60,7 @@ class DBDataSource extends DataSource {
   }
 
   async endGame({ gameId, winner: { index, score, name } }) {
-    const game = await this.models.Game.findOne({ _id: gameId });
+    const game = await this.models.Game.findById(gameId);
     const winnerToSave = {
       index,
       score,
@@ -74,7 +74,7 @@ class DBDataSource extends DataSource {
   }
 
   async saveNickName({ gameId, nickName }) {
-    const game = await this.models.Game.findOne({ _id: gameId });
+    const game = await this.models.Game.findById(gameId);
     game.winner.name = nickName;
     await game.save();
     return game;
@@ -97,6 +97,10 @@ class DBDataSource extends DataSource {
       total,
       finished
     };
+  }
+
+  getGame({ _id }) {
+    return this.models.Game.findById({ _id });
   }
 
   async getWinners({ where = {}, limit = 100, sort = {} }) {

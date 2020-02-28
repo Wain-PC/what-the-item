@@ -34,7 +34,9 @@ import {
   LOADER_SHOW,
   LOADER_HIDE,
   ERROR_HIDE,
-  ERROR_SHOW
+  ERROR_SHOW,
+  LOAD_GAME_START,
+  LOAD_GAME_SUCCESS
 } from "./constants/actions";
 
 import { query, mutation } from "./utils/request";
@@ -377,6 +379,66 @@ export const removeImage = _id => async dispatch => {
   } catch (e) {
     dispatch({
       type: REMOVE_IMAGE_ERROR,
+      payload: e.message
+    });
+  }
+};
+
+export const getGame = _id => async dispatch => {
+  dispatch({
+    type: LOAD_GAME_START
+  });
+
+  try {
+    // DB request here
+    const {
+      data: { game }
+    } = await query(
+      gql`
+        query getGame($_id: ID!) {
+          game(_id: $_id) {
+            config {
+              gameplay {
+                maxPointsPerRound
+                roundsInGame
+              }
+              timers {
+                round
+              }
+            }
+            finished
+            finishedOn
+            players {
+              _id
+              name
+              score
+            }
+            rounds {
+              answerIndex
+              answered
+              answeredBy
+              index
+              pictures {
+                picture
+                selected
+                selectedBy
+              }
+              pointsReceived
+              timeLeft
+            }
+          }
+        }
+      `,
+      { _id }
+    );
+
+    dispatch({
+      type: LOAD_GAME_SUCCESS,
+      payload: game
+    });
+  } catch (e) {
+    dispatch({
+      type: LOAD_GAMES_ERROR,
       payload: e.message
     });
   }
