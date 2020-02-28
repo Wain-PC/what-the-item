@@ -407,6 +407,7 @@ export const getGame = _id => async dispatch => {
               }
             }
             finished
+            startedOn
             finishedOn
             players {
               _id

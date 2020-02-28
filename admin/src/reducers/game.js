@@ -16,10 +16,7 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case LOAD_GAME_SUCCESS: {
       const game = action.payload;
-      return {
-        ...state,
-        ...game
-      };
+      return { ...game };
     }
     default: {
       return state;
