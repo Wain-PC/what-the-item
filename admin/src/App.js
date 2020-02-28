@@ -27,7 +27,7 @@ class App extends PureComponent {
               <AdminMenu />
               <ConnectedError />
             </Grid.Column>
-            <Grid.Column padded="relaxed" width={14}>
+            <Grid.Column width={14}>
               <Switch>
                 <Route exact path="/" component={screens.dashboard} />
                 <Route path="/image/:id" component={screens.image} />

@@ -57,7 +57,9 @@ const Config = ({
         <Table.Body>
           <Table.Row>
             <Table.HeaderCell colSpan={2}>
-              <Label>Таймеры</Label>
+              <Label ribbon color="teal">
+                Таймеры
+              </Label>
             </Table.HeaderCell>
           </Table.Row>
           <Row
@@ -78,7 +80,9 @@ const Config = ({
 
           <Table.Row>
             <Table.HeaderCell colSpan={2}>
-              <Label>Геймплей</Label>
+              <Label color="orange" ribbon>
+                Геймплей
+              </Label>
             </Table.HeaderCell>
           </Table.Row>
           <Row

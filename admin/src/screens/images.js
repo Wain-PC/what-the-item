@@ -1,15 +1,8 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  Card,
-  Image,
-  List,
-  Table,
-  Button,
-  Label,
-  Header
-} from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Card, Table, Header } from "semantic-ui-react";
+
+import Image from "../components/image/image";
 
 const Images = ({
   images,
@@ -22,37 +15,8 @@ const Images = ({
     loadImages();
   }, []);
 
-  const imgs = images.map(({ _id, image, title, incorrectTitles, active }) => (
-    <Card key={_id}>
-      <Image src={image} wrapped ui={false} />
-      <Card.Content>
-        <Card.Meta>Правильное название</Card.Meta>
-        <Card.Description>{title}</Card.Description>
-        <p />
-        <Card.Meta>Неправильные названия</Card.Meta>
-        <Card.Description>
-          <List items={incorrectTitles} />
-          <Label
-            color={active ? "green" : "red"}
-            content={active ? "Активно" : "Неактивно"}
-          />
-        </Card.Description>
-      </Card.Content>
-      <Card.Content extra>
-        <Button
-          as={Link}
-          to={`/image/${_id}`}
-          content="Редактировать"
-          size="small"
-        />
-        <Button
-          negative
-          content="Удалить"
-          size="small"
-          onClick={() => removeImage(_id)}
-        />
-      </Card.Content>
-    </Card>
+  const imgs = images.map(image => (
+    <Image {...image} removeImage={removeImage} />
   ));
 
   const totals = (
