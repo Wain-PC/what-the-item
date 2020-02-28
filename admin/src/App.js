@@ -6,6 +6,8 @@ import * as actions from "./actions";
 import * as screens from "./screens";
 import "semantic-ui-css/semantic.min.css";
 import AdminMenu from "./components/menu/menu";
+import { ConnectedLoader } from "./components/loader/loader";
+import { ConnectedError } from "./components/error/error";
 
 class App extends PureComponent {
   // eslint-disable-next-line react/static-property-placement
@@ -18,18 +20,22 @@ class App extends PureComponent {
 
     return (
       <BrowserRouter>
-        <Grid centered columns={1}>
-          <Grid.Column width={16}>
-            <AdminMenu />
-          </Grid.Column>
-          <Grid.Column padded="relaxed" width={14}>
-            <Switch>
-              <Route exact path="/" component={screens.dashboard} />
-              <Route path="/image/:id" component={screens.image} />
-              {routes}
-            </Switch>
-          </Grid.Column>
-        </Grid>
+        <>
+          <ConnectedLoader />
+          <Grid centered columns={1}>
+            <Grid.Column width={16}>
+              <AdminMenu />
+              <ConnectedError />
+            </Grid.Column>
+            <Grid.Column padded="relaxed" width={14}>
+              <Switch>
+                <Route exact path="/" component={screens.dashboard} />
+                <Route path="/image/:id" component={screens.image} />
+                {routes}
+              </Switch>
+            </Grid.Column>
+          </Grid>
+        </>
       </BrowserRouter>
     );
   }

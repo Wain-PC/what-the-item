@@ -76,7 +76,7 @@ const Images = ({
     <>
       {header}
       {totals}
-      <Card.Group>{imgs}</Card.Group>
+      <Card.Group centered>{imgs}</Card.Group>
     </>
   );
 };

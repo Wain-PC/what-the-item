@@ -30,7 +30,11 @@ import {
   LOAD_IMAGE_START,
   LOAD_IMAGE_SUCCESS,
   LOAD_IMAGE_ERROR,
-  IMAGE_DATA_CLEAR
+  IMAGE_DATA_CLEAR,
+  LOADER_SHOW,
+  LOADER_HIDE,
+  ERROR_HIDE,
+  ERROR_SHOW
 } from "./constants/actions";
 
 import { query, mutation } from "./utils/request";
@@ -376,4 +380,40 @@ export const removeImage = _id => async dispatch => {
       payload: e.message
     });
   }
+};
+
+export const hideLoader = () => ({
+  type: LOADER_HIDE
+});
+
+export const showLoader = seconds => dispatch => {
+  dispatch({
+    type: LOADER_SHOW
+  });
+
+  if (seconds) {
+    return setTimeout(() => {
+      dispatch(hideLoader());
+    }, seconds * 1000);
+  }
+
+  return null;
+};
+
+export const hideError = () => ({
+  type: ERROR_HIDE
+});
+
+export const showError = seconds => dispatch => {
+  dispatch({
+    type: ERROR_SHOW
+  });
+
+  if (seconds) {
+    return setTimeout(() => {
+      dispatch(hideError());
+    }, seconds * 1000);
+  }
+
+  return null;
 };

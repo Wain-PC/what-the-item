@@ -8,7 +8,8 @@ const resolvers = {
     games: call("getGames"),
     config: call("getConfig"),
     images: call("getImages"),
-    image: call("getImage")
+    image: call("getImage"),
+    nRandomImages: call("getNRandomImages")
   },
   Mutation: {
     startGame: call("startGame"),

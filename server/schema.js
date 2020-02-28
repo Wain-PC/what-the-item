@@ -98,6 +98,7 @@ const schema = gql`
     config: Config!
     images: ImagesResponse!
     image(_id: ID!): Image!
+    nRandomImages(n: Int!): [Image]!
   }
 
   input InputPlayer {
