@@ -34,7 +34,7 @@ const schema = gql`
     finished: Boolean!
     answered: Boolean!
     answerIndex: Int
-    answeredBy: Boolean
+    answeredBy: Int
     timeLeft: Int
     pointsReceived: Int
   }

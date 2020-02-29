@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { Card, List, Label, Button, Header, Form } from "semantic-ui-react";
+import { Label, Header, Form, Segment } from "semantic-ui-react";
 
 import Image from "../components/image/image";
 import Config from "../components/config/config";
+import Player from "../components/player/player";
 
 const Game = ({
   match: {
@@ -36,6 +37,29 @@ const Game = ({
     <Form.Input label="Время завершения" value={finishedOn} />
   );
 
+  const roundsArray = rounds.map(
+    ({ index, image, started, finished: roundFinished }) => {
+      return (
+        <Segment key={index}>
+          <Header as="h2" content={`Раунд ${index + 1}`} />
+          <Label
+            color={started ? "green" : "red"}
+            content={started ? "Начат" : "Не начат"}
+          />
+          {started && (
+            <Label
+              color={roundFinished ? "green" : "red"}
+              content={roundFinished ? "Закончен" : "Не закончен"}
+            />
+          )}
+          <Image image={image} />
+        </Segment>
+      );
+    }
+  );
+
+  const playersArray = players.map(player => <Player player={player} />);
+
   return (
     <>
       <Header as="h1" content={`Игра ${id}`} />
@@ -46,6 +70,10 @@ const Game = ({
       </Form>
       <Header as="h1" content="Конфигурация игры" />
       {config && <Config config={config} />}
+      <Header as="h1" content="Раунды" />
+      {roundsArray}
+      <Header as="h1" content="Игроки" />
+      {playersArray}
     </>
   );
 };
@@ -58,8 +86,8 @@ Game.propTypes = {
   }).isRequired,
   config: PropTypes.shape({
     gameplay: PropTypes.shape({
-      maxPointsPerRound: PropTypes.number.isRequired,
-      roundsInGame: PropTypes.number.isRequired
+      maxPointsPerRound: PropTypes.number,
+      roundsInGame: PropTypes.number
     }).isRequired,
     timers: PropTypes.shape({
       round: PropTypes.number
@@ -67,28 +95,36 @@ Game.propTypes = {
   }).isRequired,
   finished: PropTypes.bool.isRequired,
   startedOn: PropTypes.string.isRequired,
-  finishedOn: PropTypes.string.isRequired,
-  players: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    score: PropTypes.string.isRequired
-  }).isRequired,
+  finishedOn: PropTypes.string,
+  players: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      score: PropTypes.string.isRequired
+    }).isRequired
+  ).isRequired,
   rounds: PropTypes.arrayOf(
     PropTypes.shape({
+      index: PropTypes.number.isRequired,
+      image: PropTypes.shape({
+        _id: PropTypes.string.isRequired,
+        image: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        incorrectTitles: PropTypes.arrayOf(PropTypes.string).isRequired
+      }).isRequired,
       answerIndex: PropTypes.number.isRequired,
       answered: PropTypes.bool.isRequired,
+      started: PropTypes.bool.isRequired,
+      finished: PropTypes.bool.isRequired,
       answeredBy: PropTypes.number.isRequired,
-      index: PropTypes.number.isRequired,
-      pictures: PropTypes.arrayOf(
-        PropTypes.shape({
-          picture: PropTypes.string.isRequired,
-          selected: PropTypes.bool.isRequired,
-          selectedBy: PropTypes.number.isRequired
-        })
-      ),
-      pointsReceived: PropTypes.number.isRequired,
-      timeLeft: PropTypes.number.isRequired
+      pointsReceived: PropTypes.number,
+      timeLeft: PropTypes.number
     })
-  ).isRequired
+  ).isRequired,
+  getGame: PropTypes.func.isRequired
+};
+
+Game.defaultProps = {
+  finishedOn: ""
 };
 
 export default Game;

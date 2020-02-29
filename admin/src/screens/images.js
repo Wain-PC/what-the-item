@@ -16,7 +16,7 @@ const Images = ({
   }, []);
 
   const imgs = images.map(image => (
-    <Image {...image} removeImage={removeImage} />
+    <Image image={image} removeImage={removeImage} />
   ));
 
   const totals = (

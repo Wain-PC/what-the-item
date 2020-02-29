@@ -6,10 +6,13 @@ const initialState = {
     gameplay: {},
     timers: {}
   },
+  started: false,
   finished: false,
+  startedOn: "",
   finishedOn: "",
   players: [],
-  rounds: []
+  rounds: [],
+  image: {}
 };
 
 export default (state = initialState, action) => {

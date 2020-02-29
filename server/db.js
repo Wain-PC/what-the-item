@@ -21,11 +21,7 @@ const imageSchema = new Schema({
       // Need to check if `this` is a document, because in mongoose 5
       // setters will also run on queries, in which case `this` will be a
       // mongoose query object.
-      if (
-        this instanceof mongoose.Document &&
-        v != null &&
-        typeof v === "string"
-      ) {
+      if (v != null && typeof v === "string") {
         const { binary, extension } = base64ToBinary(v);
         this.extension = extension;
         return binary;
