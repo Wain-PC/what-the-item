@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { MONGODB_CONNECTION_STRING } = require("./constants/db");
 const defaultConfig = require("./config");
+const { binaryToBase64, base64ToBinary } = require("./utils/base64");
 
 const { Schema } = mongoose;
 
@@ -11,7 +12,27 @@ const playerSchema = new Schema({
 });
 
 const imageSchema = new Schema({
-  image: Buffer,
+  image: {
+    type: Buffer,
+    get(value) {
+      return binaryToBase64(value, this.extension);
+    },
+    set(v) {
+      // Need to check if `this` is a document, because in mongoose 5
+      // setters will also run on queries, in which case `this` will be a
+      // mongoose query object.
+      if (
+        this instanceof mongoose.Document &&
+        v != null &&
+        typeof v === "string"
+      ) {
+        const { binary, extension } = base64ToBinary(v);
+        this.extension = extension;
+        return binary;
+      }
+      return v;
+    }
+  },
   extension: String,
   title: String,
   incorrectTitles: [String],

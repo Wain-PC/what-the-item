@@ -33,10 +33,10 @@ const schema = gql`
     started: Boolean!
     finished: Boolean!
     answered: Boolean!
-    answerIndex: Int!
-    answeredBy: Boolean!
-    timeLeft: Int!
-    pointsReceived: Int!
+    answerIndex: Int
+    answeredBy: Boolean
+    timeLeft: Int
+    pointsReceived: Int
   }
 
   type ConfigTimers {

@@ -1,5 +1,5 @@
 const { DataSource } = require("apollo-datasource");
-const { base64ToBinary, mapImage, mapImages } = require("./utils/base64");
+const { mapGame } = require("./utils/base64");
 
 class DBDataSource extends DataSource {
   constructor(db) {
@@ -8,8 +8,8 @@ class DBDataSource extends DataSource {
     this.connect = db.connect;
   }
 
-  async initialize() {
-    await this.connect();
+  initialize() {
+    return this.connect();
   }
 
   async startGame({ players }) {
@@ -46,10 +46,11 @@ class DBDataSource extends DataSource {
       ]).exec()
     ).map(({ title }) => title);
 
-    const outputImages = images.map(({ incorrectTitles, ...restImage }) => {
+    const outputImages = images.map(image => {
+      const { incorrectTitles } = image;
       const imagesToFill = answersToGet - incorrectTitles.length;
       return {
-        ...restImage,
+        ...image,
         incorrectTitles: incorrectTitles.concat(
           randomOptions.splice(0, imagesToFill)
         )
@@ -79,7 +80,7 @@ class DBDataSource extends DataSource {
     const round = { index, pictures, answerIndex };
     game.rounds.push(round);
     await game.save();
-    return game;
+    return mapGame(game);
   }
 
   async endRound({
@@ -99,7 +100,7 @@ class DBDataSource extends DataSource {
     }
 
     await game.save();
-    return game;
+    return mapGame(game);
   }
 
   async endGame({ gameId, winner: { index, score, name } }) {
@@ -113,14 +114,14 @@ class DBDataSource extends DataSource {
     game.winner = winnerToSave;
     game.finishedOn = new Date();
     await game.save();
-    return game;
+    return mapGame(game);
   }
 
   async saveNickName({ gameId, nickName }) {
     const game = await this.models.Game.findById(gameId);
     game.winner.name = nickName;
     await game.save();
-    return game;
+    return mapGame(game);
   }
 
   // ---------------ADMINISTRATION METHODS---------------
@@ -215,22 +216,16 @@ class DBDataSource extends DataSource {
     return this.models.Config.findOne() || this.saveConfig();
   }
 
-  async getImage({ _id }) {
-    return mapImage(await this.models.Image.findById(_id));
+  getImage({ _id }) {
+    return this.models.Image.findById(_id);
   }
 
   async saveImage({ image }) {
-    const { _id, image: imageStr, incorrectTitles, ...rest } = image;
-    const { binary, extension } = base64ToBinary(imageStr);
+    const { _id, ...restImage } = image;
 
-    const img = await this.models.Image.findOneAndUpdate(
+    return this.models.Image.findOneAndUpdate(
       _id ? { _id } : { title: "@@@@@@@@@@@@@@@@@@@@@@" },
-      {
-        image: binary,
-        extension,
-        incorrectTitles: incorrectTitles.filter(v => v),
-        ...rest
-      },
+      restImage,
       {
         new: true,
         upsert: true,
@@ -238,8 +233,6 @@ class DBDataSource extends DataSource {
         useFindAndModify: true
       }
     );
-
-    return mapImage(img);
   }
 
   async removeImage({ _id }) {
@@ -248,11 +241,9 @@ class DBDataSource extends DataSource {
   }
 
   async getImages() {
-    const images = mapImages(
-      await this.models.Image.find()
-        .sort({ _id: -1 })
-        .exec()
-    );
+    const images = await this.models.Image.find()
+      .sort({ _id: -1 })
+      .exec();
 
     const total = await this.models.Image.countDocuments().exec();
     const active = await this.models.Image.where({ active: true })
@@ -266,13 +257,11 @@ class DBDataSource extends DataSource {
     };
   }
 
-  async getNRandomImages({ n }) {
-    return mapImages(
-      await this.models.Image.aggregate([
-        { $match: { active: true } },
-        { $sample: { size: n } }
-      ]).exec()
-    );
+  getNRandomImages({ n }) {
+    return this.models.Image.aggregate([
+      { $match: { active: true } },
+      { $sample: { size: n } }
+    ]).exec();
   }
 }
 

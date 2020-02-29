@@ -18,22 +18,7 @@ const binaryToBase64 = (blob, extension) => {
   return `data:image/${extension};base64,${str}`;
 };
 
-const mapImage = ({
-  _id,
-  image,
-  extension,
-  title,
-  incorrectTitles,
-  active
-}) => ({
-  _id,
-  image: binaryToBase64(image, extension),
-  title,
-  incorrectTitles,
-  active,
-  extension
-});
-
-const mapImages = images => images.map(mapImage);
-
-module.exports = { base64ToBinary, binaryToBase64, mapImage, mapImages };
+module.exports = {
+  base64ToBinary,
+  binaryToBase64
+};

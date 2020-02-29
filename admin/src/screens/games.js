@@ -53,7 +53,7 @@ Games.propTypes = {
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
       players: PropTypes.array.isRequired,
-      finished: PropTypes.number.isRequired
+      finished: PropTypes.bool.isRequired
     })
   ).isRequired,
   total: PropTypes.number.isRequired,

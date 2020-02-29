@@ -95,9 +95,11 @@ export const loadGames = () => async dispatch => {
               score
             }
             config {
-              __typename
               timers {
                 controls
+              }
+              gameplay {
+                roundsInGame
               }
             }
           }
@@ -415,15 +417,18 @@ export const getGame = _id => async dispatch => {
               score
             }
             rounds {
+              started
+              finished
+              image {
+                _id
+                image
+                title
+                incorrectTitles
+              }
               answerIndex
               answered
               answeredBy
               index
-              pictures {
-                picture
-                selected
-                selectedBy
-              }
               pointsReceived
               timeLeft
             }
