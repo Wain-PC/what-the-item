@@ -21,8 +21,51 @@ class DBDataSource extends DataSource {
 
     const config = await this.getConfig();
 
+    const {
+      gameplay: { roundsInGame, answersInRound }
+    } = config;
+    // -1 because of the correct title
+    const answersToGet = answersInRound - 1;
+
+    // Get N random images
+    const images = await this.getNRandomImages({ n: roundsInGame });
+    // Get their ids
+    const ids = images.map(({ _id }) => _id);
+    // Find a total number of missing options.
+    const numberOfMissingOptions = images.reduce(
+      (acc, { incorrectTitles }) => acc + answersToGet - incorrectTitles.length,
+      0
+    );
+
+    // Get some more random images' titles
+    const randomOptions = (
+      await this.models.Image.aggregate([
+        { $match: { active: true, _id: { $nin: ids } } },
+        { $sample: { size: numberOfMissingOptions } },
+        { $project: { title: true } }
+      ]).exec()
+    ).map(({ title }) => title);
+
+    const outputImages = images.map(({ incorrectTitles, ...restImage }) => {
+      const imagesToFill = answersToGet - incorrectTitles.length;
+      return {
+        ...restImage,
+        incorrectTitles: incorrectTitles.concat(
+          randomOptions.splice(0, imagesToFill)
+        )
+      };
+    });
+
+    const rounds = new Array(roundsInGame).fill(null).map((_, index) => ({
+      index,
+      image: outputImages[index],
+      selection: Array(answersInRound).fill({}),
+      answerIndex: Math.floor(Math.random(answersInRound))
+    }));
+
     const game = new this.models.Game({
       players: playersToSave,
+      rounds,
       finished: false,
       startedOn: new Date(),
       config

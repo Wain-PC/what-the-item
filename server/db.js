@@ -10,15 +10,25 @@ const playerSchema = new Schema({
   name: { type: String, default: "Player" }
 });
 
-const pictureSchema = new Schema({
-  picture: String,
-  selected: Boolean,
+const imageSchema = new Schema({
+  image: Buffer,
+  extension: String,
+  title: String,
+  incorrectTitles: [String],
+  active: { type: Boolean, default: true }
+});
+
+const selectionSchema = new Schema({
+  selected: { type: Boolean, default: false },
   selectedBy: { type: Number, default: -1 }
 });
 
 const roundSchema = new Schema({
   index: Number,
-  pictures: [pictureSchema],
+  image: imageSchema,
+  selection: [selectionSchema],
+  started: { type: Boolean, default: false },
+  finished: { type: Boolean, default: false },
   answered: { type: Boolean, default: false },
   answerIndex: Number,
   answeredBy: { type: Number, default: -1 },
@@ -65,7 +75,7 @@ const configSchema = new Schema({
 });
 
 const gameSchema = new Schema({
-  finished: Boolean,
+  finished: { type: Boolean, default: false },
   players: [playerSchema],
   rounds: [roundSchema],
   roundsInGame: Number,
@@ -73,14 +83,6 @@ const gameSchema = new Schema({
   startedOn: Date,
   finishedOn: Date,
   config: configSchema
-});
-
-const imageSchema = new Schema({
-  image: Buffer,
-  extension: String,
-  title: String,
-  incorrectTitles: [String],
-  active: { type: Boolean, default: true }
 });
 
 const models = {

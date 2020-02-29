@@ -12,15 +12,26 @@ const schema = gql`
     name: String!
   }
 
-  type Picture {
-    picture: String!
+  type Image {
+    _id: ID!
+    image: String!
+    extension: String!
+    title: String!
+    incorrectTitles: [String]!
+    active: Boolean!
+  }
+
+  type Selection {
     selected: Boolean!
     selectedBy: Int!
   }
 
   type Round {
     index: Int!
-    pictures: [Picture]!
+    image: Image!
+    selection: [Selection!]!
+    started: Boolean!
+    finished: Boolean!
     answered: Boolean!
     answerIndex: Int!
     answeredBy: Boolean!
@@ -55,39 +66,30 @@ const schema = gql`
     _id: ID!
     config: Config
     finished: Boolean!
-    players: [Player]!
-    rounds: [Round]!
+    players: [Player!]!
+    rounds: [Round!]!
     winner: Player
     startedOn: Date
     finishedOn: Date
   }
 
   type PlayersResponse {
-    players: [Player]!
+    players: [Player!]!
     total: Int
     page: Int!
     pages: Int!
   }
 
   type GamesResponse {
-    games: [Game]!
+    games: [Game!]!
     total: Int
     finished: Int
     page: Int!
     pages: Int!
   }
 
-  type Image {
-    _id: ID!
-    image: String!
-    extension: String!
-    title: String!
-    incorrectTitles: [String]!
-    active: Boolean!
-  }
-
   type ImagesResponse {
-    images: [Image]!
+    images: [Image!]!
     total: Int!
     active: Int!
   }
@@ -111,22 +113,6 @@ const schema = gql`
   input InputWinner {
     score: Int!
     name: String!
-  }
-
-  input InputPicture {
-    picture: String!
-    selected: Boolean!
-    selectedBy: Int!
-  }
-
-  input InputRound {
-    index: Int!
-    pictures: [InputPicture]!
-    answered: Boolean!
-    answerIndex: Int!
-    answeredBy: Boolean!
-    timeLeft: Int!
-    pointsReceived: Int!
   }
 
   input InputConfigTimers {
@@ -161,15 +147,10 @@ const schema = gql`
   }
 
   type Mutation {
-    startGame(players: [InputPlayer]!): Game!
+    startGame(players: [InputPlayer!]!): Game!
     endGame(gameId: ID!, winner: InputWinner!): Game!
-    startRound(
-      gameId: ID!
-      index: Int!
-      pictures: [InputPicture!]!
-      answerIndex: Int!
-    ): Game!
-    endRound(gameId: ID!, round: InputRound!): Game!
+    startRound(gameId: ID!): Game!
+    endRound(gameId: ID!): Game!
     setNickName(nickName: String!): Game!
     saveConfig(config: InputConfig!): Config!
     saveImage(image: InputImage!): Image!
