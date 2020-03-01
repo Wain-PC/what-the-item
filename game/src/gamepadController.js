@@ -95,8 +95,6 @@ export default class GamepadController {
   }
 
   static getActiveGamepads() {
-    return Array.from(navigator.getGamepads()).filter(
-      gamepad => gamepad !== null
-    );
+    return Array.from(navigator.getGamepads()).filter(gamepad => gamepad);
   }
 }
