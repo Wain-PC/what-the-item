@@ -27,7 +27,7 @@ export default class GamepadController {
   };
 
   checkPressed(gamepads) {
-    gamepads.forEach(({ index, buttons }, gamepadIndex) => {
+    gamepads.forEach(({ buttons }, gamepadIndex) => {
       buttons.forEach((button, buttonIndex) => {
         if (button.pressed === true) {
           if (
@@ -37,7 +37,7 @@ export default class GamepadController {
           ) {
             const buttonName = GamepadController.getButtonMapping(buttonIndex);
             if (buttonName) {
-              this.pressListener({ gamepad: index, button: buttonName });
+              this.pressListener({ gamepad: gamepadIndex, button: buttonName });
             }
           }
         }
