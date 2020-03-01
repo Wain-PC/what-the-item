@@ -360,7 +360,7 @@ const setNickName = () => async (dispatch, getState) => {
     return;
   }
 
-  await db.saveNickName({ gameId, nickName });
+  await db.setNickName({ gameId, nickName });
 
   await dispatch(setScreenTop());
 };

@@ -45,6 +45,12 @@ const schema = gql`
     roundEnd: Int!
   }
 
+  fragment allTimers on ConfigTimers {
+    controls
+    round
+    roundEnd
+  }
+
   type ConfigGameplay {
     defaultPlayers: Int!
     minPlayers: Int!
@@ -57,9 +63,30 @@ const schema = gql`
     topPlayers: Int!
   }
 
+  fragment allGameplayTimers on ConfigGameplay {
+    defaultPlayers
+    minPlayers
+    maxPlayers
+    roundsInGame
+    answersInRound
+    maxPointsPerRound
+    winnerNickNameMaxLetters
+    winnerNickNameLetterTable
+    topPlayers
+  }
+
   type Config {
     timers: ConfigTimers!
     gameplay: ConfigGameplay!
+  }
+
+  fragment allConfig on Config {
+    timers {
+      ...allTimers
+    }
+    gameplay {
+      ...allGameplayTimers
+    }
   }
 
   type Game {
@@ -76,16 +103,12 @@ const schema = gql`
   type PlayersResponse {
     players: [Player!]!
     total: Int
-    page: Int!
-    pages: Int!
   }
 
   type GamesResponse {
     games: [Game!]!
     total: Int
     finished: Int
-    page: Int!
-    pages: Int!
   }
 
   type ImagesResponse {
@@ -95,6 +118,7 @@ const schema = gql`
   }
 
   type Query {
+    topPlayers: PlayersResponse!
     players: PlayersResponse!
     games: GamesResponse!
     game(_id: ID!): Game!
@@ -146,12 +170,26 @@ const schema = gql`
     active: Boolean!
   }
 
+  input InputSelection {
+    selected: Boolean!
+    selectedBy: Int!
+  }
+
+  input InputRound {
+    selection: [InputSelection!]!
+    answered: Boolean!
+    answerIndex: Int
+    answeredBy: Int
+    timeLeft: Int
+    pointsReceived: Int
+  }
+
   type Mutation {
     startGame(players: [InputPlayer!]!): Game!
     endGame(gameId: ID!, winner: InputWinner!): Game!
-    startRound(gameId: ID!): Game!
-    endRound(gameId: ID!): Game!
-    setNickName(nickName: String!): Game!
+    startRound(gameId: ID!, index: Int!): Game!
+    endRound(gameId: ID!, round: InputRound!): Game!
+    setNickName(gameId: ID!, nickName: String!): Game!
     saveConfig(config: InputConfig!): Config!
     saveImage(image: InputImage!): Image!
     removeImage(_id: ID!): ImagesResponse!

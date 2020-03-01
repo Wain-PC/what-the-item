@@ -1,13 +1,24 @@
-import axios from "axios";
+import ApolloClient, { InMemoryCache } from "apollo-boost";
 
-const request = async (endpoint, params = {}, options = {}) => {
-  const { data } = await axios.request({
-    method: "post",
-    url: `/api/${endpoint}`,
-    data: params,
-    ...options
-  });
-  return data;
-};
+const client = new ApolloClient({
+  uri: "/graphql",
+  cache: new InMemoryCache({
+    addTypename: false
+  }),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: "no-cache",
+      errorPolicy: "ignore"
+    },
+    query: {
+      fetchPolicy: "no-cache",
+      errorPolicy: "all"
+    }
+  }
+});
 
-export default request;
+const query = async (q, variables) =>
+  client.query({ query: q, variables, fetchPolicy: "network-only" });
+const mutation = async (m, variables = {}) =>
+  client.mutate({ mutation: m, variables });
+export { query, mutation };
