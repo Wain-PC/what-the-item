@@ -1,8 +1,10 @@
 import { gql } from "apollo-boost";
 import { query, mutation } from "./request";
 
-const getConfig = () => {
-  return query(gql`
+const getConfig = async () => {
+  const {
+    data: { config }
+  } = await query(gql`
     {
       config {
         gameplay {
@@ -17,16 +19,35 @@ const getConfig = () => {
       }
     }
   `);
+
+  return config;
 };
 
-const startGame = ({ players }) => {
-  return mutation(
+const startGame = async ({ players }) => {
+  const {
+    data: { startGame: game }
+  } = await mutation(
     gql`
       mutation startGame($players: [InputPlayer!]!) {
         startGame(players: $players) {
           _id
           config {
-            ...allConfig
+            gameplay {
+              answersInRound
+              defaultPlayers
+              maxPlayers
+              maxPointsPerRound
+              minPlayers
+              roundsInGame
+              topPlayers
+              winnerNickNameLetterTable
+              winnerNickNameMaxLetters
+            }
+            timers {
+              controls
+              round
+              roundEnd
+            }
           }
           currentRound
           finished
@@ -61,10 +82,14 @@ const startGame = ({ players }) => {
     `,
     { players }
   );
+
+  return game;
 };
 
 const endGame = async ({ gameId, winner }) => {
-  return mutation(
+  const {
+    data: { endGame: game }
+  } = await mutation(
     gql`
       mutation endGame($gameId: ID!, $winner: InputWinner!) {
         endGame(gameId: $gameId, winner: $winner) {
@@ -78,10 +103,14 @@ const endGame = async ({ gameId, winner }) => {
     `,
     { gameId, winner }
   );
+
+  return game;
 };
 
-const startRound = ({ gameId, index }) => {
-  return mutation(
+const startRound = async ({ gameId, index }) => {
+  const {
+    data: { startRound: game }
+  } = await mutation(
     gql`
       mutation startRound($gameId: ID!, $index: Int!) {
         startRound(gameId: $gameId, index: $index) {
@@ -91,10 +120,14 @@ const startRound = ({ gameId, index }) => {
     `,
     { gameId, index }
   );
+
+  return game;
 };
 
-const endRound = ({ gameId, round }) => {
-  return mutation(
+const endRound = async ({ gameId, round }) => {
+  const {
+    data: { endRound: game }
+  } = await mutation(
     gql`
       mutation endRound($gameId: ID!, $round: InputRound!) {
         endRound(gameId: $gameId, round: $round) {
@@ -104,10 +137,14 @@ const endRound = ({ gameId, round }) => {
     `,
     { gameId, round }
   );
+
+  return game;
 };
 
-const getTopPlayers = () => {
-  return query(
+const getTopPlayers = async () => {
+  const {
+    data: { topPlayers }
+  } = await query(
     gql`
       {
         topPlayers {
@@ -119,10 +156,14 @@ const getTopPlayers = () => {
       }
     `
   );
+
+  return topPlayers;
 };
 
 const setNickName = async ({ gameId, nickName }) => {
-  return mutation(
+  const {
+    data: { setNickName: game }
+  } = await mutation(
     gql`
       mutation setNickName($gameId: ID!, $nickName: String!) {
         setNickName(gameId: $gameId, nickName: $nickName) {
@@ -132,6 +173,8 @@ const setNickName = async ({ gameId, nickName }) => {
     `,
     { gameId, nickName }
   );
+
+  return game;
 };
 
 export {

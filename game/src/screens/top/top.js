@@ -6,7 +6,10 @@ import styles from "./top.module.css";
 
 const Top = props => {
   const {
-    top: { players }
+    top: { players },
+    config: {
+      gameplay: { topPlayers }
+    }
   } = props;
 
   return (
@@ -19,7 +22,7 @@ const Top = props => {
       </div>
       <div className={cn(styles.header, styles.headerAnimation)} />
       <div className={styles.table}>
-        <div className={styles.text}>TOP-5</div>
+        <div className={styles.text}>TOP-{topPlayers}</div>
         <TopTable players={players} />
       </div>
       <div className={cn(styles.text, styles.footer)}>
@@ -37,6 +40,12 @@ Top.propTypes = {
         score: PropTypes.number.isRequired
       })
     ).isRequired
+  }).isRequired,
+
+  config: PropTypes.shape({
+    gameplay: PropTypes.shape({
+      topPlayers: PropTypes.number
+    }).isRequired
   }).isRequired
 };
 

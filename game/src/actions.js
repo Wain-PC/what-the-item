@@ -32,9 +32,7 @@ const getConfig = () => async dispatch => {
   });
 
   try {
-    const {
-      data: { config }
-    } = await db.getConfig();
+    const config = await db.getConfig();
 
     dispatch({
       type: LOAD_CONFIG_SUCCESS,
@@ -49,11 +47,7 @@ const getConfig = () => async dispatch => {
 };
 
 const setScreenTop = () => async dispatch => {
-  const {
-    data: {
-      topPlayers: { players }
-    }
-  } = await db.getTopPlayers();
+  const { players } = await db.getTopPlayers();
 
   dispatch({
     type: SET_SCREEN_TOP,
@@ -61,9 +55,18 @@ const setScreenTop = () => async dispatch => {
   });
 };
 
-const setScreenReady = () => ({
-  type: SET_SCREEN_READY
-});
+const setScreenReady = () => (dispatch, getState) => {
+  const { defaultPlayers } = getState().config.gameplay;
+
+  dispatch({
+    type: SET_PLAYERS_NUMBER,
+    payload: defaultPlayers
+  });
+
+  dispatch({
+    type: SET_SCREEN_READY
+  });
+};
 
 const setPlayersNumber = number => (dispatch, getState) => {
   const {
@@ -82,25 +85,15 @@ const setPlayersNumber = number => (dispatch, getState) => {
   });
 };
 
-const setScreenGame = () => async (dispatch, getState) => {
-  const {
-    players: { list: players }
-  } = getState();
-  // Start the game in DB and get gameId
-  const data = await db.startGame({ players });
-  dispatch({
-    type: SET_SCREEN_GAME,
-    payload: {
-      ...data
-    }
-  });
-
-  dispatch(startRound());
-};
+const setScreenGame = gameData => ({
+  type: SET_SCREEN_GAME,
+  payload: gameData
+});
 
 // Show timer for N seconds, then switch to game screen
-const setScreenControls = () => (dispatch, getState) => {
+const setScreenControls = () => async (dispatch, getState) => {
   const {
+    players: { list },
     config: {
       timers: { controls }
     }
@@ -110,11 +103,17 @@ const setScreenControls = () => (dispatch, getState) => {
     type: SET_SCREEN_CONTROLS
   });
 
-  dispatch(
-    runTimer(controls, () => {
-      dispatch(setScreenGame());
-    })
-  );
+  const players = list.map(({ index, name, score }) => ({
+    index,
+    name,
+    score
+  }));
+
+  const timerPromise = dispatch(runTimer(controls));
+
+  const [data] = await Promise.all([db.startGame({ players }), timerPromise]);
+
+  dispatch(setScreenGame(data));
 };
 
 const setPlayerReady = index => (dispatch, getState) => {
