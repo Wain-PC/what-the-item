@@ -1,5 +1,4 @@
 const { DataSource } = require("apollo-datasource");
-const { mapGame } = require("./utils/base64");
 
 class DBDataSource extends DataSource {
   constructor(db) {
@@ -75,53 +74,56 @@ class DBDataSource extends DataSource {
     return game;
   }
 
-  async startRound({ gameId, index, pictures, answerIndex }) {
+  async startRound({ gameId, index }) {
+    const {
+      timers: { round: secondsInRound }
+    } = await this.getConfig();
     const game = await this.models.Game.findById(gameId);
-    const round = { index, pictures, answerIndex };
-    game.rounds.push(round);
-    await game.save();
-    return mapGame(game);
+    const round = game.rounds[index];
+    if (round) {
+      round.started = true;
+      round.timeLeft = secondsInRound;
+      await game.save();
+      return game.rounds[index];
+    }
+    return null;
   }
 
   async endRound({
     gameId,
-    round: { answered, answeredBy, timeLeft, pointsReceived, pictures }
+    selection,
+    round: { answered, answeredBy, timeLeft, pointsReceived }
   }) {
     const game = await this.models.Game.findById(gameId);
     const [round] = game.rounds.slice(-1);
+    round.selection = selection;
     round.answered = answered;
     round.answeredBy = answeredBy;
     round.timeLeft = timeLeft;
     round.pointsReceived = pointsReceived;
-    round.pictures = pictures;
 
     if (game.players[answeredBy]) {
       game.players[answeredBy].score += pointsReceived;
     }
 
     await game.save();
-    return mapGame(game);
+    return game;
   }
 
-  async endGame({ gameId, winner: { index, score, name } }) {
+  async endGame({ gameId, winner }) {
     const game = await this.models.Game.findById(gameId);
-    const winnerToSave = {
-      index,
-      score,
-      name
-    };
     game.finished = true;
-    game.winner = winnerToSave;
     game.finishedOn = new Date();
+    game.winner = winner;
     await game.save();
-    return mapGame(game);
+    return game;
   }
 
   async saveNickName({ gameId, nickName }) {
     const game = await this.models.Game.findById(gameId);
     game.winner.name = nickName;
     await game.save();
-    return mapGame(game);
+    return game;
   }
 
   // ---------------ADMINISTRATION METHODS---------------

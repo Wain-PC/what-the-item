@@ -95,7 +95,6 @@ const gameSchema = new Schema({
   finished: { type: Boolean, default: false },
   players: [playerSchema],
   rounds: [roundSchema],
-  roundsInGame: Number,
   winner: playerSchema,
   startedOn: Date,
   finishedOn: Date,
