@@ -1,7 +1,6 @@
 import {
   START_GAME_ROUND,
   SELECT_ROUND_ANSWER,
-  SET_SCREEN_GAME,
   SET_SCREEN_TOP,
   SET_SCREEN_GAME_END,
   END_GAME_ROUND
@@ -36,33 +35,23 @@ export default (state = initialState, action) => {
     }
 
     case SELECT_ROUND_ANSWER: {
-      const { answerIndex, answered, pictures } = state;
+      const { answerIndex, answered, selection } = state;
       const { playerIndex, selectedAnswer } = action.payload;
       const isCorrectAnswer = answerIndex === selectedAnswer;
 
       // One cannot select an answer in a finished round or if this answer has been previously selected by someone else.
-      if (answered || pictures[selectedAnswer].selected) {
+      if (answered || selection[selectedAnswer].selected) {
         return state;
       }
 
-      const newPictures = pictures.map((picture, pictureIndex) => {
-        if (pictureIndex === selectedAnswer) {
-          return {
-            ...picture,
-            correct: isCorrectAnswer,
-            selected: true,
-            selectedBy: playerIndex
-          };
-        }
-        return {
-          ...picture
-        };
-      });
+      const newSelection = JSON.parse(JSON.stringify(selection));
+      newSelection[selectedAnswer].selected = true;
+      newSelection[selectedAnswer].selectedBy = playerIndex;
 
       return {
         ...state,
         answered: isCorrectAnswer,
-        pictures: newPictures
+        selection: newSelection
       };
     }
 

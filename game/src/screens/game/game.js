@@ -8,6 +8,7 @@ import Audio from "../../components/audio/audio";
 
 const Game = props => {
   const {
+    players: { list },
     round: {
       image: { image: imageURL },
       selection,
@@ -15,8 +16,7 @@ const Game = props => {
     },
     game: {
       currentRound,
-      message: { answered },
-      players: list
+      message: { answered }
     },
     timer: { timer }
   } = props;
@@ -92,8 +92,10 @@ Game.propTypes = {
     currentRound: PropTypes.number.isRequired,
     message: PropTypes.shape({
       answered: PropTypes.bool
-    }).isRequired,
-    players: PropTypes.arrayOf(
+    }).isRequired
+  }).isRequired,
+  players: PropTypes.shape({
+    list: PropTypes.arrayOf(
       PropTypes.shape({
         index: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,

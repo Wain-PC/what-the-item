@@ -81,18 +81,16 @@ class DBDataSource extends DataSource {
     return game;
   }
 
-  async startRound({ gameId }) {
+  async startRound({ gameId, index }) {
     const {
       timers: { round: secondsInRound }
     } = await this.getConfig();
     const game = await this.models.Game.findById(gameId);
-    const { currentRound } = game;
-    const nextRound = currentRound + 1;
-    const round = game.rounds[nextRound];
+    const round = game.rounds[index];
     if (round) {
       round.started = true;
       round.timeLeft = secondsInRound;
-      game.currentRound = nextRound;
+      game.currentRound = index;
       await game.save();
       return game;
     }
@@ -105,6 +103,7 @@ class DBDataSource extends DataSource {
   }) {
     const game = await this.models.Game.findById(gameId);
     const [round] = game.rounds.slice(-1);
+    round.finished = true;
     round.selection = selection;
     round.answered = answered;
     round.answeredBy = answeredBy;
@@ -128,7 +127,7 @@ class DBDataSource extends DataSource {
     return game;
   }
 
-  async saveNickName({ gameId, nickName }) {
+  async setNickName({ gameId, nickName }) {
     const game = await this.models.Game.findById(gameId);
     game.winner.name = nickName;
     await game.save();
@@ -175,24 +174,6 @@ class DBDataSource extends DataSource {
       })),
       total
     };
-  }
-
-  async getWinnersWithCurrentGameId({ gameId }) {
-    const {
-      gameplay: { topPlayers }
-    } = await this.getConfig();
-
-    const { players } = await this.getWinners({
-      limit: topPlayers,
-      sort: { "winner.score": -1 }
-    });
-
-    return players.map(player => {
-      return {
-        ...player,
-        currentGame: player.gameId === gameId
-      };
-    });
   }
 
   async getPlayers({ from = "" } = {}) {

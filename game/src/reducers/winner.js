@@ -10,7 +10,7 @@ const initialState = {
   name: "",
   score: 0,
   activeLetter: 0,
-  nickName: ""
+  nickName: "_______"
 };
 
 export default (state = initialState, action) => {

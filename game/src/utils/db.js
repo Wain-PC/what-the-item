@@ -147,6 +147,7 @@ const getTopPlayers = async () => {
       {
         topPlayers {
           players {
+            gameId
             name
             score
           }

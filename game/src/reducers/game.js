@@ -1,8 +1,8 @@
 import {
   END_GAME_ROUND,
-  SET_SCREEN_GAME_END,
   SET_GAME_MESSAGE,
-  LOAD_GAME_SUCCESS
+  LOAD_GAME_SUCCESS,
+  END_GAME
 } from "../constants/actions";
 
 const initialState = {
@@ -47,7 +47,7 @@ export default (state = initialState, action) => {
       };
     }
 
-    case SET_SCREEN_GAME_END: {
+    case END_GAME: {
       return initialState;
     }
 
