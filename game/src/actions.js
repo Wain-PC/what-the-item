@@ -15,31 +15,49 @@ import {
   SELECT_ROUND_ANSWER,
   CALCULATE_ROUND_POINTS,
   SET_WINNER,
-  SET_WINNER_LETTER_INDEX_INCREASE,
-  SET_WINNER_LETTER_INDEX_DECREASE,
-  SET_WINNER_LETTER_INCREASE,
-  SET_WINNER_LETTER_DECREASE,
   SET_WINNER_NICKNAME,
-  SET_GAME_MESSAGE
+  SET_GAME_MESSAGE,
+  LOAD_CONFIG_START,
+  LOAD_CONFIG_SUCCESS,
+  LOAD_CONFIG_ERROR,
+  SET_WINNER_LETTER_INDEX,
+  SET_WINNER_LETTER
 } from "./constants/actions";
-
-import {
-  CONTROLS_SCREEN_TIMER,
-  GAME_SCREEN_TIMER,
-  POINTS_PER_ROUND,
-  ROUND_END_TIMER
-} from "./constants/gameplay";
 
 import * as db from "./utils/db";
 
-import getPicturesForRound from "./utils/getPicturesForRound";
+const getConfig = () => async dispatch => {
+  dispatch({
+    type: LOAD_CONFIG_START
+  });
+
+  try {
+    const {
+      data: { config }
+    } = await db.getConfig();
+
+    dispatch({
+      type: LOAD_CONFIG_SUCCESS,
+      payload: { config }
+    });
+  } catch (e) {
+    dispatch({
+      type: LOAD_CONFIG_ERROR,
+      payload: e.message
+    });
+  }
+};
 
 const setScreenTop = () => async dispatch => {
-  const topPlayers = await db.getTopPlayers();
+  const {
+    data: {
+      topPlayers: { players }
+    }
+  } = await db.getTopPlayers();
 
   dispatch({
     type: SET_SCREEN_TOP,
-    payload: topPlayers
+    payload: players
   });
 };
 
@@ -47,23 +65,33 @@ const setScreenReady = () => ({
   type: SET_SCREEN_READY
 });
 
-const setPlayersNumber = number => ({
-  type: SET_PLAYERS_NUMBER,
-  payload: number
-});
+const setPlayersNumber = number => (dispatch, getState) => {
+  const {
+    config: {
+      gameplay: { minPlayers, maxPlayers }
+    }
+  } = getState();
+
+  if (number < minPlayers || number > maxPlayers) {
+    return;
+  }
+
+  dispatch({
+    type: SET_PLAYERS_NUMBER,
+    payload: number
+  });
+};
 
 const setScreenGame = () => async (dispatch, getState) => {
   const {
     players: { list: players }
   } = getState();
   // Start the game in DB and get gameId
-  const id = await db.startGame({ players });
-  const pictures = await db.getShuffledPictures();
+  const data = await db.startGame({ players });
   dispatch({
     type: SET_SCREEN_GAME,
     payload: {
-      id,
-      pictures
+      ...data
     }
   });
 
@@ -71,13 +99,19 @@ const setScreenGame = () => async (dispatch, getState) => {
 };
 
 // Show timer for N seconds, then switch to game screen
-const setScreenControls = () => dispatch => {
+const setScreenControls = () => (dispatch, getState) => {
+  const {
+    config: {
+      timers: { controls }
+    }
+  } = getState();
+
   dispatch({
     type: SET_SCREEN_CONTROLS
   });
 
   dispatch(
-    runTimer(CONTROLS_SCREEN_TIMER, () => {
+    runTimer(controls, () => {
       dispatch(setScreenGame());
     })
   );
@@ -141,11 +175,16 @@ const runTimer = (initialTimerValue, onTimerFinish = () => {}) => (
   });
 };
 
-const setWinner = () => async (dispatch, getState) => {
+const setWinner = () => (dispatch, getState) => {
   // Determine the winner to show
   const {
     players: { list },
-    game: { id: gameId }
+    game: {
+      id: gameId,
+      config: {
+        gameplay: { winnerNickNameMaxLetters }
+      }
+    }
   } = getState();
 
   // TODO: what to do in case of a draw?
@@ -155,14 +194,19 @@ const setWinner = () => async (dispatch, getState) => {
   dispatch({
     type: SET_WINNER,
     payload: {
-      index,
-      name,
-      score
+      winner: {
+        index,
+        name,
+        score
+      },
+      nickName: Array(winnerNickNameMaxLetters)
+        .fill("_")
+        .join("")
     }
   });
 
   // Save the winner to DB for this game.
-  await db.endGame({ gameId, winner: { index, name, score } });
+  return db.endGame({ gameId, winner: { index, name, score } });
 };
 
 const setScreenWinner = () => async dispatch => {
@@ -178,15 +222,15 @@ const setScreenGameEnd = () => async (dispatch, getState) => {
   const {
     game: { id: gameId }
   } = getState();
-  const topPlayers = await db.getTopPlayers({ gameId });
+  const { players } = await db.getTopPlayers({ gameId });
 
   // If the player is in top N players,
-  const isInTop = topPlayers.some(player => player.gameId === gameId);
+  const isInTop = players.some(player => player.gameId === gameId);
 
   if (isInTop) {
     dispatch({
       type: SET_SCREEN_GAME_END,
-      payload: topPlayers
+      payload: players
     });
   } else {
     dispatch(setScreenTop());
@@ -196,33 +240,24 @@ const setScreenGameEnd = () => async (dispatch, getState) => {
 const startRound = () => async (dispatch, getState) => {
   // This is the data for the the previous round.
   const {
-    game: { round, pictures: allPictures },
-    round: { answered }
+    game: { currentRound },
+    round,
+    config: {
+      timers: { roundEnd: roundEndTimer }
+    }
   } = getState();
 
   // Recalculate points after each round (except the first one, obviously)
-  if (round !== 0) {
+  if (currentRound !== 0) {
     await dispatch(calculateRoundPoints());
     // Show correct/incorrect answer message for N seconds
-    await dispatch(setMessage({ answered }, ROUND_END_TIMER));
+    await dispatch(setMessage({ answered: round.answered }, roundEndTimer));
   }
-
-  const pictures = (await getPicturesForRound(allPictures, round)).map(
-    picture => ({
-      picture,
-      selected: false,
-      selectedBy: -1,
-      correct: null
-    })
-  );
-
-  const answerIndex = Math.floor(Math.random() * pictures.length);
 
   dispatch({
     type: START_GAME_ROUND,
     payload: {
-      pictures,
-      answerIndex
+      round
     }
   });
 
@@ -235,7 +270,7 @@ const startRound = () => async (dispatch, getState) => {
 
   // Run the timer.
   dispatch(
-    runTimer(GAME_SCREEN_TIMER, () => {
+    runTimer(roundEndTimer, () => {
       // If the timer is here, no one has answered correctly.
       // Start the next round
       dispatch(startRound());
@@ -244,15 +279,15 @@ const startRound = () => async (dispatch, getState) => {
 
   // Save round to DB
   const {
-    game: { id: gameId, round: index }
+    game: {
+      id: gameId,
+      round: { index }
+    }
   } = getState();
 
   await db.startRound({
     gameId,
-    index,
-    pictures,
-    answerIndex,
-    timeToSolve: GAME_SCREEN_TIMER
+    index
   });
 };
 
@@ -293,7 +328,11 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
     players: { list },
     timer: { timer: timeLeft },
     round: { answerIndex, answered: roundAnswered, pictures },
-    game: { id: gameId }
+    game: { id: gameId },
+    config: {
+      timers: { round },
+      gameplay: { pointsPerRound }
+    }
   } = getState();
 
   const winner = list[pictures[answerIndex].selectedBy];
@@ -311,7 +350,7 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
   }
 
   const { index } = winner;
-  const points = Math.round(POINTS_PER_ROUND * (timeLeft / GAME_SCREEN_TIMER));
+  const points = Math.round(pointsPerRound * (timeLeft / round));
 
   dispatch({
     type: CALCULATE_ROUND_POINTS,
@@ -329,20 +368,62 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
   });
 };
 
-const setNickNameLetterIndexIncrease = () => ({
-  type: SET_WINNER_LETTER_INDEX_INCREASE
-});
+const setNickNameLetterIndexIncrease = () => (dispatch, getState) => {
+  const { winnerNickNameMaxLetters } = getState().game.config.gameplay;
+  const { activeLetter } = getState().winner;
 
-const setNickNameLetterIndexDecrease = () => ({
-  type: SET_WINNER_LETTER_INDEX_DECREASE
-});
-const setNickNameLetterIncrease = () => ({
-  type: SET_WINNER_LETTER_INCREASE
-});
+  dispatch({
+    type: SET_WINNER_LETTER_INDEX,
+    payload: (activeLetter + 1) % winnerNickNameMaxLetters
+  });
+};
 
-const setNickNameLetterDecrease = () => ({
-  type: SET_WINNER_LETTER_DECREASE
-});
+const setNickNameLetterIndexDecrease = () => (dispatch, getState) => {
+  const { winnerNickNameMaxLetters } = getState().game.config.gameplay;
+  const { activeLetter } = getState().winner;
+
+  dispatch({
+    type: SET_WINNER_LETTER_INDEX,
+    payload:
+      (activeLetter + winnerNickNameMaxLetters - 1) % winnerNickNameMaxLetters
+  });
+};
+const setNickNameLetterIncrease = () => (dispatch, getState) => {
+  const { activeLetter, nickName } = getState().winner;
+  const { winnerNickNameLetterTable } = getState().game.config.gameplay;
+
+  const currentLetterIndex = winnerNickNameLetterTable.indexOf(
+    nickName.charAt(activeLetter)
+  );
+  const newLetter =
+    winnerNickNameLetterTable[
+      (currentLetterIndex + 1) % winnerNickNameLetterTable.length
+    ];
+
+  dispatch({
+    type: SET_WINNER_LETTER,
+    payload: newLetter
+  });
+};
+
+const setNickNameLetterDecrease = () => (dispatch, getState) => {
+  const { activeLetter, nickName } = getState().winner;
+  const { winnerNickNameLetterTable } = getState().game.config.gameplay;
+
+  const currentLetterIndex = winnerNickNameLetterTable.indexOf(
+    nickName.charAt(activeLetter)
+  );
+  const newLetter =
+    winnerNickNameLetterTable[
+      (currentLetterIndex + winnerNickNameLetterTable.length - 1) %
+        winnerNickNameLetterTable.length
+    ];
+
+  dispatch({
+    type: SET_WINNER_LETTER,
+    payload: newLetter
+  });
+};
 
 const setNickName = () => async (dispatch, getState) => {
   dispatch({
@@ -381,6 +462,7 @@ const clearMessage = () => ({
 });
 
 export {
+  getConfig,
   setScreenTop,
   setScreenReady,
   setScreenControls,

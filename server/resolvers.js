@@ -4,6 +4,7 @@ const call = dbMethodName => (parent, args, { dataSources: { db } }) =>
 
 const resolvers = {
   Query: {
+    topPlayers: call("getTopPlayers"),
     players: call("getPlayers"),
     games: call("getGames"),
     game: call("getGame"),

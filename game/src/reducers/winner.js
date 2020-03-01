@@ -1,83 +1,46 @@
 import {
   SET_WINNER,
-  SET_WINNER_LETTER_INCREASE,
-  SET_WINNER_LETTER_DECREASE,
-  SET_WINNER_LETTER_INDEX_INCREASE,
-  SET_WINNER_LETTER_INDEX_DECREASE,
-  SET_SCREEN_TOP
+  SET_SCREEN_TOP,
+  SET_WINNER_LETTER_INDEX,
+  SET_WINNER_LETTER
 } from "../constants/actions";
-
-import {
-  WINNER_NICKNAME_MAX_LETTERS,
-  NICKNAME_LETTER_TABLE
-} from "../constants/gameplay";
 
 const initialState = {
   index: 0,
   name: "",
   score: 0,
   activeLetter: 0,
-  nickName: Array(WINNER_NICKNAME_MAX_LETTERS)
-    .fill("_")
-    .join("")
+  nickName: ""
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_WINNER: {
-      const { index, name, score } = action.payload;
+      const {
+        winner: { index, name, score },
+        nickName
+      } = action.payload;
       return {
         ...initialState,
         index,
         name,
-        score
+        score,
+        nickName
       };
     }
-    case SET_WINNER_LETTER_INDEX_INCREASE: {
+    case SET_WINNER_LETTER_INDEX: {
       return {
         ...state,
-        activeLetter: (state.activeLetter + 1) % WINNER_NICKNAME_MAX_LETTERS
+        activeLetter: action.payload
       };
     }
 
-    case SET_WINNER_LETTER_INDEX_DECREASE: {
-      return {
-        ...state,
-        activeLetter:
-          (state.activeLetter + WINNER_NICKNAME_MAX_LETTERS - 1) %
-          WINNER_NICKNAME_MAX_LETTERS
-      };
-    }
-
-    case SET_WINNER_LETTER_INCREASE: {
+    case SET_WINNER_LETTER: {
       const { activeLetter, nickName } = state;
-      const currentLetterIndex = NICKNAME_LETTER_TABLE.indexOf(
-        nickName.charAt(activeLetter)
-      );
-      const newLetter =
-        NICKNAME_LETTER_TABLE[
-          (currentLetterIndex + 1) % NICKNAME_LETTER_TABLE.length
-        ];
-      const nickNameArray = nickName.split("");
-      nickNameArray.splice(activeLetter, 1, newLetter);
-      return {
-        ...state,
-        nickName: nickNameArray.join("")
-      };
-    }
 
-    case SET_WINNER_LETTER_DECREASE: {
-      const { activeLetter, nickName } = state;
-      const currentLetterIndex = NICKNAME_LETTER_TABLE.indexOf(
-        nickName.charAt(activeLetter)
-      );
-      const newLetter =
-        NICKNAME_LETTER_TABLE[
-          (currentLetterIndex + NICKNAME_LETTER_TABLE.length - 1) %
-            NICKNAME_LETTER_TABLE.length
-        ];
       const nickNameArray = nickName.split("");
-      nickNameArray.splice(activeLetter, 1, newLetter);
+      nickNameArray.splice(activeLetter, 1, action.payload);
+
       return {
         ...state,
         nickName: nickNameArray.join("")

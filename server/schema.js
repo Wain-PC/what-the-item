@@ -95,6 +95,7 @@ const schema = gql`
     finished: Boolean!
     players: [Player!]!
     rounds: [Round!]!
+    currentRound: Int!
     winner: Player
     startedOn: Date
     finishedOn: Date

@@ -5,12 +5,10 @@ import {
   SET_GAME_MESSAGE
 } from "../constants/actions";
 
-import { ROUNDS_IN_GAME } from "../constants/gameplay";
-
 const initialState = {
   id: "",
   round: 0,
-  rounds: ROUNDS_IN_GAME,
+  rounds: 0,
   finished: false,
   message: "",
   pictures: []

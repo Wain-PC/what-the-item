@@ -74,15 +74,18 @@ class DBDataSource extends DataSource {
     return game;
   }
 
-  async startRound({ gameId, index }) {
+  async startRound({ gameId }) {
     const {
       timers: { round: secondsInRound }
     } = await this.getConfig();
     const game = await this.models.Game.findById(gameId);
-    const round = game.rounds[index];
+    const { currentRound } = game;
+    const nextRound = currentRound + 1;
+    const round = game.rounds[nextRound];
     if (round) {
       round.started = true;
       round.timeLeft = secondsInRound;
+      game.currentRound = nextRound;
       await game.save();
       return game;
     }
@@ -197,6 +200,17 @@ class DBDataSource extends DataSource {
       players,
       total
     };
+  }
+
+  async getTopPlayers() {
+    const {
+      gameplay: { topPlayers }
+    } = await this.getConfig();
+
+    return this.getWinners({
+      limit: topPlayers,
+      sort: { "winner.score": -1 }
+    });
   }
 
   async saveConfig(newConfig = {}) {

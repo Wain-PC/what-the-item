@@ -9,12 +9,6 @@ import {
   SET_GAME_MESSAGE
 } from "../constants/actions";
 
-import {
-  MIN_PLAYERS,
-  MAX_PLAYERS,
-  INITIAL_PLAYERS
-} from "../constants/gameplay";
-
 const initialPlayer = {
   index: 0,
   name: "Player-1",
@@ -52,16 +46,13 @@ const getNewList = (state, index) => {
 };
 
 const initialState = {
-  list: generatePlayers(INITIAL_PLAYERS)
+  list: []
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_PLAYERS_NUMBER: {
       const number = action.payload;
-      if (number < MIN_PLAYERS || number > MAX_PLAYERS) {
-        return state;
-      }
       return {
         ...state,
         list: generatePlayers(number)

@@ -1,6 +1,24 @@
 import { gql } from "apollo-boost";
 import { query, mutation } from "./request";
 
+const getConfig = () => {
+  return query(gql`
+    {
+      config {
+        gameplay {
+          defaultPlayers
+          minPlayers
+          maxPlayers
+          topPlayers
+        }
+        timers {
+          controls
+        }
+      }
+    }
+  `);
+};
+
 const startGame = ({ players }) => {
   return mutation(
     gql`
@@ -10,6 +28,7 @@ const startGame = ({ players }) => {
           config {
             ...allConfig
           }
+          currentRound
           finished
           startedOn
           finishedOn
@@ -87,7 +106,7 @@ const endRound = ({ gameId, round }) => {
   );
 };
 
-const getTopPlayers = async () => {
+const getTopPlayers = () => {
   return query(
     gql`
       {
@@ -115,4 +134,12 @@ const setNickName = async ({ gameId, nickName }) => {
   );
 };
 
-export { startGame, startRound, endRound, endGame, getTopPlayers, setNickName };
+export {
+  getConfig,
+  startGame,
+  startRound,
+  endRound,
+  endGame,
+  getTopPlayers,
+  setNickName
+};

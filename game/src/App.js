@@ -14,7 +14,8 @@ class App extends PureComponent {
     screen: PropTypes.shape({
       id: PropTypes.string.isRequired
     }).isRequired,
-    setScreenTop: PropTypes.func.isRequired
+    setScreenTop: PropTypes.func.isRequired,
+    getConfig: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -29,9 +30,10 @@ class App extends PureComponent {
     this.keyboardController.onPress(this.onButtonPress);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     // Acquire top players
-    const { setScreenTop } = this.props;
+    const { setScreenTop, getConfig } = this.props;
+    await getConfig();
     setScreenTop();
   }
 
