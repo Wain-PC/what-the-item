@@ -1,35 +1,40 @@
 import {
-  SET_SCREEN_GAME,
-  START_GAME_ROUND,
-  SET_SCREEN_TOP,
-  SET_GAME_MESSAGE
+  END_GAME_ROUND,
+  SET_SCREEN_GAME_END,
+  SET_GAME_MESSAGE,
+  LOAD_GAME_SUCCESS
 } from "../constants/actions";
 
 const initialState = {
   id: "",
-  round: 0,
-  rounds: 0,
+  config: {
+    gameplay: {},
+    timers: {}
+  },
+  rounds: [],
+  currentRound: 0,
   finished: false,
-  message: "",
-  pictures: []
+  startedOn: undefined,
+  finishedOn: undefined,
+  players: [],
+  message: {} // internal-only field
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_SCREEN_GAME: {
-      const { id, pictures } = action.payload;
+    case LOAD_GAME_SUCCESS: {
+      const { _id: id, ...game } = action.payload;
       return {
-        ...initialState,
+        ...state,
         id,
-        pictures
+        ...game
       };
     }
-
-    case START_GAME_ROUND: {
-      const { round, rounds } = state;
+    case END_GAME_ROUND: {
+      const { currentRound, rounds } = state;
 
       // Current round was the last one
-      if (round === rounds) {
+      if (currentRound === rounds.length - 1) {
         return {
           ...state,
           finished: true
@@ -38,11 +43,11 @@ export default (state = initialState, action) => {
 
       return {
         ...state,
-        round: round + 1
+        currentRound: currentRound + 1
       };
     }
 
-    case SET_SCREEN_TOP: {
+    case SET_SCREEN_GAME_END: {
       return initialState;
     }
 

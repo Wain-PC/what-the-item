@@ -1,4 +1,4 @@
-import { LOAD_CONFIG_SUCCESS, SET_SCREEN_GAME } from "../constants/actions";
+import { LOAD_CONFIG_SUCCESS, LOAD_GAME_SUCCESS } from "../constants/actions";
 
 const initialState = {
   gameplay: {},
@@ -8,7 +8,7 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case LOAD_CONFIG_SUCCESS:
-    case SET_SCREEN_GAME: {
+    case LOAD_GAME_SUCCESS: {
       const { config } = action.payload;
       return {
         ...state,

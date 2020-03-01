@@ -4,8 +4,7 @@ import styles from "./screen.module.css";
 import Thumb from "../thumb/thumb";
 
 const Screen = ({ round, timer, imageURL, isCorrectAnswer }) => {
-  const src = `/pictures/${imageURL}.jpg`;
-  const image = imageURL ? { backgroundImage: `url("${src}")` } : {};
+  const image = imageURL ? { backgroundImage: `url("${imageURL}")` } : {};
   const thumb =
     isCorrectAnswer !== undefined ? <Thumb down={!isCorrectAnswer} /> : null;
   const roundDiv = <div className={styles.round}>Round-{round}:</div>;

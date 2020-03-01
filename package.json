@@ -13,6 +13,7 @@
   "dependencies": {
     "apollo-datasource": "^0.7.0",
     "apollo-server-express": "^2.10.1",
+    "array-shuffle": "^1.0.1",
     "config": "^3.2.5",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",

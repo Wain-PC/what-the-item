@@ -29,13 +29,14 @@ const imageSchema = new Schema({
       return v;
     }
   },
-  extension: String,
+  extension: { type: String, default: "jpeg" }, // TODO: remove this hack ASAP
   title: String,
   incorrectTitles: [String],
   active: { type: Boolean, default: true }
 });
 
 const selectionSchema = new Schema({
+  title: String,
   selected: { type: Boolean, default: false },
   selectedBy: { type: Number, default: -1 }
 });

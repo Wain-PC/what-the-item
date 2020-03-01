@@ -8,27 +8,25 @@ import Audio from "../../components/audio/audio";
 
 const Game = props => {
   const {
-    round: { pictures, answerIndex },
-    players: { list },
+    round: {
+      image: { image: imageURL },
+      selection,
+      answerIndex
+    },
     game: {
-      round,
-      message: { answered }
+      currentRound,
+      message: { answered },
+      players: list
     },
     timer: { timer }
   } = props;
 
-  const imageURL = pictures[answerIndex]
-    ? pictures[answerIndex].picture
-    : undefined;
-
-  const buttons = pictures.map(({ picture, selectedBy }, index) => {
+  const buttons = selection.map(({ title, selectedBy }, i) => {
     let correct;
     if (selectedBy !== -1) {
-      correct = index === answerIndex;
+      correct = i === answerIndex;
     }
-    return (
-      <Button key={picture} index={index} text={picture} correct={correct} />
-    );
+    return <Button key={title} index={i} text={title} correct={correct} />;
   });
 
   let audio = null;
@@ -52,7 +50,7 @@ const Game = props => {
       </div>
       <div className={styles.screen}>
         <Screen
-          round={round}
+          round={currentRound}
           timer={timer}
           imageURL={imageURL}
           isCorrectAnswer={answered}
@@ -78,18 +76,24 @@ Game.propTypes = {
     timer: PropTypes.number.isRequired
   }).isRequired,
   round: PropTypes.shape({
-    pictures: PropTypes.arrayOf(
+    image: PropTypes.shape({
+      image: PropTypes.string.isRequired
+    }).isRequired,
+    selection: PropTypes.arrayOf(
       PropTypes.shape({
-        picture: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
         selected: PropTypes.bool.isRequired,
-        selectedBy: PropTypes.number.isRequired,
-        correct: PropTypes.oneOf([true, false, null])
-      })
+        selectedBy: PropTypes.number.isRequired
+      }).isRequired
     ).isRequired,
     answerIndex: PropTypes.number.isRequired
   }).isRequired,
-  players: PropTypes.shape({
-    list: PropTypes.arrayOf(
+  game: PropTypes.shape({
+    currentRound: PropTypes.number.isRequired,
+    message: PropTypes.shape({
+      answered: PropTypes.bool
+    }).isRequired,
+    players: PropTypes.arrayOf(
       PropTypes.shape({
         index: PropTypes.number.isRequired,
         name: PropTypes.string.isRequired,
@@ -97,12 +101,6 @@ Game.propTypes = {
         scoreAdd: PropTypes.number
       })
     ).isRequired
-  }).isRequired,
-  game: PropTypes.shape({
-    round: PropTypes.number.isRequired,
-    message: PropTypes.shape({
-      answered: PropTypes.bool
-    }).isRequired
   }).isRequired
 };
 

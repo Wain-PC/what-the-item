@@ -65,13 +65,11 @@ const startGame = async ({ players }) => {
             answeredBy
             finished
             image {
-              _id
               image
-              title
-              incorrectTitles
             }
             index
             selection {
+              title
               selected
               selectedBy
             }

@@ -8,8 +8,8 @@
       "mongoConnectionLine": "mongodb://localhost/db"
     },
     "timers": {
-      "controls": 9,
-      "round": 10,
+      "controls": 3,
+      "round": 9999,
       "roundEnd": 3
     },
     "gameplay": {

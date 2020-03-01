@@ -21,7 +21,9 @@ import {
   LOAD_CONFIG_SUCCESS,
   LOAD_CONFIG_ERROR,
   SET_WINNER_LETTER_INDEX,
-  SET_WINNER_LETTER
+  SET_WINNER_LETTER,
+  LOAD_GAME_SUCCESS,
+  END_GAME_ROUND
 } from "./constants/actions";
 
 import * as db from "./utils/db";
@@ -85,10 +87,13 @@ const setPlayersNumber = number => (dispatch, getState) => {
   });
 };
 
-const setScreenGame = gameData => ({
-  type: SET_SCREEN_GAME,
-  payload: gameData
-});
+const setScreenGame = () => async dispatch => {
+  await dispatch(startRound());
+
+  return dispatch({
+    type: SET_SCREEN_GAME
+  });
+};
 
 // Show timer for N seconds, then switch to game screen
 const setScreenControls = () => async (dispatch, getState) => {
@@ -113,7 +118,12 @@ const setScreenControls = () => async (dispatch, getState) => {
 
   const [data] = await Promise.all([db.startGame({ players }), timerPromise]);
 
-  dispatch(setScreenGame(data));
+  dispatch({
+    type: LOAD_GAME_SUCCESS,
+    payload: data
+  });
+
+  dispatch(setScreenGame());
 };
 
 const setPlayerReady = index => (dispatch, getState) => {
@@ -237,26 +247,35 @@ const setScreenGameEnd = () => async (dispatch, getState) => {
 };
 
 const startRound = () => async (dispatch, getState) => {
+  debugger;
   // This is the data for the the previous round.
+  const { game, round } = getState();
+
   const {
-    game: { currentRound },
-    round,
     config: {
       timers: { roundEnd: roundEndTimer }
     }
-  } = getState();
+  } = game;
 
   // Recalculate points after each round (except the first one, obviously)
-  if (currentRound !== 0) {
+  if (game.currentRound > 0) {
+    dispatch({
+      type: END_GAME_ROUND
+    });
+
     await dispatch(calculateRoundPoints());
     // Show correct/incorrect answer message for N seconds
     await dispatch(setMessage({ answered: round.answered }, roundEndTimer));
   }
 
+  const {
+    game: { currentRound, rounds }
+  } = getState();
+
   dispatch({
     type: START_GAME_ROUND,
     payload: {
-      round
+      round: rounds[currentRound]
     }
   });
 
@@ -278,10 +297,7 @@ const startRound = () => async (dispatch, getState) => {
 
   // Save round to DB
   const {
-    game: {
-      id: gameId,
-      round: { index }
-    }
+    game: { id: gameId, currentRound: index }
   } = getState();
 
   await db.startRound({
@@ -324,26 +340,26 @@ const selectAnswer = (playerIndex, selectedAnswer) => async (
 const calculateRoundPoints = () => async (dispatch, getState) => {
   // Find the user that won the round
   const {
-    players: { list },
     timer: { timer: timeLeft },
-    round: { answerIndex, answered: roundAnswered, pictures },
-    game: { id: gameId },
+    round: { answerIndex, answered: roundAnswered, selection },
+    game: { id: gameId, players: list },
     config: {
       timers: { round },
       gameplay: { pointsPerRound }
     }
   } = getState();
 
-  const winner = list[pictures[answerIndex].selectedBy];
+  const winner = list[selection[answerIndex].selectedBy];
 
   // No winner in this round, still save the stats.
   if (!winner) {
-    await db.endRound({
+    db.endRound({
       gameId,
-      answered: false,
-      timeLeft: 0,
-      pointsReceived: 0,
-      pictures
+      round: {
+        answered: false,
+        timeLeft: 0,
+        pointsReceived: 0
+      }
     });
     return;
   }
@@ -359,11 +375,12 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
   // Winner found, save round stats to DB.
   db.endRound({
     gameId,
-    answered: roundAnswered,
-    answeredBy: winner.index,
-    timeLeft,
-    pointsReceived: points,
-    pictures
+    round: {
+      answered: roundAnswered,
+      answeredBy: winner.index,
+      timeLeft,
+      pointsReceived: points
+    }
   });
 };
 

@@ -3,29 +3,35 @@ import {
   SELECT_ROUND_ANSWER,
   SET_SCREEN_GAME,
   SET_SCREEN_TOP,
-  SET_SCREEN_GAME_END
+  SET_SCREEN_GAME_END,
+  END_GAME_ROUND
 } from "../constants/actions";
 
 const initialState = {
-  pictures: [],
   answerIndex: 0,
-  answered: false
+  answered: false,
+  answeredBy: -1,
+  finished: false,
+  image: {
+    image: ""
+  },
+  index: 0,
+  selection: [],
+  started: false
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case SET_SCREEN_GAME: {
+    case END_GAME_ROUND: {
       return {
         ...initialState
       };
     }
     case START_GAME_ROUND: {
-      const { pictures, answerIndex } = action.payload;
+      const { round } = action.payload;
       return {
         ...state,
-        pictures,
-        answerIndex,
-        answered: false
+        ...round
       };
     }
 

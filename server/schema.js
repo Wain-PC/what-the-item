@@ -22,6 +22,7 @@ const schema = gql`
   }
 
   type Selection {
+    title: String!
     selected: Boolean!
     selectedBy: Int!
   }
@@ -136,6 +137,7 @@ const schema = gql`
   }
 
   input InputWinner {
+    index: Int!
     score: Int!
     name: String!
   }
@@ -177,7 +179,7 @@ const schema = gql`
   }
 
   input InputRound {
-    selection: [InputSelection!]!
+    selection: [InputSelection!]
     answered: Boolean!
     answerIndex: Int
     answeredBy: Int

@@ -1,4 +1,5 @@
 const { DataSource } = require("apollo-datasource");
+const arrayShuffle = require("array-shuffle");
 
 class DBDataSource extends DataSource {
   constructor(db) {
@@ -56,12 +57,18 @@ class DBDataSource extends DataSource {
       };
     });
 
-    const rounds = new Array(roundsInGame).fill(null).map((_, index) => ({
-      index,
-      image: outputImages[index],
-      selection: Array(answersInRound).fill({}),
-      answerIndex: Math.floor(Math.random(answersInRound))
-    }));
+    const rounds = new Array(roundsInGame).fill(null).map((_, index) => {
+      const image = outputImages[index];
+      const answerIndex = Math.floor(Math.random() * answersInRound);
+      const selection = arrayShuffle(image.incorrectTitles);
+      selection.splice(answerIndex, 0, image.title);
+      return {
+        index,
+        image,
+        selection: selection.map(title => ({ title })),
+        answerIndex
+      };
+    });
 
     const game = new this.models.Game({
       players: playersToSave,
@@ -236,11 +243,14 @@ class DBDataSource extends DataSource {
   }
 
   async saveImage({ image }) {
-    const { _id, ...restImage } = image;
+    const { _id, incorrectTitles, ...restImage } = image;
 
     return this.models.Image.findOneAndUpdate(
       _id ? { _id } : { title: "@@@@@@@@@@@@@@@@@@@@@@" },
-      restImage,
+      {
+        ...restImage,
+        incorrectTitles: incorrectTitles.filter(v => v)
+      },
       {
         new: true,
         upsert: true,
