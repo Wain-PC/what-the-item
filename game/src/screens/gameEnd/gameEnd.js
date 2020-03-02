@@ -7,6 +7,7 @@ import styles from "./gameEnd.module.css";
 
 const GameEnd = props => {
   const {
+    game: { id },
     winner: { activeLetter, nickName },
     top: { players }
   } = props;
@@ -14,7 +15,7 @@ const GameEnd = props => {
   return (
     <div className={styles.root}>
       <div className={styles.text}>Top-5</div>
-      <TopTable players={players} avatarSize="medium" />
+      <TopTable id={id} players={players} avatarSize="medium" />
       <div className={styles.nickNameHeader}>Enter Your Nickname:</div>
       <div className={styles.nickName}>
         <NickName activeLetter={activeLetter} nickName={nickName} />
@@ -26,6 +27,9 @@ const GameEnd = props => {
 };
 
 GameEnd.propTypes = {
+  game: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }).isRequired,
   winner: PropTypes.shape({
     name: PropTypes.string.isRequired,
     activeLetter: PropTypes.number.isRequired,

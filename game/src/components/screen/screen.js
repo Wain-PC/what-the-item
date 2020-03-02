@@ -7,7 +7,7 @@ const Screen = ({ round, timer, imageURL, isCorrectAnswer }) => {
   const image = imageURL ? { backgroundImage: `url("${imageURL}")` } : {};
   const thumb =
     isCorrectAnswer !== undefined ? <Thumb down={!isCorrectAnswer} /> : null;
-  const roundDiv = <div className={styles.round}>Round-{round}:</div>;
+  const roundDiv = <div className={styles.round}>Round-{round + 1}:</div>;
   const timerDiv = <div className={styles.timer}>{timer}</div>;
 
   return (

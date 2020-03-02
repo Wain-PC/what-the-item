@@ -475,8 +475,8 @@ const setNickName = () => async (dispatch, getState) => {
 
   await db.setNickName({ gameId, nickName });
 
-  await dispatch(endGame());
   await dispatch(setScreenTop());
+  await dispatch(endGame());
 };
 
 const setMessage = (message, seconds = 0) => async dispatch => {
