@@ -8,19 +8,28 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
     loadGames();
   }, []);
 
-  const tableRows = games.map(({ _id, players, finished }) => {
-    return (
-      <Table.Row key={_id}>
-        <Table.Cell>
-          <Link to={`/game/${_id}`}>
-            <Label>{_id}</Label>
-          </Link>
-        </Table.Cell>
-        <Table.Cell>{players.length}</Table.Cell>
-        <Table.Cell>{finished ? "Закончена" : "Не закончена"}</Table.Cell>
-      </Table.Row>
-    );
-  });
+  const tableRows = games.map(
+    ({ _id, players, finished, startedOn, winner }) => {
+      return (
+        <Table.Row key={_id}>
+          <Table.Cell>
+            <Link to={`/game/${_id}`}>
+              <Label>{_id}</Label>
+            </Link>
+          </Table.Cell>
+          <Table.Cell>
+            <Label
+              color={finished ? "green" : "red"}
+              content={finished ? "Закончена" : "Не закончена"}
+            />
+          </Table.Cell>
+          <Table.Cell>{players.length}</Table.Cell>
+          <Table.Cell>{startedOn}</Table.Cell>
+          <Table.Cell>{winner && winner.score}</Table.Cell>
+        </Table.Row>
+      );
+    }
+  );
 
   return (
     <>
@@ -28,9 +37,11 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
       <Table celled>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Game Id</Table.HeaderCell>
-            <Table.HeaderCell>Players</Table.HeaderCell>
-            <Table.HeaderCell>Finished</Table.HeaderCell>
+            <Table.HeaderCell>Id</Table.HeaderCell>
+            <Table.HeaderCell>Статус</Table.HeaderCell>
+            <Table.HeaderCell>Игроков</Table.HeaderCell>
+            <Table.HeaderCell>Время начала</Table.HeaderCell>
+            <Table.HeaderCell>Очков у победителя</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -38,12 +49,13 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
 
         <Table.Footer>
           <Table.Row>
-            <Table.HeaderCell colSpan={2}>
-              <strong>Total: {total}</strong>
+            <Table.HeaderCell>
+              <strong>Всего игр: {total}</strong>
             </Table.HeaderCell>
             <Table.HeaderCell>
-              <strong>Finished: {finishedCount}</strong>
+              <strong>Завершено: {finishedCount}</strong>
             </Table.HeaderCell>
+            <Table.HeaderCell colSpan={3} />
           </Table.Row>
         </Table.Footer>
       </Table>

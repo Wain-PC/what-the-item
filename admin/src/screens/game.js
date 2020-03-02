@@ -6,6 +6,7 @@ import { Label, Header, Form, Segment } from "semantic-ui-react";
 import Image from "../components/image/image";
 import Config from "../components/config/config";
 import Player from "../components/player/player";
+import Round from "../components/round/round";
 
 const Game = ({
   match: {
@@ -37,28 +38,9 @@ const Game = ({
     <Form.Input label="Время завершения" value={finishedOn} />
   );
 
-  const roundsArray = rounds.map(
-    ({ index, image, started, finished: roundFinished }) => {
-      return (
-        <Segment key={index}>
-          <Header as="h2" content={`Раунд ${index + 1}`} />
-          <Label
-            color={started ? "green" : "red"}
-            content={started ? "Начат" : "Не начат"}
-          />
-          {started && (
-            <Label
-              color={roundFinished ? "green" : "red"}
-              content={roundFinished ? "Закончен" : "Не закончен"}
-            />
-          )}
-          <Image image={image} />
-        </Segment>
-      );
-    }
-  );
-
-  const playersArray = players.map(player => <Player player={player} />);
+  const roundsArray = rounds.map(round => (
+    <Round round={round} players={players} />
+  ));
 
   return (
     <>
@@ -72,8 +54,6 @@ const Game = ({
       {config && <Config config={config} />}
       <Header as="h1" content="Раунды" />
       {roundsArray}
-      <Header as="h1" content="Игроки" />
-      {playersArray}
     </>
   );
 };

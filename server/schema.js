@@ -174,13 +174,14 @@ const schema = gql`
   }
 
   input InputSelection {
+    title: String!
     selected: Boolean!
     selectedBy: Int!
   }
 
   input InputRound {
     index: Int
-    selection: [InputSelection!]
+    selection: [InputSelection!]!
     answered: Boolean!
     answerIndex: Int
     answeredBy: Int

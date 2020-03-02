@@ -176,14 +176,10 @@ class DBDataSource extends DataSource {
     };
   }
 
-  async getPlayers({ from = "" } = {}) {
-    const where = from
-      ? {
-          _id: { $gt: from }
-        }
-      : {};
-
-    const { players, total } = await this.getWinners({ where, limit: 10 });
+  async getPlayers() {
+    const { players, total } = await this.getWinners({
+      sort: { "winner.score": -1 }
+    });
     return {
       players,
       total

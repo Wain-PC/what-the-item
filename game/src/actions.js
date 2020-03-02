@@ -375,7 +375,8 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
         index,
         answered: false,
         timeLeft: 0,
-        pointsReceived: 0
+        pointsReceived: 0,
+        selection
       }
     });
     return;
@@ -396,7 +397,8 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
       answered: roundAnswered,
       answeredBy: winner.index,
       timeLeft,
-      pointsReceived: points
+      pointsReceived: points,
+      selection
     }
   });
 };

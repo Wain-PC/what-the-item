@@ -102,6 +102,11 @@ export const loadGames = () => async dispatch => {
                 roundsInGame
               }
             }
+            startedOn
+            winner {
+              name
+              score
+            }
           }
           total
           finished
@@ -431,6 +436,11 @@ export const getGame = _id => async dispatch => {
               index
               pointsReceived
               timeLeft
+              selection {
+                selected
+                selectedBy
+                title
+              }
             }
           }
         }
