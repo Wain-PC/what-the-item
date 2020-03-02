@@ -15,6 +15,12 @@ const Image = ({
 }) => (
   <Card>
     <ImageComponent src={image} wrapped ui={false} />
+    {active !== undefined && (
+      <Label
+        color={active ? "green" : "red"}
+        content={active ? "Активно" : "Неактивно"}
+      />
+    )}
     {title || incorrectTitles.length ? (
       <Card.Content>
         {title && (
@@ -29,12 +35,6 @@ const Image = ({
             <Card.Meta>Неправильные названия</Card.Meta>
             <Card.Description>
               <List items={incorrectTitles} />
-              {active !== undefined && (
-                <Label
-                  color={active ? "green" : "red"}
-                  content={active ? "Активно" : "Неактивно"}
-                />
-              )}
             </Card.Description>
           </>
         ) : null}
