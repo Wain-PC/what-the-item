@@ -99,10 +99,10 @@ class DBDataSource extends DataSource {
 
   async endRound({
     gameId,
-    round: { answered, answeredBy, selection, timeLeft, pointsReceived }
+    round: { index, answered, answeredBy, selection, timeLeft, pointsReceived }
   }) {
     const game = await this.models.Game.findById(gameId);
-    const [round] = game.rounds.slice(-1);
+    const round = game.rounds[index];
     round.finished = true;
     round.selection = selection;
     round.answered = answered;

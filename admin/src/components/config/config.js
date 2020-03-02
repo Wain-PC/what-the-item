@@ -61,7 +61,13 @@ const Config = ({ config: { timers, gameplay }, onChange }) => {
           value={timers.controls}
           onChange={onChange}
         />
-        <Row type="timers" id="round" title="Раунд" value={timers.round} />
+        <Row
+          type="timers"
+          id="round"
+          title="Раунд"
+          value={timers.round}
+          onChange={onChange}
+        />
         <Row
           type="timers"
           id="roundEnd"

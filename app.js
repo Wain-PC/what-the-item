@@ -12,6 +12,10 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get("/admin/*", (req, res) => {
+  res.sendFile(`${__dirname}/public/admin/index.html`);
+});
+
 const { graphql, port } = config.system;
 apollo(graphql, app);
 

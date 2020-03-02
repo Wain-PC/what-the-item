@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Grid } from "semantic-ui-react";
 import * as actions from "./actions";
 import * as screens from "./screens";
@@ -19,7 +19,7 @@ class App extends PureComponent {
     ));
 
     return (
-      <BrowserRouter>
+      <BrowserRouter basename="/admin">
         <>
           <ConnectedLoader />
           <Grid centered columns={1}>
@@ -29,7 +29,11 @@ class App extends PureComponent {
             </Grid.Column>
             <Grid.Column width={14}>
               <Switch>
-                <Route exact path="/" component={screens.dashboard} />
+                <Route
+                  exact
+                  path="/"
+                  component={() => <Redirect to="/games" />}
+                />
                 <Route path="/image/:id" component={screens.image} />
                 <Route path="/game/:id" component={screens.game} />
                 {routes}

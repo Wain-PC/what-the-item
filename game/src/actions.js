@@ -354,7 +354,7 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
   // Find the user that won the round
   const {
     timer: { timer: timeLeft },
-    round: { answerIndex, answered: roundAnswered, selection },
+    round: { index, answerIndex, answered: roundAnswered, selection },
     game: {
       id: gameId,
       players: list,
@@ -372,6 +372,7 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
     db.endRound({
       gameId,
       round: {
+        index,
         answered: false,
         timeLeft: 0,
         pointsReceived: 0
@@ -380,18 +381,18 @@ const calculateRoundPoints = () => async (dispatch, getState) => {
     return;
   }
 
-  const { index } = winner;
   const points = Math.round(maxPointsPerRound * (timeLeft / round));
 
   dispatch({
     type: CALCULATE_ROUND_POINTS,
-    payload: { index, points }
+    payload: { index: winner.index, points }
   });
 
   // Winner found, save round stats to DB.
   db.endRound({
     gameId,
     round: {
+      index,
       answered: roundAnswered,
       answeredBy: winner.index,
       timeLeft,

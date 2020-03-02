@@ -4,11 +4,11 @@ import { NavLink } from "react-router-dom";
 import { MENU_ITEMS } from "../../constants/system";
 
 const AdminMenu = () => {
-  const menuItems = MENU_ITEMS.map(({ id, icon }) => {
+  const menuItems = MENU_ITEMS.map(({ id, icon, title }) => {
     return (
       <Menu.Item as={NavLink} key={id} to={`/${id}`} activeClassName="active">
         <Icon name={icon} />
-        {id}
+        {title}
       </Menu.Item>
     );
   });

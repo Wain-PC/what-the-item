@@ -7,14 +7,14 @@ const Player = ({ player: { index, name, score, gameId } }) => {
   return (
     <Card key={index}>
       <Card.Content>
-        <Card.Meta>Им]</Card.Meta>
+        <Card.Meta>Никнейм</Card.Meta>
         <Card.Description>{name}</Card.Description>
         <p />
         <Card.Meta>Счёт</Card.Meta>
         <Card.Description>{score}</Card.Description>
       </Card.Content>
-      <Card.Content extra>
-        {gameId && (
+      {gameId && (
+        <Card.Content extra>
           <Button
             color="teal"
             as={Link}
@@ -22,8 +22,8 @@ const Player = ({ player: { index, name, score, gameId } }) => {
             content="К игре"
             size="small"
           />
-        )}
-      </Card.Content>
+        </Card.Content>
+      )}
     </Card>
   );
 };

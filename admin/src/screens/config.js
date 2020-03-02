@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { Button } from "semantic-ui-react";
+import { Button, Header } from "semantic-ui-react";
 
 import ConfigTable from "../components/config/config";
 
@@ -18,6 +18,7 @@ const Config = ({
 
   return (
     <>
+      <Header as="h1" content="Конфигурация игры" />
       <ConfigTable config={{ timers, gameplay }} onChange={changeConfig} />
       <Button
         positive

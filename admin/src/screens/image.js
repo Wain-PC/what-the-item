@@ -1,6 +1,14 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-import { Button, Checkbox, Form, Image, Input, Grid } from "semantic-ui-react";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Image,
+  Input,
+  Grid,
+  Header
+} from "semantic-ui-react";
 
 class ImageScreen extends PureComponent {
   // eslint-disable-next-line react/static-property-placement
@@ -99,8 +107,11 @@ class ImageScreen extends PureComponent {
     });
 
     return (
-      <Grid centered>
-        <Grid.Column width={8}>
+      <Grid centered columns={1}>
+        <Grid.Column width={16}>
+          <Header as="h1" content="Новое изображение" />
+        </Grid.Column>
+        <Grid.Column width={15}>
           <Form>
             <Form.Field>
               {image ? (

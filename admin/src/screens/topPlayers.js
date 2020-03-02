@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { Table, Label } from "semantic-ui-react";
+import { Table, Label, Header } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 const TopPlayers = ({ players, total, loadTopPlayers }) => {
   useEffect(() => {
@@ -11,7 +12,9 @@ const TopPlayers = ({ players, total, loadTopPlayers }) => {
     return (
       <Table.Row key={gameId}>
         <Table.Cell>
-          <Label>{gameId}</Label>
+          <Link to={`/game/${gameId}`}>
+            <Label>{gameId}</Label>
+          </Link>
         </Table.Cell>
         <Table.Cell>{name}</Table.Cell>
         <Table.Cell>{score}</Table.Cell>
@@ -20,25 +23,28 @@ const TopPlayers = ({ players, total, loadTopPlayers }) => {
   });
 
   return (
-    <Table celled>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Game Id</Table.HeaderCell>
-          <Table.HeaderCell>Name</Table.HeaderCell>
-          <Table.HeaderCell>Score</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
+    <>
+      <Header as="h1" content="Топ игроков" />
+      <Table celled>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Game Id</Table.HeaderCell>
+            <Table.HeaderCell>Name</Table.HeaderCell>
+            <Table.HeaderCell>Score</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
 
-      <Table.Body>{tableRows}</Table.Body>
+        <Table.Body>{tableRows}</Table.Body>
 
-      <Table.Footer>
-        <Table.Row>
-          <Table.HeaderCell colSpan="3">
-            <strong>Total: {total}</strong>
-          </Table.HeaderCell>
-        </Table.Row>
-      </Table.Footer>
-    </Table>
+        <Table.Footer>
+          <Table.Row>
+            <Table.HeaderCell colSpan="3">
+              <strong>Total: {total}</strong>
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Footer>
+      </Table>
+    </>
   );
 };
 

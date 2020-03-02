@@ -179,6 +179,7 @@ const schema = gql`
   }
 
   input InputRound {
+    index: Int
     selection: [InputSelection!]
     answered: Boolean!
     answerIndex: Int
