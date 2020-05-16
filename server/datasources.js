@@ -67,7 +67,8 @@ class DataSources {
     const game = new models.Game({
       rounds,
       startedOn: new Date(),
-      config
+      config,
+      player: {}
     });
     await game.save();
     return game._id;
