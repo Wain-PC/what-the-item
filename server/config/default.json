@@ -5,7 +5,7 @@
       "ws": "/ws"
     },
     "db": {
-      "mongoConnectionLine": "mongodb://localhost/db"
+      "mongoConnectionLine": "mongodb://localhost/what-the-item"
     },
     "timers": {
       "controls": 3,

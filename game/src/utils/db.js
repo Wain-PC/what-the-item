@@ -4,7 +4,7 @@ const getConfig = () => send("getConfig");
 const getTopPlayers = () => send("getTopPlayers");
 const startGame = () => send("startGame");
 const endGame = async ({ gameId }) => send("endGame", { gameId });
-const startRound = ({ gameId }) => send("nextRound", { gameId });
+const nextRound = ({ gameId }) => send("nextRound", { gameId });
 const endRound = ({ gameId, answerIndex }) =>
   send("endRound", {
     gameId,
@@ -16,7 +16,7 @@ const setNickName = ({ gameId, nickName }) =>
 export {
   getConfig,
   startGame,
-  startRound,
+  nextRound,
   endRound,
   endGame,
   getTopPlayers,

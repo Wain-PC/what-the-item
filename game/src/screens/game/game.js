@@ -15,9 +15,9 @@ const Game = props => {
       answerIndex
     },
     game: {
-      currentRound,
       message: { answered }
     },
+    round: { index },
     timer: { timer }
   } = props;
 
@@ -50,7 +50,7 @@ const Game = props => {
       </div>
       <div className={styles.screen}>
         <Screen
-          round={currentRound}
+          round={index + 1}
           timer={timer}
           imageURL={imageURL}
           isCorrectAnswer={answered}
@@ -76,6 +76,7 @@ Game.propTypes = {
     timer: PropTypes.number.isRequired
   }).isRequired,
   round: PropTypes.shape({
+    index: PropTypes.number.isRequired,
     image: PropTypes.shape({
       image: PropTypes.string.isRequired
     }).isRequired,
@@ -89,7 +90,6 @@ Game.propTypes = {
     answerIndex: PropTypes.number.isRequired
   }).isRequired,
   game: PropTypes.shape({
-    currentRound: PropTypes.number.isRequired,
     message: PropTypes.shape({
       answered: PropTypes.bool
     }).isRequired

@@ -13,7 +13,6 @@ import {
   CANCEL_TIMER_INTERVAL_ID,
   START_GAME_ROUND,
   SELECT_ROUND_ANSWER,
-  CALCULATE_ROUND_POINTS,
   SET_WINNER,
   SET_WINNER_NICKNAME,
   SET_GAME_MESSAGE,
@@ -103,7 +102,6 @@ const setScreenGame = () => async dispatch => {
 // Show timer for N seconds, then switch to game screen
 const setScreenControls = () => async (dispatch, getState) => {
   const {
-    players: { list },
     config: {
       timers: { controls }
     }
@@ -113,19 +111,13 @@ const setScreenControls = () => async (dispatch, getState) => {
     type: SET_SCREEN_CONTROLS
   });
 
-  const players = list.map(({ index, name, score }) => ({
-    index,
-    name,
-    score
-  }));
-
   const timerPromise = dispatch(runTimer(controls));
 
-  const [data] = await Promise.all([db.startGame({ players }), timerPromise]);
+  const gameId = await Promise.all([db.startGame(), timerPromise]);
 
   dispatch({
     type: LOAD_GAME_SUCCESS,
-    payload: data
+    payload: gameId
   });
 
   dispatch(setScreenGame());
@@ -193,11 +185,9 @@ const setWinner = () => (dispatch, getState) => {
   // Determine the winner to show
   const {
     players: { list },
-    game: {
-      id: gameId,
-      config: {
-        gameplay: { winnerNickNameMaxLetters }
-      }
+    game: { id: gameId },
+    config: {
+      gameplay: { winnerNickNameMaxLetters }
     }
   } = getState();
 
@@ -254,39 +244,42 @@ const setScreenGameEnd = () => async (dispatch, getState) => {
 
 const endRound = () => async (dispatch, getState) => {
   const {
-    round: { answered },
-    game: {
-      config: {
-        timers: { roundEnd: roundEndTimer }
-      }
+    game: { id: gameId },
+    config: {
+      timers: { roundEnd: roundEndTimer }
     }
   } = getState();
-  await dispatch(calculateRoundPoints());
+
+  const { isCorrectAnswer, score, pointsReceived } = await db.endRound({
+    gameId
+  });
+
   // Show correct/incorrect answer message for N seconds
-  await dispatch(setMessage({ answered }, roundEndTimer));
-  // Increase round ID or set the game to finished
+  await dispatch(setMessage({ answered: isCorrectAnswer }, roundEndTimer));
+
   dispatch({
-    type: END_GAME_ROUND
+    type: END_GAME_ROUND,
+    payload: {
+      score,
+      pointsReceived
+    }
   });
 };
 
 const startRound = () => async (dispatch, getState) => {
   // This is the data for the the previous round.
   const {
-    game: {
-      currentRound,
-      rounds,
-      config: {
-        timers: { round }
-      }
+    game: { id: gameId },
+    config: {
+      timers: { round: roundTimer }
     }
   } = getState();
 
+  const round = await db.nextRound({ gameId });
+
   dispatch({
     type: START_GAME_ROUND,
-    payload: {
-      round: rounds[currentRound]
-    }
+    payload: { round }
   });
 
   // If we've just had a final round, switch to 'final' screen
@@ -298,7 +291,7 @@ const startRound = () => async (dispatch, getState) => {
 
   // Run the timer.
   dispatch(
-    runTimer(round, async () => {
+    runTimer(roundTimer, async () => {
       // If the timer is here, no one has answered correctly.
       // Finish the current round
       await dispatch(endRound());
@@ -306,16 +299,6 @@ const startRound = () => async (dispatch, getState) => {
       await dispatch(startRound());
     })
   );
-
-  // Save round to DB
-  const {
-    game: { id: gameId, currentRound: index }
-  } = getState();
-
-  await db.startRound({
-    gameId,
-    index
-  });
 };
 
 const selectAnswer = (playerIndex, selectedAnswer) => async (
@@ -348,59 +331,6 @@ const selectAnswer = (playerIndex, selectedAnswer) => async (
     await dispatch(endRound());
     await dispatch(startRound());
   }
-};
-
-const calculateRoundPoints = () => async (dispatch, getState) => {
-  // Find the user that won the round
-  const {
-    timer: { timer: timeLeft },
-    round: { index, answerIndex, answered: roundAnswered, selection },
-    game: {
-      id: gameId,
-      players: list,
-      config: {
-        timers: { round },
-        gameplay: { maxPointsPerRound }
-      }
-    }
-  } = getState();
-
-  const winner = list[selection[answerIndex].selectedBy];
-
-  // No winner in this round, still save the stats.
-  if (!winner) {
-    db.endRound({
-      gameId,
-      round: {
-        index,
-        answered: false,
-        timeLeft: 0,
-        pointsReceived: 0,
-        selection
-      }
-    });
-    return;
-  }
-
-  const points = Math.round(maxPointsPerRound * (timeLeft / round));
-
-  dispatch({
-    type: CALCULATE_ROUND_POINTS,
-    payload: { index: winner.index, points }
-  });
-
-  // Winner found, save round stats to DB.
-  db.endRound({
-    gameId,
-    round: {
-      index,
-      answered: roundAnswered,
-      answeredBy: winner.index,
-      timeLeft,
-      pointsReceived: points,
-      selection
-    }
-  });
 };
 
 const setNickNameLetterIndexIncrease = () => (dispatch, getState) => {
@@ -510,7 +440,6 @@ export {
   setTimer,
   startRound,
   selectAnswer,
-  calculateRoundPoints,
   setNickNameLetterIndexIncrease,
   setNickNameLetterIndexDecrease,
   setNickNameLetterIncrease,

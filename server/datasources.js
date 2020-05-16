@@ -9,9 +9,7 @@ class DataSources {
       config = this.saveConfig();
     }
 
-    const { _id, ...rest } = config;
-
-    return rest;
+    return config;
   }
 
   async startGame() {
@@ -91,7 +89,7 @@ class DataSources {
     return null;
   }
 
-  async checkSelection({ gameId, answerIndex }) {
+  async endRound({ gameId, answerIndex }) {
     const game = await models.Game.findById(gameId);
     const finishedRound = game.rounds.find(
       ({ started, finished }) => started && !finished

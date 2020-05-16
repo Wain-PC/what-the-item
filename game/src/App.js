@@ -13,7 +13,7 @@ class App extends PureComponent {
 
     // Start keyboard listener
     this.keyboardController = new KeyboardController();
-    this.keyboardController.onPress(this.onButtonPress);
+    this.keyboardController.onPress(this.onButtonPress.bind(this));
   }
 
   async componentDidMount() {
