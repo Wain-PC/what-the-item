@@ -3,12 +3,12 @@
   "version": "0.0.1",
   "private": true,
   "engines": {
-    "node": "11.x"
+    "node": ">=11.x"
   },
   "scripts": {
     "start": "node app.js",
     "dev": "node-dev --no-notify app.js",
-    "build": "cd game && yarn && yarn build && cp -rf build/* ../public && cd ../admin && yarn && yarn build && cp -rf build/* ../public/admin"
+    "build": "cd ../game && yarn && yarn build && cp -rf build/* ../public && cd ../admin && yarn && yarn build && cp -rf build/* ../public/admin"
   },
   "dependencies": {
     "apollo-datasource": "^0.7.0",

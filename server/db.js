@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const { MONGODB_CONNECTION_STRING } = require("./constants/db");
-const defaultConfig = require("./config");
+const config = require("./config");
 const { binaryToBase64, base64ToBinary } = require("./utils/base64");
 
 const { Schema } = mongoose;
@@ -55,36 +54,36 @@ const roundSchema = new Schema({
 });
 
 const timersConfigSchema = new Schema({
-  controls: { type: Number, default: defaultConfig.timers.controls },
-  round: { type: Number, default: defaultConfig.timers.round },
-  roundEnd: { type: Number, default: defaultConfig.timers.roundEnd }
+  controls: { type: Number, default: config.timers.controls },
+  round: { type: Number, default: config.timers.round },
+  roundEnd: { type: Number, default: config.timers.roundEnd }
 });
 
 const gameplayConfigSchema = new Schema({
   defaultPlayers: {
     type: Number,
-    default: defaultConfig.gameplay.defaultPlayers
+    default: config.gameplay.defaultPlayers
   },
-  minPlayers: { type: Number, default: defaultConfig.gameplay.minPlayers },
-  maxPlayers: { type: Number, default: defaultConfig.gameplay.maxPlayers },
-  roundsInGame: { type: Number, default: defaultConfig.gameplay.roundsInGame },
+  minPlayers: { type: Number, default: config.gameplay.minPlayers },
+  maxPlayers: { type: Number, default: config.gameplay.maxPlayers },
+  roundsInGame: { type: Number, default: config.gameplay.roundsInGame },
   answersInRound: {
     type: Number,
-    default: defaultConfig.gameplay.answersInRound
+    default: config.gameplay.answersInRound
   },
   maxPointsPerRound: {
     type: Number,
-    default: defaultConfig.gameplay.maxPointsPerRound
+    default: config.gameplay.maxPointsPerRound
   },
   winnerNickNameMaxLetters: {
     type: Number,
-    default: defaultConfig.gameplay.winnerNickNameMaxLetters
+    default: config.gameplay.winnerNickNameMaxLetters
   },
   winnerNickNameLetterTable: {
     type: String,
-    default: defaultConfig.gameplay.winnerNickNameLetterTable
+    default: config.gameplay.winnerNickNameLetterTable
   },
-  topPlayers: { type: Number, default: defaultConfig.gameplay.topPlayers }
+  topPlayers: { type: Number, default: config.gameplay.topPlayers }
 });
 
 const configSchema = new Schema({
@@ -111,7 +110,10 @@ const models = {
 
 const connect = () => {
   return new Promise((resolve, reject) => {
-    mongoose.connect(MONGODB_CONNECTION_STRING, { useNewUrlParser: true });
+    mongoose.connect(config.db.mongoConnectionLine, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
     const db = mongoose.connection;
     db.on("error", reject);
     db.once("open", () => {
