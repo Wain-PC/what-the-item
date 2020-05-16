@@ -7,7 +7,8 @@ const { Schema } = mongoose;
 const playerSchema = new Schema({
   index: { type: Number, default: 0 },
   score: { type: Number, default: 0 },
-  name: { type: String, default: "Player" }
+  name: { type: String },
+  contact: { type: String }
 });
 
 const imageSchema = new Schema({
@@ -60,12 +61,6 @@ const timersConfigSchema = new Schema({
 });
 
 const gameplayConfigSchema = new Schema({
-  defaultPlayers: {
-    type: Number,
-    default: config.gameplay.defaultPlayers
-  },
-  minPlayers: { type: Number, default: config.gameplay.minPlayers },
-  maxPlayers: { type: Number, default: config.gameplay.maxPlayers },
   roundsInGame: { type: Number, default: config.gameplay.roundsInGame },
   answersInRound: {
     type: Number,
@@ -83,6 +78,14 @@ const gameplayConfigSchema = new Schema({
     type: String,
     default: config.gameplay.winnerNickNameLetterTable
   },
+  contactMaxLetters: {
+    type: Number,
+    default: config.gameplay.contactMaxLetters
+  },
+  contactLetterTable: {
+    type: String,
+    default: config.gameplay.contactLetterTable
+  },
   topPlayers: { type: Number, default: config.gameplay.topPlayers }
 });
 
@@ -93,10 +96,8 @@ const configSchema = new Schema({
 
 const gameSchema = new Schema({
   finished: { type: Boolean, default: false },
-  players: [playerSchema],
+  player: playerSchema,
   rounds: [roundSchema],
-  currentRound: { type: Number, default: 0 },
-  winner: playerSchema,
   startedOn: Date,
   finishedOn: Date,
   config: configSchema

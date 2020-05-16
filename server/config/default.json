@@ -21,6 +21,8 @@
       "maxPointsPerRound": 100,
       "winnerNickNameMaxLetters": 8,
       "winnerNickNameLetterTable": "0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      "contactMaxLetters": 50,
+      "contactLetterTable": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.-_@",
       "topPlayers": 5
     }
   }
