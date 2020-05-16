@@ -84,7 +84,14 @@ class DataSources {
       nextRound.startedOn = new Date();
       nextRound.timeLeft = secondsInRound;
       await game.save();
-      return nextRound;
+      // Get only required fields
+      const {
+        index,
+        selection,
+        image: { extension, image }
+      } = nextRound;
+
+      return { index, selection, image: { image, extension } };
     }
     return null;
   }
