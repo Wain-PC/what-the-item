@@ -85,13 +85,13 @@ class DataSources {
       nextRound.timeLeft = secondsInRound;
       await game.save();
       // Get only required fields
-      const {
-        index,
-        selection,
-        image: { extension, image }
-      } = nextRound;
+      const { index, selection, image } = nextRound;
 
-      return { index, selection, image: { image, extension } };
+      return {
+        index,
+        selection: selection.map(title => ({ title })),
+        image: { image: image.image, extension: image.extension }
+      };
     }
     return null;
   }
@@ -104,16 +104,16 @@ class DataSources {
     const timeLeft = Math.round(
       (finishedRound.finishedOn - finishedRound.startedOn) / 1000
     );
-    const correctAnswer = answerIndex === finishedRound.answerIndex;
+    const isCorrectAnswer = answerIndex === finishedRound.answerIndex;
 
     finishedRound.finished = true;
     finishedRound.finishedOn = new Date();
     finishedRound.timeLeft = timeLeft;
-    finishedRound.answered = correctAnswer;
+    finishedRound.answered = isCorrectAnswer;
 
     let pointsReceived = 0;
 
-    if (correctAnswer && timeLeft) {
+    if (isCorrectAnswer && timeLeft) {
       pointsReceived = Math.round(
         game.config.maxPointsPerRound * (game.config.timers.round - timeLeft)
       );
@@ -123,7 +123,11 @@ class DataSources {
     game.player.score += pointsReceived;
 
     await game.save();
-    return game._id;
+    return {
+      score: game.player.score,
+      pointsReceived,
+      isCorrectAnswer
+    };
   }
 
   async endGame({ gameId }) {
@@ -146,7 +150,6 @@ class DataSources {
 
   async getTopPlayers() {
     const config = await this.getConfig();
-
     return this.getWinners({
       limit: config.gameplay.topPlayers,
       sort: { "player.score": -1 }
