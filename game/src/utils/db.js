@@ -8,9 +8,6 @@ const getConfig = async () => {
     {
       config {
         gameplay {
-          defaultPlayers
-          minPlayers
-          maxPlayers
           topPlayers
         }
         timers {
@@ -34,14 +31,13 @@ const startGame = async ({ players }) => {
           config {
             gameplay {
               answersInRound
-              defaultPlayers
-              maxPlayers
               maxPointsPerRound
-              minPlayers
               roundsInGame
               topPlayers
               winnerNickNameLetterTable
               winnerNickNameMaxLetters
+              contactMaxLetters
+              contactLetterTable
             }
             timers {
               controls
@@ -49,11 +45,10 @@ const startGame = async ({ players }) => {
               roundEnd
             }
           }
-          currentRound
           finished
           startedOn
           finishedOn
-          players {
+          player {
             _id
             index
             name
@@ -92,7 +87,7 @@ const endGame = async ({ gameId, winner }) => {
       mutation endGame($gameId: ID!, $winner: InputWinner!) {
         endGame(gameId: $gameId, winner: $winner) {
           _id
-          winner {
+          player {
             name
             score
           }

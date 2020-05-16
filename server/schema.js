@@ -10,6 +10,7 @@ const schema = gql`
     index: Int!
     score: Int!
     name: String!
+    contact: String!
   }
 
   type Image {
@@ -46,34 +47,15 @@ const schema = gql`
     roundEnd: Int!
   }
 
-  fragment allTimers on ConfigTimers {
-    controls
-    round
-    roundEnd
-  }
-
   type ConfigGameplay {
-    defaultPlayers: Int!
-    minPlayers: Int!
-    maxPlayers: Int!
     roundsInGame: Int!
     answersInRound: Int!
     maxPointsPerRound: Int!
     winnerNickNameMaxLetters: Int!
     winnerNickNameLetterTable: String!
+    contactMaxLetters: Int!
+    contactLetterTable: String!
     topPlayers: Int!
-  }
-
-  fragment allGameplayTimers on ConfigGameplay {
-    defaultPlayers
-    minPlayers
-    maxPlayers
-    roundsInGame
-    answersInRound
-    maxPointsPerRound
-    winnerNickNameMaxLetters
-    winnerNickNameLetterTable
-    topPlayers
   }
 
   type Config {
@@ -81,23 +63,12 @@ const schema = gql`
     gameplay: ConfigGameplay!
   }
 
-  fragment allConfig on Config {
-    timers {
-      ...allTimers
-    }
-    gameplay {
-      ...allGameplayTimers
-    }
-  }
-
   type Game {
     _id: ID!
     config: Config
     finished: Boolean!
-    players: [Player!]!
+    player: Player
     rounds: [Round!]!
-    currentRound: Int!
-    winner: Player
     startedOn: Date
     finishedOn: Date
   }
@@ -157,6 +128,8 @@ const schema = gql`
     maxPointsPerRound: Int
     winnerNickNameMaxLetters: Int
     winnerNickNameLetterTable: String
+    contactMaxLetters: Int
+    contactLetterTable: String
     topPlayers: Int
   }
 

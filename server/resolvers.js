@@ -2,26 +2,25 @@
 const call = dbMethodName => (parent, args, { dataSources: { db } }) =>
   db[dbMethodName](args);
 
+const capitalize = str => str[0].toUpperCase() + str.slice(1);
+
 const resolvers = {
-  Query: {
-    topPlayers: call("getTopPlayers"),
-    players: call("getPlayers"),
-    games: call("getGames"),
-    game: call("getGame"),
-    config: call("getConfig"),
-    images: call("getImages"),
-    image: call("getImage"),
-    nRandomImages: call("getNRandomImages")
-  },
-  Mutation: {
-    startGame: call("startGame"),
-    endGame: call("endGame"),
-    startRound: call("startRound"),
-    endRound: call("endRound"),
-    setNickName: call("setNickName"),
-    saveConfig: call("saveConfig"),
-    saveImage: call("saveImage"),
-    removeImage: call("removeImage")
-  }
+  Query: new Proxy(
+    {},
+    {
+      get(target, prop) {
+        return call(`get${capitalize(prop)}`);
+      }
+    }
+  ),
+  Mutation: new Proxy(
+    {},
+    {
+      get(target, prop) {
+        return call(prop);
+      }
+    }
+  )
 };
+
 module.exports = resolvers;
