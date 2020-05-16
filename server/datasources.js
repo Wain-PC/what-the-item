@@ -1,24 +1,9 @@
-const { DataSource } = require("apollo-datasource");
+/* eslint-disable class-methods-use-this */
 const arrayShuffle = require("array-shuffle");
+const models = require("./schema");
 
-class DBDataSource extends DataSource {
-  constructor(db) {
-    super();
-    this.models = db.models;
-    this.connect = db.connect;
-  }
-
-  initialize() {
-    return this.connect();
-  }
-
-  async startGame({ players }) {
-    const playersToSave = players.map(({ index, name, score }) => ({
-      index,
-      name,
-      score
-    }));
-
+class DataSource {
+  async startGame() {
     const config = await this.getConfig();
 
     const {
@@ -39,7 +24,7 @@ class DBDataSource extends DataSource {
 
     // Get some more random images' titles
     const randomOptions = (
-      await this.models.Image.aggregate([
+      await models.Image.aggregate([
         { $match: { active: true, _id: { $nin: ids } } },
         { $sample: { size: numberOfMissingOptions } },
         { $project: { title: true } }
@@ -70,79 +55,99 @@ class DBDataSource extends DataSource {
       };
     });
 
-    const game = new this.models.Game({
-      players: playersToSave,
+    const game = new models.Game({
       rounds,
-      finished: false,
       startedOn: new Date(),
       config
     });
     await game.save();
-    return game;
+    return game._id;
   }
 
-  async startRound({ gameId, index }) {
+  async nextRound({ gameId }) {
     const {
       timers: { round: secondsInRound }
     } = await this.getConfig();
-    const game = await this.models.Game.findById(gameId);
-    const round = game.rounds[index];
-    if (round) {
-      round.started = true;
-      round.timeLeft = secondsInRound;
-      game.currentRound = index;
+    const game = await models.Game.findById(gameId);
+    const nextRound = game.rounds.find(({ started }) => !started);
+    if (nextRound) {
+      nextRound.started = true;
+      nextRound.startedOn = new Date();
+      nextRound.timeLeft = secondsInRound;
       await game.save();
-      return game;
+      return nextRound;
     }
     return null;
   }
 
-  async endRound({
-    gameId,
-    round: { index, answered, answeredBy, selection, timeLeft, pointsReceived }
-  }) {
-    const game = await this.models.Game.findById(gameId);
-    const round = game.rounds[index];
-    round.finished = true;
-    round.selection = selection;
-    round.answered = answered;
-    round.answeredBy = answeredBy;
-    round.timeLeft = timeLeft;
-    round.pointsReceived = pointsReceived;
+  async checkSelection({ gameId, answerIndex }) {
+    const game = await models.Game.findById(gameId);
+    const finishedRound = game.rounds.find(
+      ({ started, finished }) => started && !finished
+    );
+    const timeLeft = Math.round(
+      (finishedRound.finishedOn - finishedRound.startedOn) / 1000
+    );
+    const correctAnswer = answerIndex === finishedRound.answerIndex;
 
-    if (game.players[answeredBy]) {
-      game.players[answeredBy].score += pointsReceived;
+    finishedRound.finished = true;
+    finishedRound.finishedOn = new Date();
+    finishedRound.timeLeft = timeLeft;
+    finishedRound.answered = correctAnswer;
+
+    let pointsReceived = 0;
+
+    if (correctAnswer && timeLeft) {
+      pointsReceived = Math.round(
+        game.config.maxPointsPerRound * (game.config.timers.round - timeLeft)
+      );
     }
 
+    finishedRound.pointsReceived = pointsReceived;
+    game.player.score += pointsReceived;
+
     await game.save();
-    return game;
+    return game._id;
   }
 
-  async endGame({ gameId, winner }) {
-    const game = await this.models.Game.findById(gameId);
+  async endGame({ gameId }) {
+    const game = await models.Game.findById(gameId);
     game.finished = true;
     game.finishedOn = new Date();
-    game.winner = winner;
+    await game.save();
+    return {
+      score: game.player.score
+    };
+  }
+
+  async setNickName({ gameId, nickName, contact }) {
+    const game = await models.Game.findById(gameId);
+    game.player.name = nickName;
+    game.player.contact = contact;
     await game.save();
     return game;
   }
 
-  async setNickName({ gameId, nickName }) {
-    const game = await this.models.Game.findById(gameId);
-    game.winner.name = nickName;
-    await game.save();
-    return game;
+  async getTopPlayers() {
+    const {
+      gameplay: { topPlayers }
+    } = await this.getConfig();
+
+    return this.getWinners({
+      limit: topPlayers,
+      sort: { "player.score": -1 }
+    });
   }
 
   // ---------------ADMINISTRATION METHODS---------------
 
   async getGames() {
-    const games = await this.models.Game.find()
+    const games = await models.Game.find()
       .sort({ _id: -1 })
       .exec();
 
-    const total = await this.models.Game.countDocuments().exec();
-    const finished = await this.models.Game.where({ finished: true })
+    const total = await models.Game.countDocuments().exec();
+    const finished = await models.Game.where({ finished: true })
       .countDocuments()
       .exec();
 
@@ -154,12 +159,12 @@ class DBDataSource extends DataSource {
   }
 
   getGame({ _id }) {
-    return this.models.Game.findById({ _id });
+    return models.Game.findById({ _id });
   }
 
   async getWinners({ where = {}, limit = 100, sort = {} }) {
-    const documentsModel = this.models.Game.find()
-      .where({ finished: true, winner: { $ne: null }, ...where })
+    const documentsModel = models.Game.find()
+      .where({ finished: true, ...where })
       .sort({ ...sort, _id: 1 });
 
     const documents = await documentsModel.limit(limit).exec();
@@ -168,17 +173,17 @@ class DBDataSource extends DataSource {
     return {
       players: documents.map(doc => ({
         gameId: doc._id.toString(),
-        _id: doc.winner._id,
-        name: doc.winner.name,
-        score: doc.winner.score
+        _id: doc.player._id,
+        name: doc.player.name,
+        score: doc.player.score
       })),
       total
     };
   }
 
-  async getPlayers() {
+  async getAllPlayers() {
     const { players, total } = await this.getWinners({
-      sort: { "winner.score": -1 }
+      sort: { "player.score": -1 }
     });
     return {
       players,
@@ -186,20 +191,9 @@ class DBDataSource extends DataSource {
     };
   }
 
-  async getTopPlayers() {
-    const {
-      gameplay: { topPlayers }
-    } = await this.getConfig();
-
-    return this.getWinners({
-      limit: topPlayers,
-      sort: { "winner.score": -1 }
-    });
-  }
-
   async saveConfig(newConfig = {}) {
     const { config = {} } = newConfig;
-    return this.models.Config.findOneAndUpdate({}, config, {
+    return models.Config.findOneAndUpdate({}, config, {
       new: true,
       upsert: true,
       setDefaultsOnInsert: true,
@@ -212,17 +206,17 @@ class DBDataSource extends DataSource {
   }
 
   getConfig() {
-    return this.models.Config.findOne() || this.saveConfig();
+    return models.Config.findOne() || this.saveConfig();
   }
 
   getImage({ _id }) {
-    return this.models.Image.findById(_id);
+    return models.Image.findById(_id);
   }
 
   async saveImage({ image }) {
     const { _id, incorrectTitles, ...restImage } = image;
 
-    return this.models.Image.findOneAndUpdate(
+    return models.Image.findOneAndUpdate(
       _id ? { _id } : { title: "@@@@@@@@@@@@@@@@@@@@@@" },
       {
         ...restImage,
@@ -238,17 +232,17 @@ class DBDataSource extends DataSource {
   }
 
   async removeImage({ _id }) {
-    await this.models.Image.findByIdAndDelete(_id);
+    await models.Image.findByIdAndDelete(_id);
     return this.getImages();
   }
 
   async getImages() {
-    const images = await this.models.Image.find()
+    const images = await models.Image.find()
       .sort({ _id: -1 })
       .exec();
 
-    const total = await this.models.Image.countDocuments().exec();
-    const active = await this.models.Image.where({ active: true })
+    const total = await models.Image.countDocuments().exec();
+    const active = await models.Image.where({ active: true })
       .countDocuments()
       .exec();
 
@@ -259,12 +253,14 @@ class DBDataSource extends DataSource {
     };
   }
 
+  // ---------------UTILS METHODS---------------
+
   getNRandomImages({ n }) {
-    return this.models.Image.aggregate([
+    return models.Image.aggregate([
       { $match: { active: true } },
       { $sample: { size: n } }
     ]).exec();
   }
 }
 
-module.exports = { DBDataSource };
+module.exports = DataSource;

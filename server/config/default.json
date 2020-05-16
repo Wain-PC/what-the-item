@@ -2,7 +2,7 @@
   "game": {
     "system": {
       "port": 3333,
-      "graphql": "/graphql"
+      "ws": "/ws"
     },
     "db": {
       "mongoConnectionLine": "mongodb://localhost/db"
@@ -13,9 +13,6 @@
       "roundEnd": 3
     },
     "gameplay": {
-      "defaultPlayers": 2,
-      "minPlayers": 1,
-      "maxPlayers": 2,
       "roundsInGame": 10,
       "answersInRound": 4,
       "maxPointsPerRound": 100,

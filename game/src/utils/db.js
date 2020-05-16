@@ -25,8 +25,8 @@ const startGame = async ({ players }) => {
     data: { startGame: game }
   } = await mutation(
     gql`
-      mutation startGame($players: [InputPlayer!]!) {
-        startGame(players: $players) {
+      mutation startGame {
+        startGame {
           _id
           config {
             gameplay {

@@ -1,177 +1,111 @@
-const { gql } = require("apollo-server-express");
+const mongoose = require("mongoose");
+const config = require("./config");
+const { binaryToBase64, base64ToBinary } = require("./utils/base64");
 
-// Construct a schema, using GraphQL schema language
-const schema = gql`
-  scalar Date
+const { Schema } = mongoose;
 
-  type Player {
-    _id: ID
-    gameId: ID
-    index: Int!
-    score: Int!
-    name: String!
-    contact: String!
-  }
+const playerSchema = new Schema({
+  index: { type: Number, default: 0 },
+  score: { type: Number, default: 0 },
+  name: { type: String },
+  contact: { type: String }
+});
 
-  type Image {
-    _id: ID!
-    image: String!
-    extension: String!
-    title: String!
-    incorrectTitles: [String]!
-    active: Boolean!
-  }
+const imageSchema = new Schema({
+  image: {
+    type: Buffer,
+    get(value) {
+      return binaryToBase64(value, this.extension);
+    },
+    set(v) {
+      // Need to check if `this` is a document, because in mongoose 5
+      // setters will also run on queries, in which case `this` will be a
+      // mongoose query object.
+      if (v != null && typeof v === "string") {
+        const { binary, extension } = base64ToBinary(v);
+        this.extension = extension;
+        return binary;
+      }
+      return v;
+    }
+  },
+  extension: { type: String, default: "jpeg" }, // TODO: remove this hack ASAP
+  title: String,
+  incorrectTitles: [String],
+  active: { type: Boolean, default: true }
+});
 
-  type Selection {
-    title: String!
-    selected: Boolean!
-    selectedBy: Int!
-  }
+const selectionSchema = new Schema({
+  title: String
+});
 
-  type Round {
-    index: Int!
-    image: Image!
-    selection: [Selection!]!
-    started: Boolean!
-    finished: Boolean!
-    answered: Boolean!
-    answerIndex: Int
-    answeredBy: Int
-    timeLeft: Int
-    pointsReceived: Int
-  }
+const roundSchema = new Schema({
+  index: Number,
+  image: imageSchema,
+  selection: [selectionSchema],
+  started: { type: Boolean, default: false },
+  finished: { type: Boolean, default: false },
+  startedOn: Date,
+  finishedOn: Date,
+  answered: { type: Boolean, default: false },
+  answerIndex: Number,
+  timeLeft: Number,
+  pointsReceived: Number
+});
 
-  type ConfigTimers {
-    controls: Int!
-    round: Int!
-    roundEnd: Int!
-  }
+const timersConfigSchema = new Schema({
+  controls: { type: Number, default: config.timers.controls },
+  round: { type: Number, default: config.timers.round },
+  roundEnd: { type: Number, default: config.timers.roundEnd }
+});
 
-  type ConfigGameplay {
-    roundsInGame: Int!
-    answersInRound: Int!
-    maxPointsPerRound: Int!
-    winnerNickNameMaxLetters: Int!
-    winnerNickNameLetterTable: String!
-    contactMaxLetters: Int!
-    contactLetterTable: String!
-    topPlayers: Int!
-  }
+const gameplayConfigSchema = new Schema({
+  roundsInGame: { type: Number, default: config.gameplay.roundsInGame },
+  answersInRound: {
+    type: Number,
+    default: config.gameplay.answersInRound
+  },
+  maxPointsPerRound: {
+    type: Number,
+    default: config.gameplay.maxPointsPerRound
+  },
+  winnerNickNameMaxLetters: {
+    type: Number,
+    default: config.gameplay.winnerNickNameMaxLetters
+  },
+  winnerNickNameLetterTable: {
+    type: String,
+    default: config.gameplay.winnerNickNameLetterTable
+  },
+  contactMaxLetters: {
+    type: Number,
+    default: config.gameplay.contactMaxLetters
+  },
+  contactLetterTable: {
+    type: String,
+    default: config.gameplay.contactLetterTable
+  },
+  topPlayers: { type: Number, default: config.gameplay.topPlayers }
+});
 
-  type Config {
-    timers: ConfigTimers!
-    gameplay: ConfigGameplay!
-  }
+const configSchema = new Schema({
+  timers: timersConfigSchema,
+  gameplay: gameplayConfigSchema
+});
 
-  type Game {
-    _id: ID!
-    config: Config
-    finished: Boolean!
-    player: Player
-    rounds: [Round!]!
-    startedOn: Date
-    finishedOn: Date
-  }
+const gameSchema = new Schema({
+  finished: { type: Boolean, default: false },
+  player: playerSchema,
+  rounds: [roundSchema],
+  startedOn: Date,
+  finishedOn: Date,
+  config: configSchema
+});
 
-  type PlayersResponse {
-    players: [Player!]!
-    total: Int
-  }
+const models = {
+  Game: mongoose.model("Game", gameSchema),
+  Config: mongoose.model("Config", configSchema),
+  Image: mongoose.model("Image", imageSchema)
+};
 
-  type GamesResponse {
-    games: [Game!]!
-    total: Int
-    finished: Int
-  }
-
-  type ImagesResponse {
-    images: [Image!]!
-    total: Int!
-    active: Int!
-  }
-
-  type Query {
-    topPlayers: PlayersResponse!
-    players: PlayersResponse!
-    games: GamesResponse!
-    game(_id: ID!): Game!
-    config: Config!
-    images: ImagesResponse!
-    image(_id: ID!): Image!
-    nRandomImages(n: Int!): [Image]!
-  }
-
-  input InputPlayer {
-    index: Int!
-    score: Int!
-    name: String!
-  }
-
-  input InputWinner {
-    index: Int!
-    score: Int!
-    name: String!
-  }
-
-  input InputConfigTimers {
-    controls: Int
-    round: Int
-    roundEnd: Int
-  }
-
-  input InputConfigGameplay {
-    defaultPlayers: Int
-    minPlayers: Int
-    maxPlayers: Int
-    roundsInGame: Int
-    answersInRound: Int
-    maxPointsPerRound: Int
-    winnerNickNameMaxLetters: Int
-    winnerNickNameLetterTable: String
-    contactMaxLetters: Int
-    contactLetterTable: String
-    topPlayers: Int
-  }
-
-  input InputConfig {
-    timers: InputConfigTimers
-    gameplay: InputConfigGameplay
-  }
-
-  input InputImage {
-    _id: String
-    image: String!
-    title: String!
-    incorrectTitles: [String]!
-    active: Boolean!
-  }
-
-  input InputSelection {
-    title: String!
-    selected: Boolean!
-    selectedBy: Int!
-  }
-
-  input InputRound {
-    index: Int
-    selection: [InputSelection!]!
-    answered: Boolean!
-    answerIndex: Int
-    answeredBy: Int
-    timeLeft: Int
-    pointsReceived: Int
-  }
-
-  type Mutation {
-    startGame(players: [InputPlayer!]!): Game!
-    endGame(gameId: ID!, winner: InputWinner!): Game!
-    startRound(gameId: ID!, index: Int!): Game!
-    endRound(gameId: ID!, round: InputRound!): Game!
-    setNickName(gameId: ID!, nickName: String!): Game!
-    saveConfig(config: InputConfig!): Config!
-    saveImage(image: InputImage!): Image!
-    removeImage(_id: ID!): ImagesResponse!
-  }
-`;
-
-module.exports = schema;
+module.exports = models;

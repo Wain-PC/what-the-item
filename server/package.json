@@ -11,13 +11,12 @@
     "build": "cd ../game && yarn && yarn build && cp -rf build/* ../public && cd ../admin && yarn && yarn build && cp -rf build/* ../public/admin"
   },
   "dependencies": {
-    "apollo-datasource": "^0.7.0",
-    "apollo-server-express": "^2.10.1",
     "array-shuffle": "^1.0.1",
     "config": "^3.2.5",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "express-ws": "^4.0.0",
     "mongoose": "^5.8.11",
     "morgan": "~1.9.1"
   },
