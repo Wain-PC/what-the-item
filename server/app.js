@@ -1,24 +1,44 @@
 const express = require("express");
-const path = require("path");
-const Morgan = require("morgan");
+const Websocket = require("express-ws");
 const db = require("./db");
-const websocketRouter = require("./ws");
 const config = require("./config");
+const DataSources = require("./datasources");
 
 const app = express();
-
-const logger = Morgan("dev");
-app.use(logger);
+Websocket(app);
 
 const bootstrap = async () => {
-  const { ws, port } = config.system;
+  const { ws: wsPath, port } = config.system;
   await db.connect();
+  const dataSources = new DataSources();
   app.listen(port, () => {
-    app.use(express.json({ limit: "50mb" }));
-    app.use(express.urlencoded({ extended: false }));
-    app.use(express.static(path.join(__dirname, "public")));
-    // Websocket server for the game.
-    app.use(ws, websocketRouter(app));
+    app.ws("/ws", ws => {
+      ws.on("message", async msg => {
+        // Parse message & get payload.
+        console.log(msg);
+        try {
+          const { id, path, data } = JSON.parse(msg);
+
+          // If we have an appropriate DB path, execute it and return results.
+          if (dataSources[path]) {
+            try {
+              const payload = await dataSources[path](data);
+              const response = { id, payload };
+              ws.send(JSON.stringify(response));
+            } catch (dbErr) {
+              console.error(dbErr);
+              ws.send(JSON.stringify({ error: "Unable to process request" }));
+            }
+            // No appropriate DB path.
+          } else {
+            ws.send(JSON.stringify({ error: "Unknown path" }));
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      });
+    });
+    console.log(`Websocket server listening on :${port}${wsPath}`);
   });
 };
 

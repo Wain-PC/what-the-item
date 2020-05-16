@@ -3,8 +3,8 @@ export default class KeyboardController {
     this.pressListener = () => {};
     this.releaseListener = () => {};
 
-    document.addEventListener("keydown", this.checkPressed);
-    document.addEventListener("keyup", this.checkReleased);
+    document.addEventListener("keydown", this.checkPressed.bind(this));
+    document.addEventListener("keyup", this.checkReleased.bind(this));
   }
 
   onPress(listener) {
@@ -15,19 +15,19 @@ export default class KeyboardController {
     this.releaseListener = listener;
   }
 
-  checkPressed = ({ code }) => {
+  checkPressed({ code }) {
     const button = KeyboardController.getButtonMapping(code);
     if (button) {
       this.pressListener({ gamepad: 0, button });
     }
-  };
+  }
 
-  checkReleased = ({ code }) => {
+  checkReleased({ code }) {
     const button = KeyboardController.getButtonMapping(code);
     if (button) {
       this.releaseListener({ gamepad: 0, button });
     }
-  };
+  }
 
   static getButtonMapping(code) {
     switch (code) {

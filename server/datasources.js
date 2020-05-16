@@ -2,7 +2,18 @@
 const arrayShuffle = require("array-shuffle");
 const models = require("./schema");
 
-class DataSource {
+class DataSources {
+  async getConfig() {
+    let config = await models.Config.findOne();
+    if (!config) {
+      config = this.saveConfig();
+    }
+
+    const { _id, ...rest } = config;
+
+    return rest;
+  }
+
   async startGame() {
     const config = await this.getConfig();
 
@@ -129,12 +140,10 @@ class DataSource {
   }
 
   async getTopPlayers() {
-    const {
-      gameplay: { topPlayers }
-    } = await this.getConfig();
+    const config = await this.getConfig();
 
     return this.getWinners({
-      limit: topPlayers,
+      limit: config.gameplay.topPlayers,
       sort: { "player.score": -1 }
     });
   }
@@ -205,10 +214,6 @@ class DataSource {
     });
   }
 
-  getConfig() {
-    return models.Config.findOne() || this.saveConfig();
-  }
-
   getImage({ _id }) {
     return models.Image.findById(_id);
   }
@@ -263,4 +268,4 @@ class DataSource {
   }
 }
 
-module.exports = DataSource;
+module.exports = DataSources;

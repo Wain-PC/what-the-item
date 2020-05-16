@@ -3,27 +3,13 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import * as actions from "./actions";
 import * as controllers from "./controllers";
-import GamepadController from "./gamepadController";
 import KeyboardController from "./keyboardController";
 import * as screens from "./screens";
 import styles from "./App.module.css";
 
 class App extends PureComponent {
-  // eslint-disable-next-line react/static-property-placement
-  static propTypes = {
-    screen: PropTypes.shape({
-      id: PropTypes.string.isRequired
-    }).isRequired,
-    setScreenTop: PropTypes.func.isRequired,
-    getConfig: PropTypes.func.isRequired
-  };
-
   constructor(props) {
     super(props);
-
-    // Start gamepads listener
-    this.gamepadController = new GamepadController();
-    this.gamepadController.onPress(this.onButtonPress);
 
     // Start keyboard listener
     this.keyboardController = new KeyboardController();
@@ -37,7 +23,7 @@ class App extends PureComponent {
     setScreenTop();
   }
 
-  onButtonPress = button => {
+  onButtonPress(button) {
     // Send every button press to backend.
     // It should process the input and return the updated state.
     const state = this.props;
@@ -55,7 +41,7 @@ class App extends PureComponent {
         }
       });
     }
-  };
+  }
 
   renderScreen() {
     const {
@@ -76,6 +62,14 @@ class App extends PureComponent {
     return <div className={styles.app}>{this.renderScreen()}</div>;
   }
 }
+
+App.propTypes = {
+  screen: PropTypes.shape({
+    id: PropTypes.string.isRequired
+  }).isRequired,
+  setScreenTop: PropTypes.func.isRequired,
+  getConfig: PropTypes.func.isRequired
+};
 
 const mapStateToProps = state => state;
 const mapDispatchToProps = actions;
