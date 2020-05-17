@@ -15,21 +15,21 @@ export default class KeyboardController {
     this.releaseListener = listener;
   }
 
-  checkPressed({ code }) {
-    const button = KeyboardController.getButtonMapping(code);
+  checkPressed({ code, key }) {
+    const button = KeyboardController.getButtonMapping(code, key);
     if (button) {
       this.pressListener({ gamepad: 0, button });
     }
   }
 
-  checkReleased({ code }) {
-    const button = KeyboardController.getButtonMapping(code);
+  checkReleased({ code, key }) {
+    const button = KeyboardController.getButtonMapping(code, key);
     if (button) {
       this.releaseListener({ gamepad: 0, button });
     }
   }
 
-  static getButtonMapping(code) {
+  static getButtonMapping(code, key) {
     switch (code) {
       case "Enter":
       case "Space": {
@@ -39,20 +39,8 @@ export default class KeyboardController {
       case "Backspace": {
         return "back";
       }
-      case "Digit1": {
-        return "1";
-      }
-      case "Digit2": {
-        return "2";
-      }
-      case "Digit3": {
-        return "3";
-      }
-      case "Digit4": {
-        return "4";
-      }
       default: {
-        return null;
+        return key;
       }
     }
   }

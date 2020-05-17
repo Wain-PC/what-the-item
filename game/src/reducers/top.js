@@ -1,4 +1,4 @@
-import { SET_SCREEN_TOP, SET_SCREEN_GAME_END } from "../constants/actions";
+import { SET_SCREEN_TOP, LOAD_TOP_PLAYERS_SUCCESS } from "../constants/actions";
 
 const initialState = {
   players: []
@@ -7,7 +7,7 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
     case SET_SCREEN_TOP:
-    case SET_SCREEN_GAME_END: {
+    case LOAD_TOP_PLAYERS_SUCCESS: {
       return {
         ...state,
         players: action.payload || initialState.players

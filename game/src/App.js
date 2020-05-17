@@ -19,7 +19,7 @@ class App extends PureComponent {
   async componentDidMount() {
     // Acquire top players
     const { setScreenTop } = this.props;
-    setScreenTop();
+    await setScreenTop();
   }
 
   onButtonPress(button) {

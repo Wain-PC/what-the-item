@@ -107,6 +107,7 @@ class DataSources {
     );
     finishedRound.finished = true;
     finishedRound.finishedOn = new Date();
+    finishedRound.userAnswered = answerIndex;
 
     const timeLeft = Math.round(
       (finishedRound.finishedOn - finishedRound.startedOn) / 1000
@@ -136,22 +137,14 @@ class DataSources {
     };
   }
 
-  async endGame({ gameId }) {
-    const game = await models.Game.findById(gameId);
-    game.finished = true;
-    game.finishedOn = new Date();
-    await game.save();
-    return {
-      score: game.player.score
-    };
-  }
-
   async saveName({ gameId, name, contact }) {
     const game = await models.Game.findById(gameId);
     game.player.name = name;
     game.player.contact = contact;
+    game.finished = true;
+    game.finishedOn = new Date();
     await game.save();
-    return game;
+    return game._id;
   }
 
   async getTopPlayers() {

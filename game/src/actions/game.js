@@ -44,9 +44,6 @@ const selectAnswer = answerIndex => async (dispatch, getState) => {
     answerIndex
   });
 
-  // Show correct/incorrect answer message for N seconds
-  await dispatch(setMessage({ answered: isCorrectAnswer }, roundEndTimer));
-
   dispatch({
     type: END_GAME_ROUND,
     payload: {
@@ -54,6 +51,9 @@ const selectAnswer = answerIndex => async (dispatch, getState) => {
       pointsReceived
     }
   });
+
+  // Show correct/incorrect answer message for N seconds
+  await dispatch(setMessage({ answered: isCorrectAnswer }, roundEndTimer));
 
   // eslint-disable-next-line no-use-before-define
   dispatch(startRound());

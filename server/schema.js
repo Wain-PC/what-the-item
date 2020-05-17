@@ -47,7 +47,8 @@ const roundSchema = new Schema({
   startedOn: Date,
   finishedOn: Date,
   answered: { type: Boolean, default: false },
-  answerIndex: Number,
+  answerIndex: Number, // Correct answer for a round
+  userAnswered: Number, // Answer that the user has selected
   timeLeft: Number,
   pointsReceived: Number
 });
