@@ -33,7 +33,7 @@ const GameEnd = props => {
         />
       </div>
 
-      <div className={styles.controlsHeader}>Press Start to Finish</div>
+      <div className={styles.controlsHeader}>Press Enter to save</div>
     </div>
   );
 };
