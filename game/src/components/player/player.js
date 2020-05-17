@@ -29,14 +29,16 @@ const Player = ({ ready, name, index, score, scoreAdd }) => {
 };
 
 Player.propTypes = {
-  index: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
+  index: PropTypes.number,
+  name: PropTypes.string,
   ready: PropTypes.bool,
   score: PropTypes.number,
   scoreAdd: PropTypes.number
 };
 
 Player.defaultProps = {
+  index: 0,
+  name: "Player",
   ready: undefined,
   score: undefined,
   scoreAdd: undefined

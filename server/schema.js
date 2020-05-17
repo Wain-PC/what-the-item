@@ -5,10 +5,9 @@ const { binaryToBase64, base64ToBinary } = require("./utils/base64");
 const { Schema } = mongoose;
 
 const playerSchema = new Schema({
-  index: { type: Number, default: 0 },
   score: { type: Number, default: 0 },
-  name: { type: String },
-  contact: { type: String }
+  name: { type: String, default: "" },
+  contact: { type: String, default: "" }
 });
 
 const imageSchema = new Schema({

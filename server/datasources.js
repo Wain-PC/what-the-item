@@ -90,7 +90,7 @@ class DataSources {
 
       return {
         index,
-        selection: selection.map(title => ({ title })),
+        selection: selection.map(({ title }) => ({ title })),
         image: { image: image.image, extension: image.extension }
       };
     }
@@ -102,13 +102,14 @@ class DataSources {
     const finishedRound = game.rounds.find(
       ({ started, finished }) => started && !finished
     );
+    finishedRound.finished = true;
+    finishedRound.finishedOn = new Date();
+
     const timeLeft = Math.round(
       (finishedRound.finishedOn - finishedRound.startedOn) / 1000
     );
     const isCorrectAnswer = answerIndex === finishedRound.answerIndex;
 
-    finishedRound.finished = true;
-    finishedRound.finishedOn = new Date();
     finishedRound.timeLeft = timeLeft;
     finishedRound.answered = isCorrectAnswer;
 
@@ -116,7 +117,8 @@ class DataSources {
 
     if (isCorrectAnswer && timeLeft) {
       pointsReceived = Math.round(
-        game.config.maxPointsPerRound * (game.config.timers.round - timeLeft)
+        game.config.gameplay.maxPointsPerRound *
+          (game.config.timers.round - timeLeft)
       );
     }
 
@@ -141,9 +143,9 @@ class DataSources {
     };
   }
 
-  async setNickName({ gameId, nickName, contact }) {
+  async saveName({ gameId, name, contact }) {
     const game = await models.Game.findById(gameId);
-    game.player.name = nickName;
+    game.player.name = name;
     game.player.contact = contact;
     await game.save();
     return game;

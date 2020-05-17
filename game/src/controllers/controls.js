@@ -3,12 +3,12 @@ const controller = ({ actions, message }) => {
     switch (message.button) {
       // Toggle player readiness
       case "ok": {
-        actions.setScreenControls();
+        actions.setScreenGame();
         break;
       }
       // Switch back to 'top' screen when 'back' button is pressed
       case "back": {
-        actions.setScreenTop();
+        actions.setScreenReady();
         break;
       }
       default: {

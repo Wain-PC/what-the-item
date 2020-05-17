@@ -1,7 +1,7 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import * as actions from "./actions";
+import actions from "./actions/index";
 import * as controllers from "./controllers";
 import KeyboardController from "./keyboardController";
 import * as screens from "./screens";
@@ -18,14 +18,11 @@ class App extends PureComponent {
 
   async componentDidMount() {
     // Acquire top players
-    const { setScreenTop, getConfig } = this.props;
-    await getConfig();
+    const { setScreenTop } = this.props;
     setScreenTop();
   }
 
   onButtonPress(button) {
-    // Send every button press to backend.
-    // It should process the input and return the updated state.
     const state = this.props;
     const {
       screen: { id }

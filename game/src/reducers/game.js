@@ -6,7 +6,11 @@ import {
 
 const initialState = {
   id: "",
-  finished: false,
+  player: {
+    name: "Player",
+    score: 0,
+    scoreAdd: 0
+  },
   message: {} // internal-only field
 };
 

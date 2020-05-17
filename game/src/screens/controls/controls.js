@@ -1,14 +1,10 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styles from "./controls.module.css";
 import Button from "../../components/button/button";
-import Audio from "../../components/audio/audio";
 
-const Controls = ({ timer: { timer } }) => {
+const Controls = () => {
   return (
     <div className={styles.root}>
-      <Audio src="controls" />
-      <div className={styles.timer}>{timer}</div>
       <div className={styles.controls} />
       <div className={styles.heading}>Выбирайте ответ при помощи кнопок</div>
       <div className={styles.buttons}>
@@ -19,12 +15,6 @@ const Controls = ({ timer: { timer } }) => {
       </div>
     </div>
   );
-};
-
-Controls.propTypes = {
-  timer: PropTypes.shape({
-    timer: PropTypes.number.isRequired
-  }).isRequired
 };
 
 export default Controls;

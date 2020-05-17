@@ -35,28 +35,21 @@ export default class KeyboardController {
       case "Space": {
         return "ok";
       }
-      case "Escape": {
+      case "Escape":
+      case "Backspace": {
         return "back";
       }
-      case "ArrowUp":
-      case "KeyW":
       case "Digit1": {
-        return "up";
+        return "1";
       }
-      case "ArrowDown":
-      case "KeyS":
-      case "Digit3": {
-        return "down";
-      }
-      case "ArrowLeft":
-      case "KeyA":
-      case "Digit4": {
-        return "left";
-      }
-      case "ArrowRight":
-      case "KeyD":
       case "Digit2": {
-        return "right";
+        return "2";
+      }
+      case "Digit3": {
+        return "3";
+      }
+      case "Digit4": {
+        return "4";
       }
       default: {
         return null;

@@ -10,8 +10,8 @@ const endRound = ({ gameId, answerIndex }) =>
     gameId,
     answerIndex
   });
-const setNickName = ({ gameId, nickName }) =>
-  send("setNickName", { gameId, nickName });
+const saveName = ({ gameId, nickName }) =>
+  send("saveName", { gameId, nickName });
 
 export {
   getConfig,
@@ -20,5 +20,5 @@ export {
   endRound,
   endGame,
   getTopPlayers,
-  setNickName
+  saveName
 };
