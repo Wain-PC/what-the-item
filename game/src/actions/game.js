@@ -8,6 +8,7 @@ import {
 } from "../constants/actions";
 
 import { runTimer, stopTimer } from "./timer";
+// eslint-disable-next-line import/no-cycle
 import { setScreenWinner } from "./screen";
 
 const clearMessage = () => ({

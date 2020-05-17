@@ -68,7 +68,10 @@ class DataSources {
       rounds,
       startedOn: new Date(),
       config,
-      player: {}
+      player: {
+        name: "Player",
+        score: 0
+      }
     });
     await game.save();
     return game._id;
@@ -118,7 +121,7 @@ class DataSources {
     if (isCorrectAnswer && timeLeft) {
       pointsReceived = Math.round(
         game.config.gameplay.maxPointsPerRound *
-          (game.config.timers.round - timeLeft)
+          ((game.config.timers.round - timeLeft) / timeLeft)
       );
     }
 

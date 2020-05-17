@@ -8,6 +8,7 @@ import {
 } from "../constants/actions";
 
 import { getConfig, getTopPlayers } from "./top";
+// eslint-disable-next-line import/no-cycle
 import { startGame, startRound } from "./game";
 
 const setScreenTop = () => async dispatch => {

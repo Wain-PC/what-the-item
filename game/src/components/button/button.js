@@ -12,9 +12,10 @@ import wrong from "../../images/buttons/wrong.png";
 
 const buttons = [button1, button2, button3, button4];
 
-const Button = ({ index, text, correct }) => {
+const Button = ({ index, text, correct, onClick }) => {
   return (
-    <div className={styles.root}>
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/interactive-supports-focus
+    <div className={styles.root} role="button" onClick={onClick}>
       {correct === undefined ? (
         <img src={buttons[index]} alt="button" className={styles.button} />
       ) : null}
@@ -41,13 +42,15 @@ const Button = ({ index, text, correct }) => {
 Button.propTypes = {
   index: PropTypes.number,
   text: PropTypes.string,
-  correct: PropTypes.bool
+  correct: PropTypes.bool,
+  onClick: PropTypes.func
 };
 
 Button.defaultProps = {
   index: 0,
   text: "",
-  correct: undefined
+  correct: undefined,
+  onClick: Function.prototype
 };
 
 export default Button;

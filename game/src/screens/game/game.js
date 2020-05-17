@@ -16,11 +16,19 @@ const Game = props => {
       message: { answered },
       player
     },
-    timer: { timer }
+    timer: { timer },
+    selectAnswer
   } = props;
 
   const buttons = selection.map(({ title }, index) => {
-    return <Button key={title} index={index} text={title} />;
+    return (
+      <Button
+        key={title}
+        index={index}
+        text={title}
+        onClick={() => selectAnswer(index)}
+      />
+    );
   });
 
   return (
@@ -74,7 +82,8 @@ Game.propTypes = {
       score: PropTypes.number.isRequired,
       scoreAdd: PropTypes.number
     })
-  }).isRequired
+  }).isRequired,
+  selectAnswer: PropTypes.func.isRequired
 };
 
 export default Game;
