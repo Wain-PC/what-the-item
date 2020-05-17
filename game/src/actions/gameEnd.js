@@ -15,7 +15,7 @@ const saveName = () => async (dispatch, getState) => {
   } = getState();
 
   await dbSaveName({ gameId, name, contact });
-  await setScreenTop();
+  await dispatch(setScreenTop());
 };
 
 const changeName = letter => async (dispatch, getState) => {
