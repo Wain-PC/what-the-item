@@ -1,4 +1,5 @@
 const express = require("express");
+const { join } = require("path");
 const Websocket = require("express-ws");
 const db = require("./db");
 const config = require("./config");
@@ -12,6 +13,7 @@ const bootstrap = async () => {
   await db.connect();
   const dataSources = new DataSources();
   app.listen(port, () => {
+    app.use(express.static(join(__dirname, "static")));
     app.ws("/ws", ws => {
       ws.on("message", async msg => {
         // Parse message & get payload.

@@ -1,8 +1,11 @@
 {
   "game": {
     "system": {
+      "baseURL": "/",
       "port": 3333,
-      "ws": "/ws"
+      "ws": "/ws",
+      "staticDir": "static",
+      "imageCache": ".cache/images"
     },
     "db": {
       "mongoConnectionLine": "mongodb://localhost/what-the-item"
