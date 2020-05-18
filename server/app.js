@@ -16,8 +16,6 @@ const bootstrap = async () => {
     app.use(express.static(join(__dirname, "static")));
     app.ws("/ws", ws => {
       ws.on("message", async msg => {
-        // Parse message & get payload.
-        console.log(msg);
         try {
           const { id, path, data } = JSON.parse(msg);
 
@@ -37,6 +35,7 @@ const bootstrap = async () => {
           }
         } catch (err) {
           console.error(err);
+          ws.send(JSON.stringify({ error: "Cannot parse request" }));
         }
       });
     });
