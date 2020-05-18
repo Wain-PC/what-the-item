@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const config = require("./config");
-const getImageUrl = require("./utils/fileCache");
+const { getURL } = require("./utils/fileCache");
 const { base64ToBinary } = require("./utils/base64");
 
 const { Schema } = mongoose;
@@ -20,7 +20,7 @@ const imageSchema = new Schema(
       get(value) {
         const id = this._id.toString();
         const { extension } = this;
-        return getImageUrl(id, extension, value);
+        return getURL(id, extension, value);
       },
       set(v) {
         // Need to check if `this` is a document, because in mongoose 5

@@ -24,4 +24,10 @@ const getURL = (id, extension, buffer) => {
   return webPath;
 };
 
-module.exports = getURL;
+const flush = id => {
+  if (id) {
+    cache.delete(id);
+  }
+};
+
+module.exports = { getURL, flush };

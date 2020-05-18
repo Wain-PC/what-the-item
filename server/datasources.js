@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 const arrayShuffle = require("array-shuffle");
 const models = require("./schema");
+const { flush } = require("./utils/fileCache");
 
 class DataSources {
   async getConfig() {
@@ -229,6 +230,9 @@ class DataSources {
 
   async saveImage(image) {
     const { _id, incorrectTitles, ...restImage } = image;
+
+    // Invalidate image in cache if editing image.
+    flush(_id);
 
     return models.Image.findOneAndUpdate(
       _id ? { _id } : { title: "@@@@@@@@@@@@@@@@@@@@@@" },
