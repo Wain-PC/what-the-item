@@ -121,8 +121,9 @@ class DataSources {
 
     if (isCorrectAnswer && timeLeft) {
       pointsReceived = Math.round(
-        game.config.gameplay.maxPointsPerRound *
-          ((game.config.timers.round - timeLeft) / timeLeft)
+        (game.config.gameplay.maxPointsPerRound *
+          (game.config.timers.round - timeLeft)) /
+          timeLeft
       );
     }
 
