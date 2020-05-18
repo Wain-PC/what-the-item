@@ -9,7 +9,7 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
   }, []);
 
   const tableRows = games.map(
-    ({ _id, players, finished, startedOn, winner }) => {
+    ({ _id, finished, startedOn, finishedOn, player }) => {
       return (
         <Table.Row key={_id}>
           <Table.Cell>
@@ -23,9 +23,9 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
               content={finished ? "Закончена" : "Не закончена"}
             />
           </Table.Cell>
-          <Table.Cell>{players.length}</Table.Cell>
           <Table.Cell>{startedOn}</Table.Cell>
-          <Table.Cell>{winner && winner.score}</Table.Cell>
+          <Table.Cell>{finishedOn}</Table.Cell>
+          <Table.Cell>{player && player.score}</Table.Cell>
         </Table.Row>
       );
     }
@@ -39,8 +39,8 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
           <Table.Row>
             <Table.HeaderCell>Id</Table.HeaderCell>
             <Table.HeaderCell>Статус</Table.HeaderCell>
-            <Table.HeaderCell>Игроков</Table.HeaderCell>
             <Table.HeaderCell>Время начала</Table.HeaderCell>
+            <Table.HeaderCell>Время завершения</Table.HeaderCell>
             <Table.HeaderCell>Очков у победителя</Table.HeaderCell>
           </Table.Row>
         </Table.Header>

@@ -22,7 +22,7 @@ class DataSources {
     const answersToGet = answersInRound - 1;
 
     // Get N random images
-    const images = await this.getNRandomImages({ n: roundsInGame });
+    const images = await this.getNRandomImages(roundsInGame);
     // Get their ids
     const ids = images.map(({ _id }) => _id);
     // Find a total number of missing options.
@@ -159,7 +159,8 @@ class DataSources {
   // ---------------ADMINISTRATION METHODS---------------
 
   async getGames() {
-    const games = await models.Game.find()
+    const games = await models.Game.find({ finished: true })
+      .select("name started finished startedOn finishedOn player")
       .sort({ _id: -1 })
       .exec();
 
@@ -175,7 +176,7 @@ class DataSources {
     };
   }
 
-  getGame({ _id }) {
+  getGame(_id) {
     return models.Game.findById({ _id });
   }
 
@@ -222,11 +223,11 @@ class DataSources {
     });
   }
 
-  getImage({ _id }) {
-    return models.Image.findById(_id);
+  getImage(id) {
+    return models.Image.findById(id);
   }
 
-  async saveImage({ image }) {
+  async saveImage(image) {
     const { _id, incorrectTitles, ...restImage } = image;
 
     return models.Image.findOneAndUpdate(
@@ -244,8 +245,8 @@ class DataSources {
     );
   }
 
-  async removeImage({ _id }) {
-    await models.Image.findByIdAndDelete(_id);
+  async removeImage(id) {
+    await models.Image.findByIdAndDelete(id);
     return this.getImages();
   }
 
@@ -268,7 +269,7 @@ class DataSources {
 
   // ---------------UTILS METHODS---------------
 
-  getNRandomImages({ n }) {
+  getNRandomImages(n) {
     return models.Image.aggregate([
       { $match: { active: true } },
       { $sample: { size: n } }

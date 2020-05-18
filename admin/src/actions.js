@@ -1,5 +1,3 @@
-import { gql } from "apollo-boost";
-
 import {
   LOAD_TOP_PLAYERS_SUCCESS,
   LOAD_GAMES_SUCCESS,
@@ -39,7 +37,7 @@ import {
   LOAD_GAME_SUCCESS
 } from "./constants/actions";
 
-import { query, mutation } from "./utils/request";
+import { send } from "./utils/request";
 
 export const loadTopPlayers = () => async dispatch => {
   dispatch({
@@ -47,25 +45,11 @@ export const loadTopPlayers = () => async dispatch => {
   });
 
   try {
-    // DB request here
-    const {
-      data: { players }
-    } = await query(gql`
-      {
-        players {
-          players {
-            gameId
-            name
-            score
-          }
-          total
-        }
-      }
-    `);
+    const payload = await send("getAllPlayers");
 
     dispatch({
       type: LOAD_TOP_PLAYERS_SUCCESS,
-      payload: players
+      payload
     });
   } catch (e) {
     dispatch({
@@ -81,42 +65,11 @@ export const loadGames = () => async dispatch => {
   });
 
   try {
-    // DB request here
-    const {
-      data: { games }
-    } = await query(gql`
-      {
-        games {
-          games {
-            _id
-            finished
-            players {
-              name
-              score
-            }
-            config {
-              timers {
-                controls
-              }
-              gameplay {
-                roundsInGame
-              }
-            }
-            startedOn
-            winner {
-              name
-              score
-            }
-          }
-          total
-          finished
-        }
-      }
-    `);
+    const payload = await send("getGames");
 
     dispatch({
       type: LOAD_GAMES_SUCCESS,
-      payload: games
+      payload
     });
   } catch (e) {
     dispatch({
@@ -132,27 +85,7 @@ export const loadConfig = () => async dispatch => {
   });
 
   try {
-    // DB request here
-    const {
-      data: { config }
-    } = await query(gql`
-      {
-        config {
-          gameplay {
-            defaultPlayers
-            maxPointsPerRound
-            roundsInGame
-            topPlayers
-            winnerNickNameMaxLetters
-          }
-          timers {
-            controls
-            round
-            roundEnd
-          }
-        }
-      }
-    `);
+    const config = await send("getConfig");
 
     dispatch({
       type: LOAD_CONFIG_SUCCESS,
@@ -193,22 +126,7 @@ export const saveImage = () => async (dispatch, getState) => {
   });
 
   try {
-    const {
-      data: { saveImage: updatedImage }
-    } = await mutation(
-      gql`
-        mutation saveImage($image: InputImage!) {
-          saveImage(image: $image) {
-            _id
-            image
-            title
-            incorrectTitles
-            active
-          }
-        }
-      `,
-      { image }
-    );
+    const updatedImage = await send("saveImage", image);
 
     dispatch({
       type: SAVE_IMAGE_SUCCESS,
@@ -223,35 +141,13 @@ export const saveImage = () => async (dispatch, getState) => {
 };
 
 export const saveConfig = () => async (dispatch, getState) => {
-  const {
-    config: { timers, gameplay }
-  } = getState();
+  const { config } = getState();
   dispatch({
     type: SAVE_CONFIG_START
   });
 
   try {
-    const newConfig = await mutation(
-      gql`
-        mutation saveConfig($config: InputConfig!) {
-          saveConfig(config: $config) {
-            gameplay {
-              defaultPlayers
-              maxPointsPerRound
-              roundsInGame
-              topPlayers
-              winnerNickNameMaxLetters
-            }
-            timers {
-              controls
-              round
-              roundEnd
-            }
-          }
-        }
-      `,
-      { config: { timers, gameplay } }
-    );
+    const newConfig = await send("saveConfig", config);
 
     dispatch({
       type: SAVE_CONFIG_SUCCESS,
@@ -277,27 +173,11 @@ export const loadImages = () => async dispatch => {
 
   try {
     // DB request here
-    const {
-      data: { images }
-    } = await query(gql`
-      {
-        images {
-          images {
-            _id
-            image
-            title
-            incorrectTitles
-            active
-          }
-          total
-          active
-        }
-      }
-    `);
+    const payload = await send("getImages");
 
     dispatch({
       type: LOAD_IMAGES_SUCCESS,
-      payload: images
+      payload
     });
   } catch (e) {
     dispatch({
@@ -311,29 +191,14 @@ export const clearImageData = () => ({
   type: IMAGE_DATA_CLEAR
 });
 
-export const getImage = _id => async dispatch => {
+export const getImage = id => async dispatch => {
   dispatch({
     type: LOAD_IMAGE_START
   });
 
   try {
     // DB request here
-    const {
-      data: { image }
-    } = await query(
-      gql`
-        query getImage($_id: ID!) {
-          image(_id: $_id) {
-            _id
-            image
-            title
-            incorrectTitles
-            active
-          }
-        }
-      `,
-      { _id }
-    );
+    const image = await send("getImage", id);
 
     dispatch({
       type: LOAD_IMAGE_SUCCESS,
@@ -347,41 +212,16 @@ export const getImage = _id => async dispatch => {
   }
 };
 
-export const removeImage = _id => async dispatch => {
+export const removeImage = id => async dispatch => {
   dispatch({
     type: REMOVE_IMAGE_START
   });
 
   try {
-    const {
-      data: { removeImage: images }
-    } = await mutation(
-      gql`
-        mutation removeImage($_id: ID!) {
-          removeImage(_id: $_id) {
-            images {
-              _id
-              active
-              extension
-              image
-              incorrectTitles
-              title
-            }
-            active
-            total
-          }
-        }
-      `,
-      { _id }
-    );
+    await send("removeImage", id);
 
     dispatch({
       type: REMOVE_IMAGE_SUCCESS
-    });
-
-    dispatch({
-      type: LOAD_IMAGES_SUCCESS,
-      payload: images
     });
   } catch (e) {
     dispatch({
@@ -397,56 +237,7 @@ export const getGame = _id => async dispatch => {
   });
 
   try {
-    // DB request here
-    const {
-      data: { game }
-    } = await query(
-      gql`
-        query getGame($_id: ID!) {
-          game(_id: $_id) {
-            config {
-              gameplay {
-                maxPointsPerRound
-                roundsInGame
-              }
-              timers {
-                round
-              }
-            }
-            finished
-            startedOn
-            finishedOn
-            players {
-              _id
-              name
-              score
-            }
-            rounds {
-              started
-              finished
-              image {
-                _id
-                image
-                title
-                incorrectTitles
-              }
-              answerIndex
-              answered
-              answeredBy
-              index
-              pointsReceived
-              timeLeft
-              selection {
-                selected
-                selectedBy
-                title
-              }
-            }
-          }
-        }
-      `,
-      { _id }
-    );
+    const game = await send("getGame", _id);
 
     dispatch({
       type: LOAD_GAME_SUCCESS,

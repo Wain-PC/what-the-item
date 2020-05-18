@@ -10,16 +10,13 @@ import { ConnectedLoader } from "./components/loader/loader";
 import { ConnectedError } from "./components/error/error";
 
 class App extends PureComponent {
-  // eslint-disable-next-line react/static-property-placement
-  static propTypes = {};
-
   render() {
     const routes = Object.entries(screens).map(([path, component]) => (
       <Route key={path} exact path={`/${path}`} component={component} />
     ));
 
     return (
-      <BrowserRouter basename="/admin">
+      <BrowserRouter basename="/">
         <>
           <ConnectedLoader />
           <Grid centered columns={1}>

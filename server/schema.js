@@ -6,55 +6,70 @@ const { base64ToBinary } = require("./utils/base64");
 const { Schema } = mongoose;
 
 const playerSchema = new Schema({
+  _id: Schema.Types.ObjectId,
   score: { type: Number, default: 0 },
   name: { type: String, default: "" },
   contact: { type: String, default: "" }
 });
 
-const imageSchema = new Schema({
-  image: {
-    type: Buffer,
-    get(value) {
-      const id = this._id.toString();
-      const { extension } = this;
-      return getImageUrl(id, extension, value);
-    },
-    set(v) {
-      // Need to check if `this` is a document, because in mongoose 5
-      // setters will also run on queries, in which case `this` will be a
-      // mongoose query object.
-      if (v != null && typeof v === "string") {
-        const { binary, extension } = base64ToBinary(v);
-        this.extension = extension;
-        return binary;
+const imageSchema = new Schema(
+  {
+    _id: Schema.Types.ObjectId,
+    image: {
+      type: Buffer,
+      get(value) {
+        const id = this._id.toString();
+        const { extension } = this;
+        return getImageUrl(id, extension, value);
+      },
+      set(v) {
+        // Need to check if `this` is a document, because in mongoose 5
+        // setters will also run on queries, in which case `this` will be a
+        // mongoose query object.
+        if (v != null && typeof v === "string") {
+          const { binary, extension } = base64ToBinary(v);
+          this.extension = extension;
+          return binary;
+        }
+        return v;
       }
-      return v;
-    }
+    },
+    extension: String,
+    title: String,
+    incorrectTitles: [String],
+    active: { type: Boolean, default: true }
   },
-  extension: { type: String, default: "jpeg" }, // TODO: remove this hack ASAP
-  title: String,
-  incorrectTitles: [String],
-  active: { type: Boolean, default: true }
-});
+  {
+    toObject: { getters: true },
+    toJSON: { getters: true }
+  }
+);
 
 const selectionSchema = new Schema({
   title: String
 });
 
-const roundSchema = new Schema({
-  index: Number,
-  image: imageSchema,
-  selection: [selectionSchema],
-  started: { type: Boolean, default: false },
-  finished: { type: Boolean, default: false },
-  startedOn: Date,
-  finishedOn: Date,
-  answered: { type: Boolean, default: false },
-  answerIndex: Number, // Correct answer for a round
-  userAnswered: Number, // Answer that the user has selected
-  timeLeft: Number,
-  pointsReceived: Number
-});
+const roundSchema = new Schema(
+  {
+    _id: Schema.Types.ObjectId,
+    index: Number,
+    image: imageSchema,
+    selection: [selectionSchema],
+    started: { type: Boolean, default: false },
+    finished: { type: Boolean, default: false },
+    startedOn: Date,
+    finishedOn: Date,
+    answered: { type: Boolean, default: false },
+    answerIndex: Number, // Correct answer for a round
+    userAnswered: Number, // Answer that the user has selected
+    timeLeft: Number,
+    pointsReceived: Number
+  },
+  {
+    toObject: { getters: true },
+    toJSON: { getters: true }
+  }
+);
 
 const timersConfigSchema = new Schema({
   controls: { type: Number, default: config.timers.controls },
@@ -96,14 +111,20 @@ const configSchema = new Schema({
   gameplay: gameplayConfigSchema
 });
 
-const gameSchema = new Schema({
-  finished: { type: Boolean, default: false },
-  player: playerSchema,
-  rounds: [roundSchema],
-  startedOn: Date,
-  finishedOn: Date,
-  config: configSchema
-});
+const gameSchema = new Schema(
+  {
+    finished: { type: Boolean, default: false },
+    player: playerSchema,
+    rounds: [roundSchema],
+    startedOn: Date,
+    finishedOn: Date,
+    config: configSchema
+  },
+  {
+    toObject: { getters: true },
+    toJSON: { getters: true }
+  }
+);
 
 const models = {
   Game: mongoose.model("Game", gameSchema),
