@@ -13,12 +13,6 @@ const base64ToBinary = dataURI => {
   };
 };
 
-const binaryToBase64 = (blob, extension) => {
-  const str = Buffer.from(blob).toString("base64");
-  return `data:image/${extension};base64,${str}`;
-};
-
 module.exports = {
-  base64ToBinary,
-  binaryToBase64
+  base64ToBinary
 };
