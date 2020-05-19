@@ -17,6 +17,7 @@ const getURL = (id, extension, buffer) => {
   const webPath = path.join(baseURL, imageCache, fileName);
   if (!existsSync(dirName)) {
     mkdirp.sync(dirName);
+    cache.clear();
   }
   writeFileSync(fullPath, Buffer.from(buffer));
   cache.set(id, webPath);
