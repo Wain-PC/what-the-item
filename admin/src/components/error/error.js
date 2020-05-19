@@ -1,33 +1,38 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Message } from "semantic-ui-react";
-import Loader from "../loader/loader";
+import { Message as UIMessage } from "semantic-ui-react";
 
-const Error = ({ title, message }) =>
+const Message = ({ title, message, negative }) =>
   title ? (
-    <Message negative>
-      <Message.Header>{title}</Message.Header>
+    <UIMessage negative={negative} positive={!negative}>
+      <UIMessage.Header>{title}</UIMessage.Header>
       {message && <p>{message}</p>}
-    </Message>
+    </UIMessage>
   ) : null;
 
-Error.propTypes = {
+Message.propTypes = {
   title: PropTypes.string,
-  message: PropTypes.string
+  message: PropTypes.string,
+  negative: PropTypes.bool
 };
 
-Error.defaultProps = {
+Message.defaultProps = {
   title: "",
-  message: ""
+  message: "",
+  negative: false
 };
 
-const mapStateToProps = state => ({
+const mapStateToPropsError = state => ({
   title: state.global.error
 });
+const mapStateToPropsSuccess = state => ({
+  title: state.global.success
+});
 
-const ConnectedError = connect(mapStateToProps)(Loader);
+const ConnectedError = connect(mapStateToPropsError)(Message);
+const ConnectedSuccess = connect(mapStateToPropsSuccess)(Message);
 
-export default Error;
+export default Message;
 
-export { ConnectedError };
+export { ConnectedError, ConnectedSuccess };

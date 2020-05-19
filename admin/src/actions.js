@@ -34,7 +34,9 @@ import {
   ERROR_HIDE,
   ERROR_SHOW,
   LOAD_GAME_START,
-  LOAD_GAME_SUCCESS
+  LOAD_GAME_SUCCESS,
+  SUCCESS_HIDE,
+  SUCCESS_SHOW
 } from "./constants/actions";
 
 import { send } from "./utils/request";
@@ -132,6 +134,9 @@ export const saveImage = () => async (dispatch, getState) => {
       type: SAVE_IMAGE_SUCCESS,
       payload: { ...updatedImage, isEdit }
     });
+
+    // eslint-disable-next-line no-use-before-define
+    dispatch(showSuccess("Изображение сохранено", 3));
   } catch (e) {
     dispatch({
       type: SAVE_IMAGE_ERROR,
@@ -153,6 +158,8 @@ export const saveConfig = () => async (dispatch, getState) => {
       type: SAVE_CONFIG_SUCCESS,
       payload: newConfig
     });
+    // eslint-disable-next-line no-use-before-define
+    dispatch(showSuccess("Конфигурация обновлена", 3));
   } catch (e) {
     dispatch({
       type: SAVE_CONFIG_ERROR,
@@ -223,6 +230,9 @@ export const removeImage = id => async dispatch => {
     dispatch({
       type: REMOVE_IMAGE_SUCCESS
     });
+
+    // eslint-disable-next-line no-use-before-define
+    dispatch(showSuccess("Изображение удалено", 3));
   } catch (e) {
     dispatch({
       type: REMOVE_IMAGE_ERROR,
@@ -273,14 +283,33 @@ export const hideError = () => ({
   type: ERROR_HIDE
 });
 
-export const showError = seconds => dispatch => {
+export const showError = (message, seconds) => dispatch => {
   dispatch({
-    type: ERROR_SHOW
+    type: ERROR_SHOW,
+    payload: message
   });
 
   if (seconds) {
     return setTimeout(() => {
       dispatch(hideError());
+    }, seconds * 1000);
+  }
+
+  return null;
+};
+export const hideSuccess = () => ({
+  type: SUCCESS_HIDE
+});
+
+export const showSuccess = (message, seconds) => dispatch => {
+  dispatch({
+    type: SUCCESS_SHOW,
+    payload: message
+  });
+
+  if (seconds) {
+    return setTimeout(() => {
+      dispatch(hideSuccess());
     }, seconds * 1000);
   }
 

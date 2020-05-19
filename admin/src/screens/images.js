@@ -16,7 +16,14 @@ const Images = ({
   }, []);
 
   const imgs = images.map(image => (
-    <Image image={image} removeImage={removeImage} />
+    <Image
+      key={image._id}
+      image={image}
+      removeImage={async () => {
+        await removeImage();
+        await loadImages();
+      }}
+    />
   ));
 
   const totals = (

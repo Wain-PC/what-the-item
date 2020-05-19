@@ -2,13 +2,16 @@ import {
   LOADER_SHOW,
   LOADER_HIDE,
   ERROR_SHOW,
-  ERROR_HIDE
+  ERROR_HIDE,
+  SUCCESS_SHOW,
+  SUCCESS_HIDE
 } from "../constants/actions";
 
 const initialState = {
   loggedIn: true,
   loading: false,
-  error: ""
+  error: "",
+  success: ""
 };
 
 export default (state = initialState, action) => {
@@ -35,6 +38,18 @@ export default (state = initialState, action) => {
       return {
         ...state,
         error: ""
+      };
+    }
+    case SUCCESS_SHOW: {
+      return {
+        ...state,
+        success: action.payload
+      };
+    }
+    case SUCCESS_HIDE: {
+      return {
+        ...state,
+        success: ""
       };
     }
     default: {

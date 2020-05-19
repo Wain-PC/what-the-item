@@ -7,7 +7,7 @@ import * as screens from "./screens";
 import "semantic-ui-css/semantic.min.css";
 import AdminMenu from "./components/menu/menu";
 import { ConnectedLoader } from "./components/loader/loader";
-import { ConnectedError } from "./components/error/error";
+import { ConnectedError, ConnectedSuccess } from "./components/error/error";
 
 class App extends PureComponent {
   render() {
@@ -22,9 +22,10 @@ class App extends PureComponent {
           <Grid centered columns={1}>
             <Grid.Column width={16}>
               <AdminMenu />
-              <ConnectedError />
             </Grid.Column>
             <Grid.Column width={14}>
+              <ConnectedError />
+              <ConnectedSuccess />
               <Switch>
                 <Route
                   exact

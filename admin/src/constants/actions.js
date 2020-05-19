@@ -47,3 +47,6 @@ export const LOADER_HIDE = "LOADER_HIDE";
 
 export const ERROR_SHOW = "ERROR_SHOW";
 export const ERROR_HIDE = "ERROR_HIDE";
+
+export const SUCCESS_SHOW = "SUCCESS_SHOW";
+export const SUCCESS_HIDE = "SUCCESS_HIDE";
