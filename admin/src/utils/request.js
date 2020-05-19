@@ -29,7 +29,7 @@ const connect = () => {
       const { id, payload, error } = JSON.parse(event.data);
       if (requests.has(id)) {
         if (error) {
-          requests.get(id).reject(payload);
+          requests.get(id).reject(new Error(error));
         } else {
           requests.get(id).resolve(payload);
         }

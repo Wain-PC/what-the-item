@@ -11,26 +11,6 @@ import {
 } from "semantic-ui-react";
 
 class ImageScreen extends PureComponent {
-  // eslint-disable-next-line react/static-property-placement
-  static propTypes = {
-    image: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    incorrectTitles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
-    active: PropTypes.bool.isRequired,
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        id: PropTypes.string
-      }).isRequired
-    }).isRequired,
-    addIncorrectAnswer: PropTypes.func.isRequired,
-    removeIncorrectAnswer: PropTypes.func.isRequired,
-    imagePropertyChange: PropTypes.func.isRequired,
-    changeIncorrectAnswer: PropTypes.func.isRequired,
-    saveImage: PropTypes.func.isRequired,
-    getImage: PropTypes.func.isRequired,
-    clearImageData: PropTypes.func.isRequired
-  };
-
   componentDidMount() {
     const {
       getImage,
@@ -82,13 +62,17 @@ class ImageScreen extends PureComponent {
 
   render() {
     const {
+      match: {
+        params: { id }
+      },
       image,
       title,
       incorrectTitles,
       active,
       addIncorrectAnswer,
       removeIncorrectAnswer,
-      saveImage
+      saveImage,
+      removeImage,
     } = this.props;
 
     const titles = incorrectTitles.map((value, index) => {
@@ -166,11 +150,40 @@ class ImageScreen extends PureComponent {
               content="Сохранить"
               onClick={saveImage}
             />
+            {id && (
+                <Button
+                    type="submit"
+                    icon="remove"
+                    negative
+                    content="Удалить"
+                    onClick={removeImage}
+                />
+            )}
           </Form>
         </Grid.Column>
       </Grid>
     );
   }
 }
+
+ImageScreen.propTypes = {
+  image: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  incorrectTitles: PropTypes.arrayOf(PropTypes.string.isRequired).isRequired,
+  active: PropTypes.bool.isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string
+    }).isRequired
+  }).isRequired,
+  addIncorrectAnswer: PropTypes.func.isRequired,
+  removeIncorrectAnswer: PropTypes.func.isRequired,
+  imagePropertyChange: PropTypes.func.isRequired,
+  changeIncorrectAnswer: PropTypes.func.isRequired,
+  saveImage: PropTypes.func.isRequired,
+  removeImage: PropTypes.func.isRequired,
+  getImage: PropTypes.func.isRequired,
+  clearImageData: PropTypes.func.isRequired
+};
 
 export default ImageScreen;

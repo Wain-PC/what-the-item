@@ -24,7 +24,8 @@ Message.defaultProps = {
 };
 
 const mapStateToPropsError = state => ({
-  title: state.global.error
+  title: state.global.error,
+  negative: true
 });
 const mapStateToPropsSuccess = state => ({
   title: state.global.success

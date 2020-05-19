@@ -20,7 +20,7 @@ const Images = ({
       key={image._id}
       image={image}
       removeImage={async () => {
-        await removeImage();
+        await removeImage(image._id);
         await loadImages();
       }}
     />

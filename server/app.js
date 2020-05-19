@@ -27,7 +27,9 @@ const bootstrap = async () => {
               ws.send(JSON.stringify(response));
             } catch (dbErr) {
               console.error(dbErr);
-              ws.send(JSON.stringify({ error: "Unable to process request" }));
+              ws.send(
+                JSON.stringify({ id, error: "Unable to process request" })
+              );
             }
             // No appropriate DB path.
           } else {
