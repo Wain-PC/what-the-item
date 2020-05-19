@@ -1,7 +1,7 @@
 /* eslint-disable class-methods-use-this */
 const arrayShuffle = require("array-shuffle");
 const models = require("./schema");
-const { flush } = require("./utils/fileCache");
+const { flush, getURL } = require("./utils/fileCache");
 
 class DataSources {
   async getConfig() {
@@ -54,6 +54,13 @@ class DataSources {
 
     const rounds = new Array(roundsInGame).fill(null).map((_, index) => {
       const image = outputImages[index];
+      image.url = getURL(
+        image._id.toString(),
+        image.extension,
+        image.image.buffer
+      );
+      delete image.image;
+      delete image.extension;
       const answerIndex = Math.floor(Math.random() * answersInRound);
       const selection = arrayShuffle(image.incorrectTitles);
       selection.splice(answerIndex, 0, image.title);
@@ -95,7 +102,7 @@ class DataSources {
       return {
         index,
         selection: selection.map(({ title }) => ({ title })),
-        image: { image: image.image, extension: image.extension }
+        image: { image: image.url }
       };
     }
     return null;

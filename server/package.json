@@ -34,5 +34,6 @@
     "eslint-plugin-react-hooks": "^2.3.0",
     "node-dev": "^4.0.0",
     "prettier": "^1.19.1"
-  }
+  },
+  "proxy": "localhost:3333"
 }
