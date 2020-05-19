@@ -16,9 +16,9 @@
 
 .app {
     position: relative;
-    width: 1920px;
-    height: 1080px;
+    width: 100%;
     background-image: url("./images/elements/Background.png");
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     color: #ffffff;

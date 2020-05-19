@@ -9,11 +9,12 @@ const Top = props => {
     top: { players },
     config: {
       gameplay: { topPlayers }
-    }
+    },
+    setScreenReady
   } = props;
 
   return (
-    <>
+    <div className={styles.root}>
       <div className={styles.shapes} />
       <div className={styles.title}>
         <a href="https://avito.tech" target="_blank" rel="noopener noreferrer">
@@ -25,10 +26,14 @@ const Top = props => {
         <div className={styles.text}>TOP-{topPlayers}</div>
         <TopTable players={players} />
       </div>
-      <div className={cn(styles.text, styles.footer)}>
-        - PRESS START TO CONTINUE -
-      </div>
-    </>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+      <div
+        className={styles.startButton}
+        onClick={() => {
+          setScreenReady();
+        }}
+      />
+    </div>
   );
 };
 
@@ -46,7 +51,8 @@ Top.propTypes = {
     gameplay: PropTypes.shape({
       topPlayers: PropTypes.number
     }).isRequired
-  }).isRequired
+  }).isRequired,
+  setScreenReady: PropTypes.func.isRequired
 };
 
 export default Top;
