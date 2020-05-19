@@ -135,8 +135,8 @@ export const saveImage = () => async (dispatch, getState) => {
       payload: { ...updatedImage, isEdit }
     });
 
-    // eslint-disable-next-line no-use-before-define
-    dispatch(showSuccess("Изображение сохранено", 3));
+    // Hack to update image
+    window.location.reload();
   } catch (e) {
     dispatch({
       type: SAVE_IMAGE_ERROR,
@@ -234,6 +234,7 @@ export const removeImage = id => async dispatch => {
     // eslint-disable-next-line no-use-before-define
     dispatch(showSuccess("Изображение удалено", 3));
   } catch (e) {
+    console.error(e);
     dispatch({
       type: REMOVE_IMAGE_ERROR,
       payload: e.message

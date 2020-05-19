@@ -19,7 +19,10 @@ const getURL = (id, extension, buffer) => {
     mkdirp.sync(dirName);
     cache.clear();
   }
-  writeFileSync(fullPath, Buffer.from(buffer));
+  if (buffer) {
+    writeFileSync(fullPath, Buffer.from(buffer));
+  }
+
   cache.set(id, webPath);
 
   return webPath;

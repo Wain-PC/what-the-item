@@ -17,33 +17,30 @@ const imageSchema = new Schema(
     _id: Schema.Types.ObjectId,
     image: {
       type: Buffer,
-      get(value) {
-        const id = this._id.toString();
-        const { extension } = this;
-        return getURL(id, extension, value);
-      },
       set(v) {
-        // Need to check if `this` is a document, because in mongoose 5
-        // setters will also run on queries, in which case `this` will be a
-        // mongoose query object.
-        if (v != null && typeof v === "string") {
-          const { binary, extension } = base64ToBinary(v);
-          this.extension = extension;
-          return binary;
+        if (v && typeof v === "string") {
+          return base64ToBinary(v);
         }
         return v;
       }
     },
-    extension: String,
+    extension: {
+      type: String,
+      default: "jpeg"
+    },
     title: String,
     incorrectTitles: [String],
     active: { type: Boolean, default: true }
   },
   {
-    toObject: { getters: true },
-    toJSON: { getters: true }
+    toObject: { getters: true, virtuals: true },
+    toJSON: { getters: true, virtuals: true }
   }
 );
+
+imageSchema.virtual("url").get(function getUrl() {
+  return getURL(this._id.toString(), this.extension, this.image);
+});
 
 const selectionSchema = new Schema({
   title: String
@@ -66,8 +63,8 @@ const roundSchema = new Schema(
     pointsReceived: Number
   },
   {
-    toObject: { getters: true },
-    toJSON: { getters: true }
+    toObject: { getters: true, virtuals: true },
+    toJSON: { getters: true, virtuals: true }
   }
 );
 
@@ -121,8 +118,8 @@ const gameSchema = new Schema(
     config: configSchema
   },
   {
-    toObject: { getters: true },
-    toJSON: { getters: true }
+    toObject: { getters: true, virtuals: true },
+    toJSON: { getters: true, virtuals: true }
   }
 );
 

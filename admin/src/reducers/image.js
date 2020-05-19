@@ -11,7 +11,7 @@ import {
 
 const initialState = {
   _id: "",
-  image: "",
+  image: undefined,
   title: "",
   incorrectTitles: [""],
   active: true

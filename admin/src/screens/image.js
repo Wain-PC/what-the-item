@@ -66,6 +66,7 @@ class ImageScreen extends PureComponent {
         params: { id }
       },
       image,
+      url,
       title,
       incorrectTitles,
       active,
@@ -93,13 +94,13 @@ class ImageScreen extends PureComponent {
     return (
       <Grid centered columns={1}>
         <Grid.Column width={16}>
-          <Header as="h1" content="Новое изображение" />
+          <Header as="h1" content={id ? "Редактировать изображение" : "Новое изображение"} />
         </Grid.Column>
         <Grid.Column width={15}>
           <Form>
             <Form.Field>
-              {image ? (
-                <Image centered rounded size="large" src={image} />
+              {url ? (
+                <Image centered rounded size="large" src={url} />
               ) : null}
               <Input
                 type="file"
@@ -156,7 +157,7 @@ class ImageScreen extends PureComponent {
                     icon="remove"
                     negative
                     content="Удалить"
-                    onClick={removeImage}
+                    onClick={() => removeImage(id)}
                 />
             )}
           </Form>

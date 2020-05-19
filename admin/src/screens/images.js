@@ -56,7 +56,7 @@ Images.propTypes = {
   images: PropTypes.arrayOf(
     PropTypes.shape({
       _id: PropTypes.string.isRequired,
-      image: PropTypes.string.isRequired,
+      url: PropTypes.string.isRequired,
       title: PropTypes.string,
       incorrectTitles: PropTypes.arrayOf(PropTypes.string).isRequired,
       active: PropTypes.bool.isRequired

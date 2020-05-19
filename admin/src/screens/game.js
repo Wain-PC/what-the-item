@@ -1,11 +1,9 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
-import { Label, Header, Form, Segment } from "semantic-ui-react";
+import { Label, Header, Form } from "semantic-ui-react";
 
-import Image from "../components/image/image";
 import Config from "../components/config/config";
-import Player from "../components/player/player";
 import Round from "../components/round/round";
 
 const Game = ({

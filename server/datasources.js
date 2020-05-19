@@ -177,8 +177,14 @@ class DataSources {
     };
   }
 
-  getGame(_id) {
-    return models.Game.findById({ _id });
+  async getGame(_id) {
+    const game = (await models.Game.findById({ _id }).exec()).toObject();
+    game.rounds.forEach(round => {
+      // eslint-disable-next-line no-param-reassign
+      delete round.image.image;
+    });
+
+    return game;
   }
 
   async getWinners({ where = {}, limit = 100, sort = {} }) {
@@ -224,8 +230,11 @@ class DataSources {
     });
   }
 
-  getImage(id) {
-    return models.Image.findById(id);
+  async getImage(id) {
+    const imageDocument = await models.Image.findById(id);
+    const image = imageDocument.toObject();
+    delete image.image;
+    return image;
   }
 
   async saveImage(image) {
@@ -234,7 +243,7 @@ class DataSources {
     // Invalidate image in cache if editing image.
     flush(_id);
 
-    return models.Image.findOneAndUpdate(
+    const imageDocument = await models.Image.findOneAndUpdate(
       _id ? { _id } : { title: "@@@@@@@@@@@@@@@@@@@@@@" },
       {
         ...restImage,
@@ -247,17 +256,27 @@ class DataSources {
         useFindAndModify: true
       }
     );
+
+    const savedImage = imageDocument.toObject();
+    delete savedImage.image;
+    return savedImage;
   }
 
   async removeImage(id) {
     await models.Image.findByIdAndDelete(id);
-    return this.getImages();
+    return id;
   }
 
   async getImages() {
-    const images = await models.Image.find()
+    const imagesDocuments = await models.Image.find()
       .sort({ _id: -1 })
       .exec();
+
+    const images = imagesDocuments.map(imageDocument => {
+      const image = imageDocument.toObject();
+      delete image.image;
+      return image;
+    });
 
     const total = await models.Image.countDocuments().exec();
     const active = await models.Image.where({ active: true })

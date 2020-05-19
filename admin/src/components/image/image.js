@@ -10,11 +10,11 @@ import {
 import { Link } from "react-router-dom";
 
 const Image = ({
-  image: { _id, image = "", title = "", incorrectTitles = [], active },
+  image: { _id, url = "", title = "", incorrectTitles = [], active },
   removeImage
 }) => (
   <Card>
-    <ImageComponent src={image} wrapped ui={false} />
+    <ImageComponent src={url} wrapped ui={false} />
     {active !== undefined && (
       <Label
         color={active ? "green" : "red"}
@@ -48,12 +48,14 @@ const Image = ({
           content="Редактировать"
           size="small"
         />
-        {removeImage && (
+        {_id && (
           <Button
             negative
             content="Удалить"
             size="small"
-            onClick={() => removeImage(_id)}
+            onClick={() => {
+              removeImage(_id);
+            }}
           />
         )}
       </Card.Content>
@@ -64,7 +66,7 @@ const Image = ({
 Image.propTypes = {
   image: PropTypes.shape({
     _id: PropTypes.string,
-    image: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
     title: PropTypes.string,
     incorrectTitles: PropTypes.arrayOf(PropTypes.string),
     active: PropTypes.bool

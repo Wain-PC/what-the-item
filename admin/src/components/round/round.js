@@ -3,20 +3,9 @@ import PropTypes from "prop-types";
 import { Segment, Header, Label, List } from "semantic-ui-react";
 import Image from "../image/image";
 
-const Config = (
-  {
-    round: {
-      index,
-      started,
-      finished,
-      answered,
-      answeredBy,
-      selection,
-      image: { _id, title, incorrectTitles, image }
-    }
-  },
-  players
-) => {
+const Round = ({
+  round: { index, started, finished, answered, answeredBy, selection, image }
+}) => {
   const startedLabel = finished ? null : (
     <Label
       color={started ? "green" : "red"}
@@ -42,17 +31,16 @@ const Config = (
       <Header as="h2">Раунд {index + 1}</Header>
       {startedLabel}
       {finishedLabel}
-      <Image image={{ image }} />
+      <Image image={image} />
       {list}
     </Segment>
   );
 };
 
-Config.propTypes = {
+Round.propTypes = {
   round: PropTypes.shape({
     selection: PropTypes.array.isRequired
-  }).isRequired,
-  players: PropTypes.array.isRequired
+  }).isRequired
 };
 
-export default Config;
+export default Round;
