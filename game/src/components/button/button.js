@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 import cn from "classnames";
 import styles from "./button.module.css";
 
-import button1 from "../../images/buttons/1.svg";
-import button2 from "../../images/buttons/2.svg";
-import button3 from "../../images/buttons/3.svg";
-import button4 from "../../images/buttons/4.svg";
-import right from "../../images/buttons/right.png";
-import wrong from "../../images/buttons/wrong.png";
+import button1 from "../../images/buttons/1.png";
+import button2 from "../../images/buttons/2.png";
+import button3 from "../../images/buttons/3.png";
+import button4 from "../../images/buttons/4.png";
+import right from "../../images/buttons/check.svg";
+import wrong from "../../images/buttons/cross.svg";
 
 const buttons = [button1, button2, button3, button4];
 

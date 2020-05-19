@@ -1,0 +1,15 @@
+.root {
+    width: 380px;
+    height: 90px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+}
+
+.start {
+
+    background-image: url("../../images/buttons/start.svg");
+}
+
+.ok {
+    background-image: url("../../images/buttons/ok.svg");
+}

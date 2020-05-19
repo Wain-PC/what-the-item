@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import cn from "classnames";
 import TopTable from "../../components/topTable/topTable";
+import WideButton from "../../components/wideButton/wideButton";
 import styles from "./top.module.css";
 
 const Top = props => {
@@ -15,24 +16,17 @@ const Top = props => {
 
   return (
     <div className={styles.root}>
-      <div className={styles.shapes} />
       <div className={styles.title}>
         <a href="https://avito.tech" target="_blank" rel="noopener noreferrer">
           avito.tech
         </a>
       </div>
-      <div className={cn(styles.header, styles.headerAnimation)} />
+      <div className={cn(styles.header)} />
       <div className={styles.table}>
         <div className={styles.text}>TOP-{topPlayers}</div>
         <TopTable players={players} />
       </div>
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <div
-        className={styles.startButton}
-        onClick={() => {
-          setScreenReady();
-        }}
-      />
+      <WideButton text="start" onClick={setScreenReady} />
     </div>
   );
 };

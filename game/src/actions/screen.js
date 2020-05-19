@@ -10,6 +10,7 @@ import {
 import { getConfig, getTopPlayers } from "./top";
 // eslint-disable-next-line import/no-cycle
 import { startGame, startRound } from "./game";
+import { runTimer } from "./timer";
 
 const setScreenTop = () => async dispatch => {
   dispatch({
@@ -24,9 +25,19 @@ const setScreenReady = () => ({
   type: SET_SCREEN_READY
 });
 
-const setScreenControls = () => ({
-  type: SET_SCREEN_CONTROLS
-});
+const setScreenControls = () => (dispatch, getState) => {
+  const { controls } = getState().config.timers;
+  dispatch(
+    runTimer(controls, () => {
+      // eslint-disable-next-line no-use-before-define
+      dispatch(setScreenGame());
+    })
+  );
+
+  dispatch({
+    type: SET_SCREEN_CONTROLS
+  });
+};
 
 const setScreenGame = () => async dispatch => {
   await dispatch(startGame());

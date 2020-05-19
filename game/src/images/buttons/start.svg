@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="380px" height="90px" viewBox="0 0 380 90" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>Elements / button next</title>
+    <desc>Created with Sketch.</desc>
+    <g id="1920x1080" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="01" transform="translate(-770.000000, -913.000000)">
+            <g id="Elements-/-button-start" transform="translate(770.000000, 913.000000)">
+                <polygon id="Fill-1" fill="#FF6163" fill-rule="evenodd" points="18 0 18 18 0 18 0 36 0 54 0 72 18 72 18 90 35.998 90 53.998 90 362 90 362 72 380 72 380 54 380 36 380 18 362 18 362 0"></polygon>
+                <text id="START" font-family="Contra" font-size="50" font-weight="normal" letter-spacing="-0.039" fill="#FFFFFF">
+                    <tspan x="65.0975" y="67">START</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
