@@ -29,13 +29,13 @@
     padding-top: 68px;
 }
 
-.score {
+.count {
     color: var(--color-red);
     font-family: var(--font-contra);
     font-size: var(--font-size-large);
 }
 
-.scoreText {
+.text {
     font-size: var(--font-size-medium);
 }
 

@@ -1,0 +1,27 @@
+.root {
+    color: var(--color-red);
+    text-align: center;
+    font-size: var(--font-size-medium);
+}
+
+.lines {
+    border-top: 9px solid var(--color-white);
+    border-bottom: 9px solid var(--color-white);
+    padding-bottom: 20px;
+}
+
+.text {
+    text-align: center;
+    color: var(--color-white);
+}
+
+.countAdd {
+    font-family: var(--font-contra);
+    text-align: center;
+    font-size: var(--font-size-small);
+    padding: 20px 0;
+}
+
+.count{
+    font-family: var(--font-contra);
+}

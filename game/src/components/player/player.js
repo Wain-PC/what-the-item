@@ -17,13 +17,11 @@ const Player = ({ ready, name, index, score, scoreAdd }) => {
       ) : null}
       {score !== undefined ? (
         <div className={styles.scoreContainer}>
-          <div className={styles.score}>{score}</div>
           <div className={styles.scoreText}>Score</div>
+          <div className={styles.score}>{score}</div>
         </div>
       ) : null}
-      {scoreAdd !== undefined ? (
-        <div className={styles.scoreAdd}>+{scoreAdd}</div>
-      ) : null}
+      {scoreAdd ? <div className={styles.scoreAdd}>+{scoreAdd}</div> : null}
     </div>
   );
 };

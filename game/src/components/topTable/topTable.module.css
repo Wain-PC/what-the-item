@@ -34,7 +34,7 @@
     padding-right: 10px;
 }
 
-.score {
+.count {
     grid-area: fourth;
     place-self: center start;
 }
