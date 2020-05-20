@@ -10,17 +10,10 @@ const connect = () => {
     socket = new WebSocket(`${protocol}://${window.location.hostname}/ws`);
 
     socket.onopen = () => {
-      console.log("Соединение установлено.");
       resolve();
     };
 
-    socket.onclose = event => {
-      if (event.wasClean) {
-        console.log("Соединение закрыто чисто");
-      } else {
-        console.log("Обрыв соединения"); // например, "убит" процесс сервера
-      }
-      console.log(`Код: ${event.code} причина: ${event.reason}`);
+    socket.onclose = () => {
       setTimeout(() => {
         console.log("Реконнект соединения...");
         connect();
@@ -28,7 +21,6 @@ const connect = () => {
     };
 
     socket.onmessage = event => {
-      console.log(`Получены данные ${event.data}`);
       const { id, payload, error } = JSON.parse(event.data);
       if (requests.has(id)) {
         if (error) {
@@ -41,7 +33,7 @@ const connect = () => {
     };
 
     socket.onerror = error => {
-      console.log(`Ошибка ${error.message}`);
+      console.log(`Ошибка сокета ${error.message}`);
     };
   });
 };
