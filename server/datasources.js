@@ -1,24 +1,20 @@
 /* eslint-disable class-methods-use-this */
+// eslint-disable-next-line max-classes-per-file
 const arrayShuffle = require("array-shuffle");
 const models = require("./schema");
 const { flush, getURL } = require("./utils/fileCache");
 
-class DataSources {
+class UtilsDataSources {
   async getGame(_id) {
     if (!_id) {
       throw new Error("No gameId provided or it is invalid");
     }
 
-    const game = (await models.Game.findById({ _id }).exec()).toObject();
+    const game = await models.Game.findById({ _id }).exec();
 
     if (!game) {
       throw new Error("No gameId provided or it is invalid");
     }
-
-    game.rounds.forEach(round => {
-      // eslint-disable-next-line no-param-reassign
-      delete round.image.image;
-    });
 
     return game;
   }
@@ -32,8 +28,57 @@ class DataSources {
     return config;
   }
 
+  async saveConfig(newConfig = {}) {
+    const { config = {} } = newConfig;
+    return models.Config.findOneAndUpdate({}, config, {
+      new: true,
+      upsert: true,
+      setDefaultsOnInsert: true,
+      useFindAndModify: true,
+      fields: {
+        gameplay: true,
+        timers: true
+      }
+    });
+  }
+
+  getNRandomImages(n) {
+    return models.Image.aggregate([
+      { $match: { active: true } },
+      { $sample: { size: n } }
+    ]).exec();
+  }
+
+  async getWinners({ where = {}, limit = 100, sort = {} }) {
+    const documentsModel = models.Game.find()
+      .where({ finished: true, ...where })
+      .sort({ ...sort, _id: 1 });
+
+    const documents = await documentsModel.limit(limit).exec();
+    const total = await documentsModel.countDocuments().exec();
+
+    return {
+      players: documents.map(doc => ({
+        gameId: doc._id.toString(),
+        _id: doc.player._id,
+        name: doc.player.name,
+        score: doc.player.score
+      })),
+      total
+    };
+  }
+}
+
+const utils = new UtilsDataSources();
+
+class DataSources {
+  async getConfig() {
+    const { gameplay, timers } = await utils.getConfig();
+    return { gameplay, timers };
+  }
+
   async startGame() {
-    const config = await this.getConfig();
+    const config = await utils.getConfig();
 
     const {
       gameplay: { roundsInGame, answersInRound }
@@ -42,7 +87,7 @@ class DataSources {
     const answersToGet = answersInRound - 1;
 
     // Get N random images
-    const images = await this.getNRandomImages(roundsInGame);
+    const images = await utils.getNRandomImages(roundsInGame);
     // Get their ids
     const ids = images.map(({ _id }) => _id);
     // Find a total number of missing options.
@@ -107,9 +152,9 @@ class DataSources {
   async nextRound({ gameId }) {
     const {
       timers: { round: secondsInRound }
-    } = await this.getConfig();
+    } = await utils.getConfig();
 
-    const game = await this.getGame(gameId);
+    const game = await utils.getGame(gameId);
 
     const nextRound = game.rounds.find(({ started }) => !started);
     if (nextRound) {
@@ -130,7 +175,7 @@ class DataSources {
   }
 
   async endRound({ gameId, answerIndex }) {
-    const game = await this.getGame(gameId);
+    const game = await utils.getGame(gameId);
 
     const finishedRound = game.rounds.find(
       ({ started, finished }) => started && !finished
@@ -169,7 +214,7 @@ class DataSources {
   }
 
   async saveName({ gameId, name, contact }) {
-    const game = await this.getGame(gameId);
+    const game = await utils.getGame(gameId);
 
     game.player.name = name;
     game.player.contact = contact;
@@ -180,14 +225,22 @@ class DataSources {
   }
 
   async getTopPlayers() {
-    const config = await this.getConfig();
-    return this.getWinners({
+    const config = await utils.getConfig();
+    return utils.getWinners({
       limit: config.gameplay.topPlayers,
       sort: { "player.score": -1 }
     });
   }
+}
 
-  // ---------------ADMINISTRATION METHODS---------------
+class AdminDataSources {
+  getConfig(gameId) {
+    return utils.getConfig(gameId);
+  }
+
+  saveConfig(gameId) {
+    return utils.saveConfig(gameId);
+  }
 
   async getGames() {
     const games = await models.Game.find({ finished: true })
@@ -207,47 +260,23 @@ class DataSources {
     };
   }
 
-  async getWinners({ where = {}, limit = 100, sort = {} }) {
-    const documentsModel = models.Game.find()
-      .where({ finished: true, ...where })
-      .sort({ ...sort, _id: 1 });
+  async getGame(gameId) {
+    const game = (await utils.getGame(gameId)).toObject();
 
-    const documents = await documentsModel.limit(limit).exec();
-    const total = await documentsModel.countDocuments().exec();
-
-    return {
-      players: documents.map(doc => ({
-        gameId: doc._id.toString(),
-        _id: doc.player._id,
-        name: doc.player.name,
-        score: doc.player.score
-      })),
-      total
-    };
+    game.rounds.forEach(round => {
+      // eslint-disable-next-line no-param-reassign
+      delete round.image.image;
+    });
   }
 
   async getAllPlayers() {
-    const { players, total } = await this.getWinners({
+    const { players, total } = await utils.getWinners({
       sort: { "player.score": -1 }
     });
     return {
       players,
       total
     };
-  }
-
-  async saveConfig(newConfig = {}) {
-    const { config = {} } = newConfig;
-    return models.Config.findOneAndUpdate({}, config, {
-      new: true,
-      upsert: true,
-      setDefaultsOnInsert: true,
-      useFindAndModify: true,
-      fields: {
-        gameplay: true,
-        timers: true
-      }
-    });
   }
 
   async getImage(id) {
@@ -309,15 +338,9 @@ class DataSources {
       active
     };
   }
-
-  // ---------------UTILS METHODS---------------
-
-  getNRandomImages(n) {
-    return models.Image.aggregate([
-      { $match: { active: true } },
-      { $sample: { size: n } }
-    ]).exec();
-  }
 }
 
-module.exports = DataSources;
+const dataSources = new DataSources();
+const adminDataSources = new AdminDataSources();
+
+module.exports = { dataSources, adminDataSources };

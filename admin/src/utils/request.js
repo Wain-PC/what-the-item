@@ -5,7 +5,7 @@ let requestId = 0;
 
 const connect = () => {
   return new Promise(resolve => {
-    socket = new WebSocket(`ws://${window.location.hostname}:3333/ws`);
+    socket = new WebSocket(`ws://${window.location.hostname}:3333/admin`);
 
     socket.onopen = () => {
       console.log("Соединение установлено.");
