@@ -37,7 +37,7 @@
 
 .header {
     width: 80%;
-    min-height: 150px;
+    padding-bottom: 30%;
     background-image: url("../../images/text/what-the-item.svg");
     background-repeat: no-repeat;
     background-position: center center;

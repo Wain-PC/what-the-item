@@ -4,6 +4,25 @@ const models = require("./schema");
 const { flush, getURL } = require("./utils/fileCache");
 
 class DataSources {
+  async getGame(_id) {
+    if (!_id) {
+      throw new Error("No gameId provided or it is invalid");
+    }
+
+    const game = (await models.Game.findById({ _id }).exec()).toObject();
+
+    if (!game) {
+      throw new Error("No gameId provided or it is invalid");
+    }
+
+    game.rounds.forEach(round => {
+      // eslint-disable-next-line no-param-reassign
+      delete round.image.image;
+    });
+
+    return game;
+  }
+
   async getConfig() {
     let config = await models.Config.findOne();
     if (!config) {
@@ -89,7 +108,9 @@ class DataSources {
     const {
       timers: { round: secondsInRound }
     } = await this.getConfig();
-    const game = await models.Game.findById(gameId);
+
+    const game = await this.getGame(gameId);
+
     const nextRound = game.rounds.find(({ started }) => !started);
     if (nextRound) {
       nextRound.started = true;
@@ -109,7 +130,8 @@ class DataSources {
   }
 
   async endRound({ gameId, answerIndex }) {
-    const game = await models.Game.findById(gameId);
+    const game = await this.getGame(gameId);
+
     const finishedRound = game.rounds.find(
       ({ started, finished }) => started && !finished
     );
@@ -147,7 +169,8 @@ class DataSources {
   }
 
   async saveName({ gameId, name, contact }) {
-    const game = await models.Game.findById(gameId);
+    const game = await this.getGame(gameId);
+
     game.player.name = name;
     game.player.contact = contact;
     game.finished = true;
@@ -182,16 +205,6 @@ class DataSources {
       total,
       finished
     };
-  }
-
-  async getGame(_id) {
-    const game = (await models.Game.findById({ _id }).exec()).toObject();
-    game.rounds.forEach(round => {
-      // eslint-disable-next-line no-param-reassign
-      delete round.image.image;
-    });
-
-    return game;
   }
 
   async getWinners({ where = {}, limit = 100, sort = {} }) {
