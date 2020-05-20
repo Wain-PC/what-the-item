@@ -1,6 +1,6 @@
 import {
   START_GAME_ROUND,
-  SET_SCREEN_TOP,
+  END_GAME,
   END_GAME_ROUND
 } from "../constants/actions";
 
@@ -39,7 +39,7 @@ export default (state = initialState, action) => {
       };
     }
 
-    case SET_SCREEN_TOP: {
+    case END_GAME: {
       return initialState;
     }
 

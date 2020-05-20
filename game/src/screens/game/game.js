@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import cn from "classnames";
 import styles from "./game.module.css";
 import Button from "../../components/button/button";
 import Screen from "../../components/screen/screen";
@@ -50,9 +51,7 @@ const Game = props => {
           <Score text="Time" count={timer} />
         </div>
       </div>
-      <div className={styles.row}>
-        <div className={styles.footer}>{buttons}</div>
-      </div>
+      <div className={cn(styles.row, styles.footer)}>{buttons}</div>
     </div>
   );
 };
