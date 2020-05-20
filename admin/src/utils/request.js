@@ -5,7 +5,9 @@ let requestId = 0;
 
 const connect = () => {
   return new Promise(resolve => {
-    socket = new WebSocket(`ws://${window.location.hostname}:3333/admin`);
+    const protocol =
+      window.location.protocol.indexOf("https") === 0 ? "ws" : "wss";
+    socket = new WebSocket(`${protocol}://${window.location.hostname}/admin`);
 
     socket.onopen = () => {
       console.log("Соединение установлено.");
