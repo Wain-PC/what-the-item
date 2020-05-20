@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import cn from "classnames";
 import styles from "./winner.module.css";
 import Avatar from "../../components/avatar/avatar";
 
@@ -14,7 +13,7 @@ const Winner = props => {
   return (
     <div className={styles.root}>
       <Avatar index={index} size="large" />
-      <div className={cn(styles.header, styles.winner1)} />
+      <div className={styles.header} />
       <div className={styles.scoreContainer}>
         <div className={styles.score}>{score}</div>
         <div className={styles.scoreText}>Final Score</div>

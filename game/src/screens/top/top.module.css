@@ -38,7 +38,7 @@
 .header {
     width: 80%;
     height: 337px;
-    background-image: url("../../images/text/title_1.png");
+    background-image: url("../../images/text/what-the-item.svg");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: contain;
@@ -56,18 +56,6 @@
     font-size: var(--font-size-xsmall);
     color: var(--color-red);
 }
-
-.startButton {
-    margin: 68px 0;
-    width: 380px;
-    height: 90px;
-    background-image: url("../../images/buttons/start.svg");
-    background-repeat: no-repeat;
-    cursor: pointer;
-
-}
-
-
 
 @keyframes spin {
     0% {
