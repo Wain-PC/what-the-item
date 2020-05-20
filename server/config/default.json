@@ -4,6 +4,7 @@
       "baseURL": "/",
       "port": 3333,
       "ws": "/ws",
+      "admin": "/admin",
       "staticDir": "static",
       "imageCache": ".cache/images"
     },
