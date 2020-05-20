@@ -1,28 +1,34 @@
 .root {
     position: relative;
-    background-image: url("frame.svg");
-    width: 1000px;
-    height: 656px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-width: 400px;
+    max-width: 1200px;
 }
 
 .top {
-    position: absolute;
-    left: 244px;
-    width: 512px;
-    height: 100px;
-
     font-family: var(--font-contra);
     font-size: var(--font-size-small);
+    color: var(--color-black);
+    padding: 10px;
+    background-color: var(--color-white);
+}
 
+.imageNew {
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    padding-bottom: 56.25%;
+    background-color: var(--color-white);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    border: 9px solid var(--color-white);
 }
 
-.top > * {
-    display: inline-block;
-}
 
 .image {
     --side-border: 16px;
@@ -62,10 +68,13 @@
     justify-content: center;
 }
 
-.timer {
-    color: var(--color-black);
-}
-
-.round {
-    color: var(--color-red);
+.thumb {
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

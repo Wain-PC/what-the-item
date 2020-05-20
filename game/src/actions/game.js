@@ -48,7 +48,9 @@ const selectAnswer = answerIndex => async (dispatch, getState) => {
     type: END_GAME_ROUND,
     payload: {
       score,
-      pointsReceived
+      pointsReceived,
+      answerIndex,
+      isCorrectAnswer
     }
   });
 

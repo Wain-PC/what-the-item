@@ -20,12 +20,13 @@ const Game = props => {
     selectAnswer
   } = props;
 
-  const buttons = selection.map(({ title }, index) => {
+  const buttons = selection.map(({ title, isCorrectAnswer }, index) => {
     return (
       <Button
         key={title}
         index={index}
         text={title}
+        correct={isCorrectAnswer}
         onClick={() => selectAnswer(index)}
       />
     );
@@ -34,11 +35,9 @@ const Game = props => {
   return (
     <div className={styles.grid}>
       <div className={styles.row}>
-        <Score
-          text="Score"
-          count={player.score}
-          countAdd={player.scoreAdd + 1000}
-        />
+        <div className={styles.left}>
+          <Score text="Score" count={player.score} countAdd={player.scoreAdd} />
+        </div>
         <div className={styles.screen}>
           <Screen
             round={roundIndex}
@@ -47,7 +46,9 @@ const Game = props => {
             isCorrectAnswer={answered}
           />
         </div>
-        <Score text="Time" count={timer} />
+        <div className={styles.right}>
+          <Score text="Time" count={timer} />
+        </div>
       </div>
       <div className={styles.row}>
         <div className={styles.footer}>{buttons}</div>

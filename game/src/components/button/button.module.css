@@ -4,12 +4,13 @@
     justify-content: flex-start;
     align-items: center;
     text-align: center;
+    flex-basis: 0;
+    flex-grow: 1;
     padding: 20px;
     cursor: pointer;
 }
 
 .text {
-    width: 440px;
     line-height: calc(var(--font-size-medium) / 2);
     padding-top: calc(var(--font-size-medium) / 2);
 }

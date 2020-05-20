@@ -1,4 +1,5 @@
 import {
+  END_GAME,
   SET_SCREEN_CONTROLS,
   SET_SCREEN_GAME,
   SET_SCREEN_GAME_END,
@@ -13,6 +14,10 @@ import { startGame, startRound } from "./game";
 import { runTimer } from "./timer";
 
 const setScreenTop = () => async dispatch => {
+  dispatch({
+    type: END_GAME
+  });
+
   dispatch({
     type: SET_SCREEN_TOP
   });

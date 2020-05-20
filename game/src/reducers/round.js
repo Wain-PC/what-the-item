@@ -1,4 +1,8 @@
-import { START_GAME_ROUND, SET_SCREEN_TOP } from "../constants/actions";
+import {
+  START_GAME_ROUND,
+  SET_SCREEN_TOP,
+  END_GAME_ROUND
+} from "../constants/actions";
 
 const initialState = {
   image: {
@@ -15,6 +19,23 @@ export default (state = initialState, action) => {
       return {
         ...state,
         ...round
+      };
+    }
+    case END_GAME_ROUND: {
+      const { isCorrectAnswer, answerIndex } = action.payload;
+      return {
+        ...state,
+        selection: state.selection.map((item, index) => {
+          if (answerIndex === index) {
+            return {
+              ...item,
+              isCorrectAnswer
+            };
+          }
+          return {
+            ...item
+          };
+        })
       };
     }
 

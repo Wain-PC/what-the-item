@@ -117,9 +117,9 @@ class DataSources {
     finishedRound.finishedOn = new Date();
     finishedRound.userAnswered = answerIndex;
 
-    const timeLeft = Math.round(
-      (finishedRound.finishedOn - finishedRound.startedOn) / 1000
-    );
+    const timeLeft =
+      game.config.timers.round -
+      Math.round((finishedRound.finishedOn - finishedRound.startedOn) / 1000);
     const isCorrectAnswer = answerIndex === finishedRound.answerIndex;
 
     finishedRound.timeLeft = timeLeft;
@@ -129,9 +129,8 @@ class DataSources {
 
     if (isCorrectAnswer && timeLeft) {
       pointsReceived = Math.round(
-        (game.config.gameplay.maxPointsPerRound *
-          (game.config.timers.round - timeLeft)) /
-          timeLeft
+        (game.config.gameplay.maxPointsPerRound * timeLeft) /
+          game.config.timers.round
       );
     }
 
@@ -142,7 +141,8 @@ class DataSources {
     return {
       score: game.player.score,
       pointsReceived,
-      isCorrectAnswer
+      isCorrectAnswer,
+      answerIndex
     };
   }
 

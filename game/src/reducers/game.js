@@ -2,6 +2,7 @@ import {
   SET_GAME_MESSAGE,
   LOAD_GAME_SUCCESS,
   END_GAME,
+  START_GAME_ROUND,
   END_GAME_ROUND,
   CHANGE_WINNER_NICKNAME,
   CHANGE_WINNER_CONTACT,
@@ -44,6 +45,16 @@ export default (state = initialState, action) => {
               ...message
             }
           : initialState.message
+      };
+    }
+
+    case START_GAME_ROUND: {
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          scoreAdd: initialState.scoreAdd
+        }
       };
     }
 
