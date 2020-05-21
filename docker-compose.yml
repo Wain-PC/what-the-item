@@ -1,0 +1,33 @@
+version: "3"
+services:
+  game:
+    build:
+      context: .
+      dockerfile: game.Dockerfile
+    container_name: what-the-item-game
+    ports:
+      - 3333:3333
+    depends_on:
+      - db
+    environment:
+      MONGODB_URI: "mongodb://db:27017/what-the-item"
+  admin:
+    build:
+      context: .
+      dockerfile: admin.Dockerfile
+    container_name: what-the-item-admin
+    ports:
+      - 3334:3334
+    depends_on:
+      - db
+    environment:
+      MONGODB_URI: "mongodb://db:27017/what-the-item"
+  db:
+    image: mongo
+    container_name: what-the-item-db
+    ports:
+      - 27017:27017
+    volumes:
+      - db:/data/db
+volumes:
+  db:
