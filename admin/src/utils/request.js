@@ -7,7 +7,7 @@ const connect = () => {
   return new Promise(resolve => {
     const protocol =
       window.location.protocol.indexOf("https") === 0 ? "wss" : "ws";
-    socket = new WebSocket(`${protocol}://${window.location.hostname}/admin`);
+    socket = new WebSocket(`${protocol}://${window.location.host}/admin`);
 
     socket.onopen = () => {
       resolve();
