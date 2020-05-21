@@ -8,6 +8,10 @@
       "staticDir": "static",
       "imageCache": ".cache/images"
     },
+    "auth": {
+      "user": "",
+      "password": ""
+    },
     "db": {
       "mongoConnectionLine": "mongodb://localhost/what-the-item"
     },

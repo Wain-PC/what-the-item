@@ -5,6 +5,10 @@
     },
     "db": {
       "mongoConnectionLine": "MONGODB_URI"
+    },
+    "auth": {
+      "user": "AUTH_USER",
+      "password": "AUTH_PASSWORD"
     }
   }
 }

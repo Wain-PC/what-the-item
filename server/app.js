@@ -1,12 +1,10 @@
 const express = require("express");
 const { join } = require("path");
 const Websocket = require("express-ws");
+const basicAuth = require("express-basic-auth");
 const db = require("./db");
 const config = require("./config");
 const { dataSources, adminDataSources } = require("./datasources");
-
-const app = express();
-Websocket(app);
 
 const onMessage = (ws, dataSource) => async msg => {
   try {
@@ -34,8 +32,19 @@ const onMessage = (ws, dataSource) => async msg => {
 
 const bootstrap = async () => {
   const { mode, websocketPath, port, staticDir } = config.system;
+  const { user, password } = config.auth;
+  const app = express();
+  Websocket(app);
   await db.connect();
   app.listen(port, () => {
+    if (user) {
+      app.use(
+        basicAuth({
+          challenge: true,
+          users: { [user]: password }
+        })
+      );
+    }
     app.use(express.static(join(__dirname, staticDir)));
 
     app.ws(websocketPath, ws => {
