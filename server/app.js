@@ -33,22 +33,26 @@ const onMessage = (ws, dataSource) => async msg => {
 };
 
 const bootstrap = async () => {
-  const { ws: wsPath, admin: adminPath, port } = config.system;
+  const { mode, websocketPath, port } = config.system;
   await db.connect();
   app.listen(port, () => {
     app.use(express.static(join(__dirname, "static")));
-    // User land
-    app.ws(`/${wsPath}`, ws => {
-      ws.on("message", onMessage(ws, dataSources));
+
+    app.ws(`/${websocketPath}`, ws => {
+      switch (mode) {
+        case "admin": {
+          ws.on("message", onMessage(ws, adminDataSources));
+          break;
+        }
+        case "user":
+        default: {
+          ws.on("message", onMessage(ws, dataSources));
+        }
+      }
     });
 
-    // Admin land
-    app.ws(`/${adminPath}`, ws => {
-      ws.on("message", onMessage(ws, adminDataSources));
-    });
-
-    console.log(`Game WS server listening on :${port}${wsPath}`);
-    console.log(`Admin WS server listening on :${port}${adminPath}`);
+    console.log(`Mode:${mode}`);
+    console.log(`WS server listening on :${port}${websocketPath}`);
   });
 };
 

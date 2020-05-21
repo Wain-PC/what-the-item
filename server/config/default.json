@@ -1,10 +1,10 @@
 {
   "game": {
     "system": {
+      "mode": "user",
       "baseURL": "/",
       "port": 3333,
-      "ws": "/ws",
-      "admin": "/admin",
+      "websocketPath": "/ws",
       "staticDir": "static",
       "imageCache": ".cache/images"
     },
