@@ -123,8 +123,6 @@ class DataSources {
         image.extension,
         image.image.buffer
       );
-      delete image.image;
-      delete image.extension;
       const answerIndex = Math.floor(Math.random() * answersInRound);
       const selection = arrayShuffle(image.incorrectTitles);
       selection.splice(answerIndex, 0, image.title);
@@ -267,6 +265,8 @@ class AdminDataSources {
       // eslint-disable-next-line no-param-reassign
       delete round.image.image;
     });
+
+    return game;
   }
 
   async getAllPlayers() {

@@ -21,9 +21,8 @@ const getURL = (id, extension, buffer) => {
   }
   if (buffer) {
     writeFileSync(fullPath, Buffer.from(buffer));
+    cache.set(id, webPath);
   }
-
-  cache.set(id, webPath);
 
   return webPath;
 };

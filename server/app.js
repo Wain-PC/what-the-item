@@ -33,10 +33,10 @@ const onMessage = (ws, dataSource) => async msg => {
 };
 
 const bootstrap = async () => {
-  const { mode, websocketPath, port } = config.system;
+  const { mode, websocketPath, port, staticDir } = config.system;
   await db.connect();
   app.listen(port, () => {
-    app.use(express.static(join(__dirname, "static")));
+    app.use(express.static(join(__dirname, staticDir)));
 
     app.ws(websocketPath, ws => {
       switch (mode) {
@@ -50,6 +50,10 @@ const bootstrap = async () => {
         }
       }
     });
+
+    app.get("*", (req, res) =>
+      res.sendFile(join(__dirname, staticDir, "index.html"))
+    );
 
     console.log(`Mode:${mode}`);
     console.log(`WS server listening on :${port}${websocketPath}`);
