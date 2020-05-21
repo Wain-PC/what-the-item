@@ -280,7 +280,16 @@ class AdminDataSources {
   }
 
   async getImage(id) {
+    if (!id) {
+      throw new Error("No image ID provided or it is invalid");
+    }
+
     const imageDocument = await models.Image.findById(id);
+
+    if (!imageDocument) {
+      throw new Error("No image ID provided or it is invalid");
+    }
+
     const image = imageDocument.toObject();
     delete image.image;
     return image;

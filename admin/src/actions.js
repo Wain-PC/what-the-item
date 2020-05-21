@@ -55,8 +55,7 @@ export const loadTopPlayers = () => async dispatch => {
     });
   } catch (e) {
     dispatch({
-      type: LOAD_TOP_PLAYERS_ERROR,
-      payload: e.message
+      type: LOAD_TOP_PLAYERS_ERROR
     });
   }
 };
@@ -75,8 +74,7 @@ export const loadGames = () => async dispatch => {
     });
   } catch (e) {
     dispatch({
-      type: LOAD_GAMES_ERROR,
-      payload: e.message
+      type: LOAD_GAMES_ERROR
     });
   }
 };
@@ -95,8 +93,7 @@ export const loadConfig = () => async dispatch => {
     });
   } catch (e) {
     dispatch({
-      type: LOAD_CONFIG_ERROR,
-      payload: e.message
+      type: LOAD_CONFIG_ERROR
     });
   }
 };
@@ -139,8 +136,7 @@ export const saveImage = () => async (dispatch, getState) => {
     window.location.reload();
   } catch (e) {
     dispatch({
-      type: SAVE_IMAGE_ERROR,
-      payload: e.message
+      type: SAVE_IMAGE_ERROR
     });
   }
 };
@@ -162,8 +158,7 @@ export const saveConfig = () => async (dispatch, getState) => {
     dispatch(showSuccess("Конфигурация обновлена", 3));
   } catch (e) {
     dispatch({
-      type: SAVE_CONFIG_ERROR,
-      payload: e.message
+      type: SAVE_CONFIG_ERROR
     });
   }
 };
@@ -188,8 +183,7 @@ export const loadImages = () => async dispatch => {
     });
   } catch (e) {
     dispatch({
-      type: LOAD_IMAGES_ERROR,
-      payload: e.message
+      type: LOAD_IMAGES_ERROR
     });
   }
 };
@@ -213,8 +207,7 @@ export const getImage = id => async dispatch => {
     });
   } catch (e) {
     dispatch({
-      type: LOAD_IMAGE_ERROR,
-      payload: e.message
+      type: LOAD_IMAGE_ERROR
     });
   }
 };
