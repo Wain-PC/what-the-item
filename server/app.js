@@ -38,7 +38,7 @@ const bootstrap = async () => {
   app.listen(port, () => {
     app.use(express.static(join(__dirname, "static")));
 
-    app.ws(`/${websocketPath}`, ws => {
+    app.ws(websocketPath, ws => {
       switch (mode) {
         case "admin": {
           ws.on("message", onMessage(ws, adminDataSources));
