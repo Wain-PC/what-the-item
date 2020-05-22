@@ -1,5 +1,9 @@
 const send = async (path = "", data = {}) => {
   const response = await fetch(`/game/${path}`, {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
     method: "POST",
     body: JSON.stringify(data)
   });
