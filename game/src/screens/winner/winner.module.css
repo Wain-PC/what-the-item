@@ -40,6 +40,10 @@
     font-size: var(--font-size-medium);
 }
 
+.button {
+    margin-top: 80px;
+}
+
 @keyframes scale {
     0% {
         transform: scale(1, 1);

@@ -225,7 +225,7 @@ class DataSources {
     const response = {
       topPlayers,
       isInTop: false,
-      place: -1
+      place: 0
     };
 
     players.some((player, index) => {

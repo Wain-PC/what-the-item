@@ -9,12 +9,13 @@ import {
 } from "../constants/actions";
 
 const initialState = {
-  id: "",
+  id: "5ec66810edd7163c16c4a117",
   player: {
     name: "",
     contact: "",
     score: 0,
-    scoreAdd: 0
+    scoreAdd: 0,
+    place: 0
   },
   message: {} // internal-only field
 };

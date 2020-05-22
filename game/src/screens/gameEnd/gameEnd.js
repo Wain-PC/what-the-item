@@ -8,7 +8,10 @@ import WideButton from "../../components/wideButton/wideButton";
 const GameEnd = props => {
   const {
     game: {
-      player: { name, contact }
+      player: { name, contact, place }
+    },
+    config: {
+      gameplay: { topPlayers }
     },
     changeName,
     changeContact,
@@ -18,6 +21,9 @@ const GameEnd = props => {
   return (
     <div className={styles.root}>
       <div className={styles.column}>
+        <div className={styles.header}>
+          Ты занял {place} место в топ-{topPlayers}!
+        </div>
         <div className={styles.nickNameHeader}>Введи имя</div>
         <NickName value={name} onChange={changeName} />
         <div className={styles.nickNameHeader}>Твоя почта или Telegram</div>
@@ -35,22 +41,14 @@ GameEnd.propTypes = {
     id: PropTypes.string.isRequired,
     player: PropTypes.shape({
       name: PropTypes.string.isRequired,
-      contact: PropTypes.string.isRequired
+      contact: PropTypes.string.isRequired,
+      place: PropTypes.number.isRequired
     }).isRequired
-  }).isRequired,
-  top: PropTypes.shape({
-    players: PropTypes.arrayOf(
-      PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        score: PropTypes.number.isRequired
-      })
-    ).isRequired
   }).isRequired,
   config: PropTypes.shape({
     gameplay: PropTypes.arrayOf(
       PropTypes.shape({
-        winnerNickNameMaxLetters: PropTypes.number.isRequired,
-        contactMaxLetters: PropTypes.number.isRequired
+        topPlayers: PropTypes.number.isRequired
       })
     ).isRequired
   }).isRequired,

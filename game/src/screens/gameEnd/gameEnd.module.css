@@ -22,6 +22,10 @@
     color: var(--color-red);
 }
 
+.header {
+    font-size: var(--font-size-large);
+}
+
 .nickNameHeader {
     padding-top: 73px;
 }

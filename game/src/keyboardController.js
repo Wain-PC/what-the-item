@@ -31,12 +31,10 @@ export default class KeyboardController {
 
   static getButtonMapping(code, key) {
     switch (code) {
-      case "Enter":
-      case "Space": {
+      case "Enter": {
         return "ok";
       }
-      case "Escape":
-      case "Backspace": {
+      case "Escape": {
         return "back";
       }
       default: {
