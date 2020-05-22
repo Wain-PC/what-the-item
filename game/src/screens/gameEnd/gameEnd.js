@@ -3,37 +3,29 @@ import PropTypes from "prop-types";
 import NickName from "../../components/nickName/nickName";
 
 import styles from "./gameEnd.module.css";
+import WideButton from "../../components/wideButton/wideButton";
 
 const GameEnd = props => {
   const {
     game: {
-      player: { name, contact, nameFilled }
+      player: { name, contact }
     },
-    config: {
-      gameplay: { winnerNickNameMaxLetters, contactMaxLetters }
-    }
+    changeName,
+    changeContact,
+    saveName
   } = props;
 
   return (
     <div className={styles.root}>
-      <div className={styles.nickNameHeader}>Enter Your Nickname:</div>
-      <div className={styles.nickName}>
-        <NickName
-          value={name}
-          length={winnerNickNameMaxLetters}
-          active={!nameFilled}
-        />
+      <div className={styles.column}>
+        <div className={styles.nickNameHeader}>Введи имя</div>
+        <NickName value={name} onChange={changeName} />
+        <div className={styles.nickNameHeader}>Твоя почта или Telegram</div>
+        <NickName value={contact} onChange={changeContact} />
+        <div className={styles.button}>
+          <WideButton onClick={saveName} text="ok" />
+        </div>
       </div>
-      <div className={styles.nickNameHeader}>Enter Your Email or Telegram:</div>
-      <div className={styles.nickName}>
-        <NickName
-          value={contact}
-          length={contactMaxLetters}
-          active={nameFilled}
-        />
-      </div>
-
-      <div className={styles.controlsHeader}>Press Enter to save</div>
     </div>
   );
 };
@@ -43,8 +35,7 @@ GameEnd.propTypes = {
     id: PropTypes.string.isRequired,
     player: PropTypes.shape({
       name: PropTypes.string.isRequired,
-      contact: PropTypes.string.isRequired,
-      nameFilled: PropTypes.bool.isRequired
+      contact: PropTypes.string.isRequired
     }).isRequired
   }).isRequired,
   top: PropTypes.shape({
@@ -62,7 +53,10 @@ GameEnd.propTypes = {
         contactMaxLetters: PropTypes.number.isRequired
       })
     ).isRequired
-  }).isRequired
+  }).isRequired,
+  saveName: PropTypes.func.isRequired,
+  changeName: PropTypes.func.isRequired,
+  changeContact: PropTypes.func.isRequired
 };
 
 export default GameEnd;

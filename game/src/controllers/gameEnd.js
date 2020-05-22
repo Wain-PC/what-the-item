@@ -2,15 +2,11 @@ const controller = ({ actions, message }) => {
   if (message.type === "button") {
     switch (message.button) {
       case "ok": {
-        actions.enterPress();
-        break;
-      }
-      case "back": {
-        actions.removeLetter();
+        actions.saveName();
         break;
       }
       default: {
-        actions.enterLetter(message.button);
+        break;
       }
     }
   }

@@ -1,9 +1,10 @@
-.blink {
-    animation: blink 1s step-start 0s infinite;
-}
-
-@keyframes blink {
-    50% {
-        visibility: hidden;
-    }
+.input {
+    color: var(--color-red);
+    font-family: var(--font-bk0010);
+    font-size: var(--font-size-xlarge);
+    background-color: transparent;
+    width: 100%;
+    border: 9px solid var(--color-white);
+    text-transform: uppercase;
+    padding: 5px;
 }

@@ -1,15 +1,15 @@
 .root {
-    width: 380px;
     height: 90px;
     background-repeat: no-repeat;
     cursor: pointer;
 }
 
 .start {
-
+    width: 380px;
     background-image: url("../../images/buttons/start.png");
 }
 
 .ok {
+    width: 250px;
     background-image: url("../../images/buttons/ok.png");
 }

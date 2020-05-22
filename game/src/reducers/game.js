@@ -5,8 +5,7 @@ import {
   START_GAME_ROUND,
   END_GAME_ROUND,
   CHANGE_WINNER_NICKNAME,
-  CHANGE_WINNER_CONTACT,
-  TOGGLE_NAME_ENTERED
+  CHANGE_WINNER_CONTACT
 } from "../constants/actions";
 
 const initialState = {
@@ -15,8 +14,7 @@ const initialState = {
     name: "",
     contact: "",
     score: 0,
-    scoreAdd: 0,
-    nameFilled: false
+    scoreAdd: 0
   },
   message: {} // internal-only field
 };
@@ -88,16 +86,6 @@ export default (state = initialState, action) => {
         player: {
           ...state.player,
           contact
-        }
-      };
-    }
-
-    case TOGGLE_NAME_ENTERED: {
-      return {
-        ...state,
-        player: {
-          ...state.player,
-          nameFilled: true
         }
       };
     }
