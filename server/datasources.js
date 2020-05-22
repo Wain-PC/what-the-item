@@ -349,7 +349,7 @@ class AdminDataSources {
   }
 }
 
-const dataSources = new DataSources();
-const adminDataSources = new AdminDataSources();
+const user = new DataSources();
+const admin = new AdminDataSources();
 
-module.exports = { dataSources, adminDataSources };
+module.exports = { user, admin };

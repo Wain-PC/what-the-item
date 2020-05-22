@@ -3,7 +3,7 @@
     "system": {
       "mode": "admin",
       "port": 3334,
-      "websocketPath": "/admin"
+      "apiPath": "/admin"
     }
   }
 }

@@ -1,40 +1,36 @@
 const express = require("express");
 const { join } = require("path");
-const Websocket = require("express-ws");
 const basicAuth = require("express-basic-auth");
 const db = require("./db");
 const config = require("./config");
-const { dataSources, adminDataSources } = require("./datasources");
+const dataSources = require("./datasources");
 
-const onMessage = (ws, dataSource) => async msg => {
+const onMessage = async (dataSource, path, data) => {
   try {
-    const { id, path, data } = JSON.parse(msg);
-
     // If we have an appropriate DB path, execute it and return results.
-    if (dataSource[path]) {
+    if (dataSource && dataSource[path]) {
       try {
         const payload = await dataSource[path](data);
-        const response = { id, payload };
-        ws.send(JSON.stringify(response));
+        return { payload };
       } catch (dbErr) {
         console.error(dbErr);
-        ws.send(JSON.stringify({ id, error: "Unable to process request" }));
+        return { error: "Unable to process request" };
       }
       // No appropriate DB path.
     } else {
-      ws.send(JSON.stringify({ error: "Unknown path" }));
+      return { error: "Unknown path" };
     }
   } catch (err) {
     console.error(err);
-    ws.send(JSON.stringify({ error: "Cannot parse request" }));
+    return { error: "Cannot parse request" };
   }
 };
 
 const bootstrap = async () => {
-  const { mode, websocketPath, port, staticDir } = config.system;
+  const { mode, apiPath, port, staticDir } = config.system;
   const { user, password } = config.auth;
   const app = express();
-  Websocket(app);
+  app.use(express.json());
   await db.connect();
   app.listen(port, () => {
     if (user) {
@@ -45,27 +41,21 @@ const bootstrap = async () => {
         })
       );
     }
-    app.use(express.static(join(__dirname, staticDir)));
+    const dataSource = dataSources[mode];
 
-    app.ws(websocketPath, ws => {
-      switch (mode) {
-        case "admin": {
-          ws.on("message", onMessage(ws, adminDataSources));
-          break;
-        }
-        case "user":
-        default: {
-          ws.on("message", onMessage(ws, dataSources));
-        }
-      }
+    app.post(`${apiPath}/:path`, async (req, res) => {
+      const response = await onMessage(dataSource, req.params.path, req.body);
+      res.json(response);
     });
+
+    app.use(express.static(join(__dirname, staticDir)));
 
     app.get("*", (req, res) =>
       res.sendFile(join(__dirname, staticDir, "index.html"))
     );
 
     console.log(`Mode:${mode}`);
-    console.log(`WS server listening on :${port}${websocketPath}`);
+    console.log(`WS server listening on :${port}${apiPath}`);
   });
 };
 

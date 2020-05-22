@@ -4,7 +4,7 @@
       "mode": "user",
       "baseURL": "/",
       "port": 3333,
-      "websocketPath": "/ws",
+      "apiPath": "/api",
       "staticDir": "static",
       "imageCache": ".cache/images"
     },
