@@ -273,8 +273,8 @@ class AdminDataSources {
     return utils.getConfig(gameId);
   }
 
-  saveConfig(gameId) {
-    return utils.saveConfig(gameId);
+  saveConfig({ config }) {
+    return utils.saveConfig(config);
   }
 
   async getGames() {
@@ -295,8 +295,8 @@ class AdminDataSources {
     };
   }
 
-  async getGame(gameId) {
-    const game = (await utils.getGame(gameId)).toObject();
+  async getGame({ id }) {
+    const game = (await utils.getGame(id)).toObject();
 
     game.rounds.forEach(round => {
       // eslint-disable-next-line no-param-reassign
@@ -316,7 +316,7 @@ class AdminDataSources {
     };
   }
 
-  async getImage(id) {
+  async getImage({ id }) {
     if (!id) {
       throw new Error("No image ID provided or it is invalid");
     }
@@ -332,7 +332,7 @@ class AdminDataSources {
     return image;
   }
 
-  async saveImage(image) {
+  async saveImage({ image }) {
     const { _id, incorrectTitles, ...restImage } = image;
 
     // Invalidate image in cache if editing image.
@@ -357,7 +357,7 @@ class AdminDataSources {
     return savedImage;
   }
 
-  async removeImage(id) {
+  async removeImage({ id }) {
     await models.Image.findByIdAndDelete(id);
     return id;
   }

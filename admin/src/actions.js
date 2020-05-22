@@ -125,15 +125,12 @@ export const saveImage = () => async (dispatch, getState) => {
   });
 
   try {
-    const updatedImage = await send("saveImage", image);
+    const updatedImage = await send("saveImage", { image });
 
     dispatch({
       type: SAVE_IMAGE_SUCCESS,
       payload: { ...updatedImage, isEdit }
     });
-
-    // Hack to update image
-    window.location.reload();
   } catch (e) {
     dispatch({
       type: SAVE_IMAGE_ERROR
@@ -148,7 +145,7 @@ export const saveConfig = () => async (dispatch, getState) => {
   });
 
   try {
-    const newConfig = await send("saveConfig", config);
+    const newConfig = await send("saveConfig", { config });
 
     dispatch({
       type: SAVE_CONFIG_SUCCESS,
@@ -199,7 +196,7 @@ export const getImage = id => async dispatch => {
 
   try {
     // DB request here
-    const image = await send("getImage", id);
+    const image = await send("getImage", { id });
 
     dispatch({
       type: LOAD_IMAGE_SUCCESS,
@@ -218,7 +215,7 @@ export const removeImage = id => async dispatch => {
   });
 
   try {
-    await send("removeImage", id);
+    await send("removeImage", { id });
 
     dispatch({
       type: REMOVE_IMAGE_SUCCESS
@@ -235,13 +232,13 @@ export const removeImage = id => async dispatch => {
   }
 };
 
-export const getGame = _id => async dispatch => {
+export const getGame = id => async dispatch => {
   dispatch({
     type: LOAD_GAME_START
   });
 
   try {
-    const game = await send("getGame", _id);
+    const game = await send("getGame", { id });
 
     dispatch({
       type: LOAD_GAME_SUCCESS,
