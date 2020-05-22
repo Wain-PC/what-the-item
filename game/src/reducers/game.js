@@ -9,7 +9,7 @@ import {
 } from "../constants/actions";
 
 const initialState = {
-  id: "5ec66810edd7163c16c4a117",
+  id: "",
   player: {
     name: "",
     contact: "",
