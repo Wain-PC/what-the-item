@@ -159,7 +159,6 @@ class DataSources {
       nextRound.started = true;
       nextRound.startedOn = new Date();
       nextRound.timeLeft = secondsInRound;
-      await game.save();
       // Get only required fields
       const { index, selection, image } = nextRound;
 
@@ -169,6 +168,10 @@ class DataSources {
         image: { image: image.url }
       };
     }
+    game.finished = true;
+    game.finishedOn = new Date();
+
+    await game.save();
     return null;
   }
 
@@ -211,13 +214,37 @@ class DataSources {
     };
   }
 
+  async isInTop({ gameId }) {
+    const config = await utils.getConfig();
+    const { topPlayers } = config.gameplay;
+    const { players } = await utils.getWinners({
+      limit: topPlayers,
+      sort: { "player.score": -1 }
+    });
+
+    const response = {
+      topPlayers,
+      isInTop: false,
+      place: -1
+    };
+
+    players.some((player, index) => {
+      if (player.gameId === gameId) {
+        response.isInTop = true;
+        response.place = index + 1;
+        return true;
+      }
+      return false;
+    });
+
+    return response;
+  }
+
   async saveName({ gameId, name, contact }) {
     const game = await utils.getGame(gameId);
 
     game.player.name = name;
     game.player.contact = contact;
-    game.finished = true;
-    game.finishedOn = new Date();
     await game.save();
     return game._id;
   }
@@ -225,6 +252,9 @@ class DataSources {
   async getTopPlayers() {
     const config = await utils.getConfig();
     return utils.getWinners({
+      where: {
+        name: { $ne: "" }
+      },
       limit: config.gameplay.topPlayers,
       sort: { "player.score": -1 }
     });
