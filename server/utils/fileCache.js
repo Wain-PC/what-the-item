@@ -6,7 +6,6 @@ const config = require("../config");
 const cache = new Map();
 
 const getURL = (id, extension, buffer) => {
-  const timestamp = new Date().getTime();
   if (!cache.has(id)) {
     const { baseURL, staticDir, imageCache } = config.system;
     const fileName = `${id.toString()}.${extension}`;
@@ -26,7 +25,7 @@ const getURL = (id, extension, buffer) => {
   const url = cache.get(id);
 
   if (url) {
-    return `${url}?t=${timestamp}`;
+    return url;
   }
 
   return undefined;
