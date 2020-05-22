@@ -163,6 +163,8 @@ class DataSources {
       nextRound.started = true;
       nextRound.startedOn = new Date();
       nextRound.timeLeft = secondsInRound;
+
+      await game.save();
       // Get only required fields
       const { index, selection, image } = nextRound;
 
