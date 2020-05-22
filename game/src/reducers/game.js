@@ -4,6 +4,7 @@ import {
   END_GAME,
   START_GAME_ROUND,
   END_GAME_ROUND,
+  LOAD_IS_IN_TOP_SUCCESS,
   CHANGE_WINNER_NICKNAME,
   CHANGE_WINNER_CONTACT
 } from "../constants/actions";
@@ -87,6 +88,17 @@ export default (state = initialState, action) => {
         player: {
           ...state.player,
           contact
+        }
+      };
+    }
+
+    case LOAD_IS_IN_TOP_SUCCESS: {
+      const { place } = action.payload;
+      return {
+        ...state,
+        player: {
+          ...state.player,
+          place
         }
       };
     }

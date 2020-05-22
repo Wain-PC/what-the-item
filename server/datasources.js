@@ -249,11 +249,9 @@ class DataSources {
   async saveName({ gameId, name, contact }) {
     const game = await utils.getGame(gameId);
 
-    if (!game.finished) {
-      game.player.name = name;
-      game.player.contact = contact;
-      await game.save();
-    }
+    game.player.name = name;
+    game.player.contact = contact;
+    await game.save();
 
     return game._id;
   }
