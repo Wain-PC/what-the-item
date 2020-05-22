@@ -154,6 +154,10 @@ class DataSources {
 
     const game = await utils.getGame(gameId);
 
+    if (game.finished) {
+      return null;
+    }
+
     const nextRound = game.rounds.find(({ started }) => !started);
     if (nextRound) {
       nextRound.started = true;
@@ -243,9 +247,12 @@ class DataSources {
   async saveName({ gameId, name, contact }) {
     const game = await utils.getGame(gameId);
 
-    game.player.name = name;
-    game.player.contact = contact;
-    await game.save();
+    if (!game.finished) {
+      game.player.name = name;
+      game.player.contact = contact;
+      await game.save();
+    }
+
     return game._id;
   }
 
