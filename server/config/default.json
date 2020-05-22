@@ -4,7 +4,7 @@
       "mode": "user",
       "baseURL": "/",
       "port": 3333,
-      "apiPath": "/api",
+      "apiPath": "/game",
       "staticDir": "static",
       "imageCache": ".cache/images"
     },
