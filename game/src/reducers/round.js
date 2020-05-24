@@ -9,6 +9,7 @@ const initialState = {
   image: {
     image: ""
   },
+  isCorrectAnswer: undefined,
   index: 0,
   selection: []
 };
@@ -29,6 +30,7 @@ export default (state = initialState, action) => {
       const { isCorrectAnswer, answerIndex } = action.payload;
       return {
         ...state,
+        isCorrectAnswer,
         selection: state.selection.map((item, index) => {
           if (answerIndex === index) {
             return {
@@ -37,7 +39,8 @@ export default (state = initialState, action) => {
             };
           }
           return {
-            ...item
+            ...item,
+            isCorrectAnswer: undefined
           };
         })
       };

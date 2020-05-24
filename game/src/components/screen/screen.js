@@ -11,7 +11,7 @@ const Screen = ({ round, imageURL, isCorrectAnswer }) => {
   return (
     <div className={styles.root}>
       <div className={styles.top}>Round-{round + 1}</div>
-      <div className={styles.imageNew} style={image} />
+      <div className={styles.image} style={image} />
       <div className={styles.thumb}>{thumb}</div>
     </div>
   );

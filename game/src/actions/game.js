@@ -1,6 +1,5 @@
 import * as db from "../utils/db";
 import {
-  SET_GAME_MESSAGE,
   SELECT_ROUND_ANSWER,
   LOAD_GAME_START,
   LOAD_GAME_SUCCESS,
@@ -17,26 +16,11 @@ import { runTimer, stopTimer } from "./timer";
 // eslint-disable-next-line import/no-cycle
 import { setScreenWinner } from "./screen";
 
-const clearMessage = () => ({
-  type: SET_GAME_MESSAGE
-});
-
-const setMessage = (message, seconds = 0) => async dispatch => {
-  dispatch({
-    type: SET_GAME_MESSAGE,
-    payload: message
-  });
-  if (seconds > 0) {
-    await dispatch(runTimer(seconds));
-    dispatch(clearMessage());
-  }
-};
-
 const selectAnswer = answerIndex => async (dispatch, getState) => {
   const {
     game: { id: gameId },
     config: {
-      timers: { roundEnd: roundEndTimer }
+      timers: { roundEnd }
     }
   } = getState();
 
@@ -66,8 +50,7 @@ const selectAnswer = answerIndex => async (dispatch, getState) => {
       }
     });
 
-    // Show correct/incorrect answer message for N seconds
-    await dispatch(setMessage({ answered: isCorrectAnswer }, roundEndTimer));
+    await dispatch(runTimer(roundEnd));
   } catch (e) {
     dispatch({
       type: END_ROUND_ERROR

@@ -57,6 +57,10 @@
 
 
 @media screen and (max-width: 1200px) {
+    .root {
+        padding: 10px;
+    }
+
     .image {
         width: 60px;
         height: 60px;

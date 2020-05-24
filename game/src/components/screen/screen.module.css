@@ -3,8 +3,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: stretch;
     width: 100%;
-    min-width: 400px;
+    height: 100%;
+    min-width: 300px;
     max-width: var(--media-xlarge);
 }
 
@@ -14,58 +16,20 @@
     color: var(--color-black);
     padding: 10px;
     background-color: var(--color-white);
+    flex: 0 0 auto;
 }
 
-.imageNew {
+.image {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
-    padding-bottom: 56.25%;
     background-color: var(--color-white);
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: contain;
     background-position: center center;
     border: 9px solid var(--color-white);
-}
-
-
-.image {
-    --side-border: 16px;
-    --top-border: 10px;
-    --width: 980px;
-    --height: 541px;
-    --top: 104px;
-    --left: 10px;
-
-
-    position: relative;
-    background-color: var(--color-white);
-    left: var(--left);
-    width: var(--width);
-    top: var(--top);
-    height: var(--height);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    /* DO NOT TRY THIS AT HOME! */
-    clip-path: polygon(
-            0 var(--top-border),
-            var(--side-border) var(--top-border),
-            var(--side-border) 0,
-            calc(var(--width) - var(--side-border)) 0,
-            calc(var(--width) - var(--side-border)) var(--side-border),
-            var(--width) var(--side-border),
-            var(--width) calc(var(--height) - var(--side-border)),
-            calc(var(--width) - var(--side-border)) calc(var(--height) - var(--side-border)),
-            calc(var(--width) - var(--side-border)) var(--height),
-            var(--side-border) var(--height),
-            var(--side-border) calc(var(--height) - var(--side-border)),
-            0 calc(var(--height) - var(--side-border)));
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    flex: 1 1 auto;
 }
 
 .thumb {

@@ -1,5 +1,4 @@
 import {
-  SET_GAME_MESSAGE,
   LOAD_GAME_SUCCESS,
   END_GAME,
   START_ROUND_SUCCESS,
@@ -17,8 +16,7 @@ const initialState = {
     score: 0,
     scoreAdd: 0,
     place: 0
-  },
-  message: {} // internal-only field
+  }
 };
 
 export default (state = initialState, action) => {
@@ -33,19 +31,6 @@ export default (state = initialState, action) => {
 
     case END_GAME: {
       return initialState;
-    }
-
-    case SET_GAME_MESSAGE: {
-      const message = action.payload;
-      return {
-        ...state,
-        message: message
-          ? {
-              ...state.message,
-              ...message
-            }
-          : initialState.message
-      };
     }
 
     case START_ROUND_SUCCESS: {

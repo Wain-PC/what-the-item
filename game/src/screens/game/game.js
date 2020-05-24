@@ -12,12 +12,10 @@ const Game = props => {
     round: {
       index: roundIndex,
       image: { image: imageURL },
-      selection
+      selection,
+      isCorrectAnswer
     },
-    game: {
-      message: { answered },
-      player
-    },
+    game: { player },
     timer: { timer },
     loading: { loading },
     selectAnswer
@@ -37,7 +35,7 @@ const Game = props => {
             round={roundIndex}
             timer={timer}
             imageURL={imageURL}
-            isCorrectAnswer={answered}
+            isCorrectAnswer={isCorrectAnswer}
           />
         </div>
         <div className={styles.right}>
@@ -50,17 +48,19 @@ const Game = props => {
   }
 
   if (selection.length && !loading) {
-    bottomRow = selection.map(({ title, isCorrectAnswer }, index) => {
-      return (
-        <Button
-          key={title}
-          index={index}
-          text={title}
-          correct={isCorrectAnswer}
-          onClick={() => selectAnswer(index)}
-        />
-      );
-    });
+    bottomRow = selection.map(
+      ({ title, isCorrectAnswer: isCorrect }, index) => {
+        return (
+          <Button
+            key={title}
+            index={index}
+            text={title}
+            correct={isCorrect}
+            onClick={() => selectAnswer(index)}
+          />
+        );
+      }
+    );
   } else if (imageURL && loading) {
     bottomRow = <Loader />;
   } else {
@@ -88,12 +88,10 @@ Game.propTypes = {
       PropTypes.shape({
         title: PropTypes.string.isRequired
       }).isRequired
-    ).isRequired
+    ).isRequired,
+    isCorrectAnswer: PropTypes.bool
   }).isRequired,
   game: PropTypes.shape({
-    message: PropTypes.shape({
-      answered: PropTypes.bool
-    }).isRequired,
     player: PropTypes.shape({
       name: PropTypes.string.isRequired,
       score: PropTypes.number.isRequired,
