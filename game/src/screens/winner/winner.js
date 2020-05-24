@@ -13,7 +13,9 @@ const Winner = props => {
 
   return (
     <div className={styles.root}>
-      <div className={styles.header} />
+      <div className={styles.header}>
+        <div className={styles.headerInner} />
+      </div>
       <div className={styles.scoreContainer}>
         <div className={styles.score}>{score}</div>
         <div className={styles.text}>Final Score</div>

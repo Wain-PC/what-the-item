@@ -5,6 +5,7 @@
     background-color: transparent;
     width: 100%;
     border: 9px solid var(--color-white);
+    box-sizing: border-box;
     text-transform: uppercase;
     padding: 5px;
 }

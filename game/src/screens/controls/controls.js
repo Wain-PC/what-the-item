@@ -23,6 +23,7 @@ const Controls = ({ timer: { timer }, loading: { loading } }) => {
 
   return (
     <div className={styles.root}>
+      <div className={styles.shapes} />
       {content}
       <div className={styles.heading}>
         Выбирайте правильный ответ быстрее, чтобы получить больше очков!

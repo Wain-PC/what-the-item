@@ -15,14 +15,16 @@
 
 .shapes {
     position: absolute;
-    width: 100%;
-    height: 95%;
+    align-self: center;
+    width: 90%;
+    height: 90%;
     background-image: url("../../images/Shapes.png");
     background-repeat: no-repeat;
     background-position: center center;
-    background-size: cover;
+    background-size: contain;
     animation:spin var(--animation) ease-in-out infinite;
     pointer-events: none;
+    overflow: hidden;
 }
 
 .title {
@@ -70,6 +72,7 @@
 }
 
 .button {
+    flex: 0 0 auto;
     display: flex;
     justify-content: center;
 }

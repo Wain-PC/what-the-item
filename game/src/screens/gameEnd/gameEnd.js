@@ -31,13 +31,19 @@ const GameEnd = props => {
   return (
     <div className={styles.root}>
       <div className={styles.column}>
-        <div className={styles.header}>
-          Ты занял {place} место в топ-{topPlayers}!
+        <div className={styles.inputs}>
+          <div className={styles.header}>
+            Ты занял {place} место в топ-{topPlayers}!
+          </div>
+          <div className={styles.nickNameHeader}>Имя</div>
+          <NickName value={name} onChange={changeName} disabled={loading} />
+          <div className={styles.nickNameHeader}>Почта или Telegram</div>
+          <NickName
+            value={contact}
+            onChange={changeContact}
+            disabled={loading}
+          />
         </div>
-        <div className={styles.nickNameHeader}>Введи имя</div>
-        <NickName value={name} onChange={changeName} disabled={loading} />
-        <div className={styles.nickNameHeader}>Твоя почта или Telegram</div>
-        <NickName value={contact} onChange={changeContact} disabled={loading} />
       </div>
       <div className={styles.button}>{content}</div>
     </div>

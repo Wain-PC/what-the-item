@@ -44,6 +44,7 @@ const Top = props => {
 
   return (
     <div className={styles.root}>
+      <div className={styles.shapes} />
       <div className={styles.title}>
         <a href="https://avito.tech" target="_blank" rel="noopener noreferrer">
           avito.tech

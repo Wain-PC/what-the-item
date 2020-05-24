@@ -24,7 +24,7 @@ const getIsInTop = () => async (dispatch, getState) => {
   try {
     const { isInTop, place } = await loadIsInTop({ gameId });
 
-    if (!isInTop) {
+    if (isInTop) {
       dispatch({
         type: LOAD_IS_IN_TOP_SUCCESS,
         payload: { place }

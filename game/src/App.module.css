@@ -39,7 +39,7 @@
 
 /*Media queries for font size*/
 
-@media screen and (max-width: 1600px) {
+@media screen and (max-width: 1600px), screen and (max-height: 1200px)  {
     :root {
         --font-size-xsmall: 18px;
         --font-size-small: 35px;
@@ -50,7 +50,7 @@
     }
 }
 
-@media screen and (max-width: 1400px) {
+@media screen and (max-width: 1400px), screen and (max-height: 1000px)  {
     :root {
         --font-size-xsmall: 16px;
         --font-size-small: 27px;
@@ -61,7 +61,7 @@
     }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: 1200px), screen and (max-height: 800px) {
     :root {
         --font-size-xsmall: 12px;
         --font-size-small: 20px;
