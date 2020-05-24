@@ -14,7 +14,9 @@
     --font-bk0010: BK0010, monospace;
     --font-contra: Contra, monospace;
 
-    --media-xlarge: 1200px;
+    --rotation-angle: 1deg;
+    --scale: 1.05;
+    --animation: 2s;
 }
 
 .app {

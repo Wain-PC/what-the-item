@@ -1,0 +1,40 @@
+.header {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    min-height: 100px;
+}
+
+.headerInner {
+    width: 80%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    animation:scale var(--animation) ease-in-out infinite;
+}
+
+.what-the-item {
+    background-image: url("../../images/text/what-the-item.svg");
+}
+
+.ready {
+    background-image: url("../../images/text/ready.svg");
+}
+
+.you_win {
+    background-image: url("../../images/text/you_win.svg");
+}
+
+
+@keyframes scale {
+    0% {
+        transform: scale(1, 1);
+    }
+    50% {
+        transform: scale(var(--scale), var(--scale));
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}

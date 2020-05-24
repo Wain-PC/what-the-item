@@ -1,32 +1,3 @@
-:root {
-    --rotation-angle: 1deg;
-    --scale: 1.05;
-    --animation: 2s;
-}
-
-.root {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-}
-
-.shapes {
-    position: absolute;
-    align-self: center;
-    width: 90%;
-    height: 90%;
-    background-image: url("../../images/Shapes.png");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: contain;
-    animation:spin var(--animation) ease-in-out infinite;
-    pointer-events: none;
-    overflow: hidden;
-}
-
 .title {
     text-align: center;
     z-index: 2;
@@ -36,23 +7,6 @@
 }
 
 .headerAnimation {
-    animation:scale var(--animation) ease-in-out infinite;
-}
-
-.header {
-    flex: 1 1 auto;
-    display: flex;
-    justify-content: center;
-    min-height: 100px;
-}
-
-.headerInner {
-    width: 80%;
-    height: 100%;
-    background-image: url("../../images/text/what-the-item.svg");
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: contain;
     animation:scale var(--animation) ease-in-out infinite;
 }
 
@@ -79,28 +33,4 @@
 
 .textWhite {
     color: var(--color-white);
-}
-
-@keyframes spin {
-    0% {
-        transform:rotate(calc(var(--rotation-angle) * -1));
-    }
-    50% {
-        transform:rotate(var(--rotation-angle));
-    }
-    100% {
-        transform:rotate(calc(var(--rotation-angle) * -1));
-    }
-}
-
-@keyframes scale {
-    0% {
-        transform: scale(1, 1);
-    }
-    50% {
-        transform: scale(var(--scale), var(--scale));
-    }
-    100% {
-        transform: scale(1, 1);
-    }
 }

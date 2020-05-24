@@ -5,6 +5,7 @@ import NickName from "../../components/nickName/nickName";
 import styles from "./gameEnd.module.css";
 import WideButton from "../../components/wideButton/wideButton";
 import Loader from "../../components/loader/loader";
+import Root from "../../components/root/root";
 
 const GameEnd = props => {
   const {
@@ -29,7 +30,7 @@ const GameEnd = props => {
   }
 
   return (
-    <div className={styles.root}>
+    <Root>
       <div className={styles.column}>
         <div className={styles.inputs}>
           <div className={styles.header}>
@@ -46,7 +47,7 @@ const GameEnd = props => {
         </div>
       </div>
       <div className={styles.button}>{content}</div>
-    </div>
+    </Root>
   );
 };
 

@@ -2,6 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./winner.module.css";
 import WideButton from "../../components/wideButton/wideButton";
+import Shapes from "../../components/shapes/shapes";
+import Header from "../../components/header/header";
+import Root from "../../components/root/root";
 
 const Winner = props => {
   const {
@@ -12,10 +15,9 @@ const Winner = props => {
   } = props;
 
   return (
-    <div className={styles.root}>
-      <div className={styles.header}>
-        <div className={styles.headerInner} />
-      </div>
+    <Root>
+      <Shapes />
+      <Header text="you_win" />
       <div className={styles.scoreContainer}>
         <div className={styles.score}>{score}</div>
         <div className={styles.text}>Final Score</div>
@@ -23,7 +25,7 @@ const Winner = props => {
           <WideButton onClick={setScreenGameEnd} text="ok" />
         </div>
       </div>
-    </div>
+    </Root>
   );
 };
 

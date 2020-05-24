@@ -1,0 +1,25 @@
+.shapes {
+    position: absolute;
+    align-self: center;
+    width: 90%;
+    height: 90%;
+    background-image: url("../../images/Shapes.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain;
+    animation:spin var(--animation) ease-in-out infinite;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+@keyframes spin {
+    0% {
+        transform:rotate(calc(var(--rotation-angle) * -1));
+    }
+    50% {
+        transform:rotate(var(--rotation-angle));
+    }
+    100% {
+        transform:rotate(calc(var(--rotation-angle) * -1));
+    }
+}

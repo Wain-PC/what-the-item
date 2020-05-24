@@ -5,6 +5,9 @@ import TopTable from "../../components/topTable/topTable";
 import WideButton from "../../components/wideButton/wideButton";
 import Loader from "../../components/loader/loader";
 import styles from "./top.module.css";
+import Shapes from "../../components/shapes/shapes";
+import Header from "../../components/header/header";
+import Root from "../../components/root/root";
 
 const Top = props => {
   const {
@@ -43,18 +46,16 @@ const Top = props => {
   }
 
   return (
-    <div className={styles.root}>
-      <div className={styles.shapes} />
+    <Root>
+      <Shapes />
       <div className={styles.title}>
         <a href="https://avito.tech" target="_blank" rel="noopener noreferrer">
           avito.tech
         </a>
       </div>
-      <div className={cn(styles.header)}>
-        <div className={styles.headerInner} />
-      </div>
+      <Header text="what-the-item" />
       {content}
-    </div>
+    </Root>
   );
 };
 

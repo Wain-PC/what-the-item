@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import styles from "./controls.module.css";
 import Button from "../../components/button/button";
 import Loader from "../../components/loader/loader";
+import Shapes from "../../components/shapes/shapes";
+import Root from "../../components/root/root";
 
 const Controls = ({ timer: { timer }, loading: { loading } }) => {
   let content;
@@ -22,11 +24,11 @@ const Controls = ({ timer: { timer }, loading: { loading } }) => {
   }
 
   return (
-    <div className={styles.root}>
-      <div className={styles.shapes} />
+    <Root>
+      <Shapes />
       {content}
       <div className={styles.heading}>
-        Выбирайте правильный ответ быстрее, чтобы получить больше очков!
+        Выбирай правильный ответ быстрее, чтобы получить больше очков!
         <br />
         Используй клавиши 1-4 или курсор!
       </div>
@@ -36,7 +38,7 @@ const Controls = ({ timer: { timer }, loading: { loading } }) => {
         <Button index={2} />
         <Button index={3} />
       </div>
-    </div>
+    </Root>
   );
 };
 
