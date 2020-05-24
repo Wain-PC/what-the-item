@@ -11,6 +11,8 @@
     grid-template-rows: 1fr;
     grid-template-areas:
             "first second third fourth";
+
+    font-size: var(--font-size-medium);
 }
 
 

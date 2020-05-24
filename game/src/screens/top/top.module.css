@@ -29,6 +29,8 @@
     text-align: center;
     z-index: 2;
     padding: 10px 0;
+    flex: 0 0 auto;
+    font-size: var(--font-size-ms);
 }
 
 .headerAnimation {
@@ -43,6 +45,7 @@
     background-position: center center;
     background-size: contain;
     animation:scale var(--animation) ease-in-out infinite;
+    flex: 0 0 auto;
 }
 
 .table {
@@ -50,12 +53,14 @@
     flex-direction: column;
     align-items: center;
     padding: 10px 0;
+    flex: 0 0 auto;
 }
 
 .text {
     font-family: var(--font-contra);
-    font-size: var(--font-size-xsmall);
+    font-size: var(--font-size-small);
     color: var(--color-red);
+    flex: 0 0 auto;
 }
 
 .textWhite {

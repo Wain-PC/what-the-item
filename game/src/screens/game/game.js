@@ -86,19 +86,15 @@ Game.propTypes = {
     }).isRequired,
     selection: PropTypes.arrayOf(
       PropTypes.shape({
-        title: PropTypes.string.isRequired,
-        selected: PropTypes.bool.isRequired,
-        selectedBy: PropTypes.number.isRequired
+        title: PropTypes.string.isRequired
       }).isRequired
-    ).isRequired,
-    answerIndex: PropTypes.number.isRequired
+    ).isRequired
   }).isRequired,
   game: PropTypes.shape({
     message: PropTypes.shape({
       answered: PropTypes.bool
     }).isRequired,
     player: PropTypes.shape({
-      index: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       score: PropTypes.number.isRequired,
       scoreAdd: PropTypes.number

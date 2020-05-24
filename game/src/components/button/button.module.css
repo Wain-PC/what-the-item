@@ -6,8 +6,40 @@
     text-align: center;
     flex-basis: 0;
     flex-grow: 1;
-    padding: 0 20px;
+    padding: 20px;
     cursor: pointer;
+}
+
+.image {
+    width: 90px;
+    height: 90px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.button_1 {
+    background-image: url("../../images/buttons/1.png");
+}
+
+.button_2 {
+    background-image: url("../../images/buttons/2.png");
+}
+
+.button_3 {
+    background-image: url("../../images/buttons/3.png");
+}
+
+.button_4 {
+    background-image: url("../../images/buttons/4.png");
+}
+
+.button_correct {
+    background-image: url("../../images/buttons/check.svg");
+}
+
+.button_incorrect {
+    background-image: url("../../images/buttons/cross.svg");
 }
 
 .text {
@@ -21,4 +53,12 @@
 
 .incorrect {
     color: var(--color-red);
+}
+
+
+@media screen and (max-width: 1200px) {
+    .image {
+        width: 60px;
+        height: 60px;
+    }
 }

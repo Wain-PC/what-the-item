@@ -25,3 +25,12 @@
 .count{
     font-family: var(--font-contra);
 }
+
+
+@media screen and (max-width: 1200px) {
+    .lines {
+        border-top: none;
+        border-bottom: none;
+        padding: 0;
+    }
+}

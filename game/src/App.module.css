@@ -6,29 +6,47 @@
 
     --font-size-xsmall: 24px;
     --font-size-small: 39px;
+    --font-size-ms: 47px;
     --font-size-medium: 78px;
     --font-size-large: 120px;
     --font-size-xlarge: 170px;
 
     --font-bk0010: BK0010, monospace;
     --font-contra: Contra, monospace;
+
+    --media-xlarge: 1200px;
 }
 
 .app {
     position: relative;
     width: 100%;
     height: 100%;
+    min-height: 740px;
     min-width: 512px;
-    min-height: 100%;
     background-image: url("./images/elements/Background.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
     color: #ffffff;
     text-transform: uppercase;
+
+    font-family: BK0010, monospace;
+    font-size: var(--font-size-ms);
 }
 
 .app a {
     color: #ffffff;
     text-decoration: none;
+}
+
+/*Media queries for font size*/
+
+@media screen and (max-width: 1200px) {
+    :root {
+        --font-size-xsmall: 12px;
+        --font-size-small: 20px;
+        --font-size-medium: 39px;
+        --font-size-large: 60px;
+        --font-size-xlarge: 85px;
+    }
 }

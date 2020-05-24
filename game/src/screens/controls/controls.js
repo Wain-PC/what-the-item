@@ -27,7 +27,7 @@ const Controls = ({ timer: { timer }, loading: { loading } }) => {
       <div className={styles.heading}>
         Выбирайте правильный ответ быстрее, чтобы получить больше очков!
         <br />
-        Выбор ответа клавишами 1-4 или курсором.
+        Используй клавиши 1-4 или курсор!
       </div>
       <div className={styles.buttons}>
         <Button index={0} />
