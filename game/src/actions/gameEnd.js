@@ -3,7 +3,10 @@ import {
   CHANGE_WINNER_CONTACT,
   LOAD_IS_IN_TOP_START,
   LOAD_IS_IN_TOP_SUCCESS,
-  LOAD_IS_IN_TOP_ERROR
+  LOAD_IS_IN_TOP_ERROR,
+  SAVE_NAME_START,
+  SAVE_NAME_SUCCESS,
+  SAVE_NAME_ERROR
 } from "../constants/actions";
 import { saveName as dbSaveName, isInTop as loadIsInTop } from "../utils/db";
 // eslint-disable-next-line import/no-cycle
@@ -21,7 +24,7 @@ const getIsInTop = () => async (dispatch, getState) => {
   try {
     const { isInTop, place } = await loadIsInTop({ gameId });
 
-    if (isInTop) {
+    if (!isInTop) {
       dispatch({
         type: LOAD_IS_IN_TOP_SUCCESS,
         payload: { place }
@@ -48,8 +51,22 @@ const saveName = () => async (dispatch, getState) => {
     }
   } = getState();
 
-  await dbSaveName({ gameId, name, contact });
-  await dispatch(setScreenTop());
+  dispatch({
+    type: SAVE_NAME_START
+  });
+
+  try {
+    await dbSaveName({ gameId, name, contact });
+    dispatch({
+      type: SAVE_NAME_SUCCESS
+    });
+
+    await dispatch(setScreenTop());
+  } catch (e) {
+    dispatch({
+      type: SAVE_NAME_ERROR
+    });
+  }
 };
 
 const changeName = name => async (dispatch, getState) => {

@@ -3,10 +3,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import styles from "./nickName.module.css";
 
-const NickName = ({ value, onChange }) => {
+const NickName = ({ value, onChange, disabled }) => {
   return (
     <input
       type="text"
+      disabled={disabled}
       className={styles.input}
       value={value}
       onChange={event => onChange(event.target.value)}
@@ -16,6 +17,7 @@ const NickName = ({ value, onChange }) => {
 
 NickName.propTypes = {
   value: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired
 };
 
