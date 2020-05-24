@@ -30,8 +30,6 @@
 
     font-family: BK0010, monospace;
     font-size: var(--font-size-ms);
-
-    overflow: hidden;
 }
 
 .app a {

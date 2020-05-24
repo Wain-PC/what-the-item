@@ -27,7 +27,9 @@ const Top = props => {
           <div className={styles.text}>TOP-{topPlayers}</div>
           <TopTable players={players} />
         </div>
-        <WideButton text="start" onClick={setScreenReady} />
+        <div className={styles.button}>
+          <WideButton text="start" onClick={setScreenReady} />
+        </div>
       </>
     );
   } else {
@@ -47,7 +49,9 @@ const Top = props => {
           avito.tech
         </a>
       </div>
-      <div className={cn(styles.header)} />
+      <div className={cn(styles.header)}>
+        <div className={styles.headerInner} />
+      </div>
       {content}
     </div>
   );
