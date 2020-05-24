@@ -5,6 +5,7 @@ import styles from "./game.module.css";
 import Button from "../../components/button/button";
 import Screen from "../../components/screen/screen";
 import Score from "../../components/score/score";
+import Loader from "../../components/loader/loader";
 
 const Game = props => {
   const {
@@ -18,24 +19,16 @@ const Game = props => {
       player
     },
     timer: { timer },
+    loading: { loading },
     selectAnswer
   } = props;
 
-  const buttons = selection.map(({ title, isCorrectAnswer }, index) => {
-    return (
-      <Button
-        key={title}
-        index={index}
-        text={title}
-        correct={isCorrectAnswer}
-        onClick={() => selectAnswer(index)}
-      />
-    );
-  });
+  let topRow;
+  let bottomRow;
 
-  return (
-    <div className={styles.grid}>
-      <div className={styles.row}>
+  if (imageURL) {
+    topRow = (
+      <>
         <div className={styles.left}>
           <Score text="Score" count={player.score} countAdd={player.scoreAdd} />
         </div>
@@ -50,8 +43,34 @@ const Game = props => {
         <div className={styles.right}>
           <Score text="Time" count={timer} />
         </div>
-      </div>
-      <div className={cn(styles.row, styles.footer)}>{buttons}</div>
+      </>
+    );
+  } else {
+    topRow = <Loader />;
+  }
+
+  if (selection.length && !loading) {
+    bottomRow = selection.map(({ title, isCorrectAnswer }, index) => {
+      return (
+        <Button
+          key={title}
+          index={index}
+          text={title}
+          correct={isCorrectAnswer}
+          onClick={() => selectAnswer(index)}
+        />
+      );
+    });
+  } else if (imageURL && loading) {
+    bottomRow = <Loader />;
+  } else {
+    bottomRow = null;
+  }
+
+  return (
+    <div className={styles.grid}>
+      <div className={styles.row}>{topRow}</div>
+      <div className={cn(styles.row, styles.footer)}>{bottomRow}</div>
     </div>
   );
 };
@@ -84,6 +103,9 @@ Game.propTypes = {
       score: PropTypes.number.isRequired,
       scoreAdd: PropTypes.number
     })
+  }).isRequired,
+  loading: PropTypes.shape({
+    loading: PropTypes.bool.isRequired
   }).isRequired,
   selectAnswer: PropTypes.func.isRequired
 };

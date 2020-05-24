@@ -2,8 +2,8 @@ import {
   SET_GAME_MESSAGE,
   LOAD_GAME_SUCCESS,
   END_GAME,
-  START_GAME_ROUND,
-  END_GAME_ROUND,
+  START_ROUND_SUCCESS,
+  END_ROUND_SUCCESS,
   LOAD_IS_IN_TOP_SUCCESS,
   CHANGE_WINNER_NICKNAME,
   CHANGE_WINNER_CONTACT
@@ -48,7 +48,7 @@ export default (state = initialState, action) => {
       };
     }
 
-    case START_GAME_ROUND: {
+    case START_ROUND_SUCCESS: {
       return {
         ...state,
         player: {
@@ -58,7 +58,7 @@ export default (state = initialState, action) => {
       };
     }
 
-    case END_GAME_ROUND: {
+    case END_ROUND_SUCCESS: {
       const { score, pointsReceived } = action.payload;
       return {
         ...state,

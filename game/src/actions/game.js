@@ -1,12 +1,16 @@
 import * as db from "../utils/db";
 import {
   SET_GAME_MESSAGE,
-  START_GAME_ROUND,
-  END_GAME_ROUND,
   SELECT_ROUND_ANSWER,
   LOAD_GAME_START,
   LOAD_GAME_SUCCESS,
-  LOAD_GAME_ERROR
+  LOAD_GAME_ERROR,
+  START_ROUND_START,
+  START_ROUND_SUCCESS,
+  START_ROUND_ERROR,
+  END_ROUND_START,
+  END_ROUND_ERROR,
+  END_ROUND_SUCCESS
 } from "../constants/actions";
 
 import { runTimer, stopTimer } from "./timer";
@@ -41,23 +45,34 @@ const selectAnswer = answerIndex => async (dispatch, getState) => {
     payload: answerIndex
   });
 
-  const { isCorrectAnswer, score, pointsReceived } = await db.endRound({
-    gameId,
-    answerIndex
-  });
-
   dispatch({
-    type: END_GAME_ROUND,
-    payload: {
-      score,
-      pointsReceived,
-      answerIndex,
-      isCorrectAnswer
-    }
+    type: END_ROUND_START,
+    payload: answerIndex
   });
 
-  // Show correct/incorrect answer message for N seconds
-  await dispatch(setMessage({ answered: isCorrectAnswer }, roundEndTimer));
+  try {
+    const { isCorrectAnswer, score, pointsReceived } = await db.endRound({
+      gameId,
+      answerIndex
+    });
+
+    dispatch({
+      type: END_ROUND_SUCCESS,
+      payload: {
+        score,
+        pointsReceived,
+        answerIndex,
+        isCorrectAnswer
+      }
+    });
+
+    // Show correct/incorrect answer message for N seconds
+    await dispatch(setMessage({ answered: isCorrectAnswer }, roundEndTimer));
+  } catch (e) {
+    dispatch({
+      type: END_ROUND_ERROR
+    });
+  }
 
   // eslint-disable-next-line no-use-before-define
   dispatch(startRound());
@@ -92,26 +107,36 @@ const startRound = () => async (dispatch, getState) => {
     }
   } = getState();
 
-  const round = await db.nextRound({ gameId });
+  dispatch({
+    type: START_ROUND_START
+  });
 
-  if (round) {
+  try {
+    const round = await db.nextRound({ gameId });
+
+    if (round) {
+      dispatch({
+        type: START_ROUND_SUCCESS,
+        payload: { round }
+      });
+
+      // Run the timer.
+      dispatch(
+        runTimer(roundTimer, async () => {
+          // If the timer is here, no one has answered correctly.
+          await dispatch(selectAnswer());
+        })
+      );
+
+      // If we've just had a final round, switch to 'final' screen
+    } else {
+      await dispatch(stopTimer());
+      await dispatch(setScreenWinner());
+    }
+  } catch (e) {
     dispatch({
-      type: START_GAME_ROUND,
-      payload: { round }
+      type: START_ROUND_ERROR
     });
-
-    // Run the timer.
-    dispatch(
-      runTimer(roundTimer, async () => {
-        // If the timer is here, no one has answered correctly.
-        await dispatch(selectAnswer());
-      })
-    );
-
-    // If we've just had a final round, switch to 'final' screen
-  } else {
-    await dispatch(stopTimer());
-    await dispatch(setScreenWinner());
   }
 };
 

@@ -1,7 +1,8 @@
 import {
-  START_GAME_ROUND,
+  START_ROUND_START,
+  START_ROUND_SUCCESS,
   END_GAME,
-  END_GAME_ROUND
+  END_ROUND_SUCCESS
 } from "../constants/actions";
 
 const initialState = {
@@ -14,14 +15,17 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case START_GAME_ROUND: {
+    case START_ROUND_START: {
+      return initialState;
+    }
+    case START_ROUND_SUCCESS: {
       const { round } = action.payload;
       return {
         ...state,
         ...round
       };
     }
-    case END_GAME_ROUND: {
+    case END_ROUND_SUCCESS: {
       const { isCorrectAnswer, answerIndex } = action.payload;
       return {
         ...state,
