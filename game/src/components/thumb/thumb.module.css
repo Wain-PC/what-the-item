@@ -2,6 +2,7 @@
     display: block;
     width: 214px;
     height: 214px;
+    background-size: contain;
 }
 
 .up {
@@ -10,4 +11,25 @@
 
 .down {
     background-image: url("../../images/elements/hand 2.png");
+}
+
+@media screen and (max-width: 1600px) {
+    .root {
+        width: 180px;
+        height: 180px;
+    }
+}
+
+@media screen and (max-width: 1400px) {
+    .root {
+        width: 140px;
+        height: 140px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .root {
+        width: 100px;
+        height: 100px;
+    }
 }
