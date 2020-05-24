@@ -72,13 +72,14 @@ const saveName = () => async (dispatch, getState) => {
 const changeName = name => async (dispatch, getState) => {
   const {
     config: {
-      gameplay: { winnerNickNameMaxLetters, winnerNickNameLetterTable }
+      gameplay: { winnerNickNameMaxLetters }
     }
   } = getState();
 
   if (
-    name.length <= winnerNickNameMaxLetters &&
-    name.indexOf(winnerNickNameLetterTable) === -1
+    !name.length ||
+    (name.length <= winnerNickNameMaxLetters &&
+      /^[A-Za-z0-9-_а-яА-Я]+$/.test(name))
   ) {
     dispatch({
       type: CHANGE_WINNER_NICKNAME,
@@ -90,13 +91,13 @@ const changeName = name => async (dispatch, getState) => {
 const changeContact = contact => async (dispatch, getState) => {
   const {
     config: {
-      gameplay: { contactMaxLetters, contactLetterTable }
+      gameplay: { contactMaxLetters }
     }
   } = getState();
 
   if (
-    contact.length <= contactMaxLetters &&
-    contact.indexOf(contactLetterTable) === -1
+    !contact.length ||
+    (contact.length <= contactMaxLetters && /[A-Za-z0-9-_.@]+$/.test(contact))
   ) {
     dispatch({
       type: CHANGE_WINNER_CONTACT,

@@ -5,8 +5,13 @@ import Button from "../../components/button/button";
 import Loader from "../../components/loader/loader";
 import Shapes from "../../components/shapes/shapes";
 import Root from "../../components/root/root";
+import WideButton from "../../components/wideButton/wideButton";
 
-const Controls = ({ timer: { timer }, loading: { loading } }) => {
+const Controls = ({
+  timer: { timer },
+  loading: { loading },
+  setScreenGame
+}) => {
   let content;
 
   if (loading) {
@@ -26,17 +31,22 @@ const Controls = ({ timer: { timer }, loading: { loading } }) => {
   return (
     <Root>
       <Shapes />
-      {content}
-      <div className={styles.heading}>
-        Выбирай правильный ответ быстрее, чтобы получить больше очков!
-        <br />
-        Используй клавиши 1-4 или курсор!
+      <div className={styles.centered}>
+        {content}
+        <div className={styles.heading}>
+          Выбирай правильный ответ быстрее, чтобы получить больше очков!
+          <br />
+          Используй клавиши 1-4 или курсор!
+        </div>
+        <div className={styles.buttons}>
+          <Button index={0} />
+          <Button index={1} />
+          <Button index={2} />
+          <Button index={3} />
+        </div>
       </div>
-      <div className={styles.buttons}>
-        <Button index={0} />
-        <Button index={1} />
-        <Button index={2} />
-        <Button index={3} />
+      <div className={styles.button}>
+        <WideButton text="start" onClick={setScreenGame} />
       </div>
     </Root>
   );
@@ -48,7 +58,8 @@ Controls.propTypes = {
   }).isRequired,
   loading: PropTypes.shape({
     loading: PropTypes.bool.isRequired
-  }).isRequired
+  }).isRequired,
+  setScreenGame: PropTypes.func.isRequired
 };
 
 export default Controls;

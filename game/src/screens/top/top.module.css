@@ -16,6 +16,7 @@
     align-items: center;
     padding: 10px 0;
     flex: 0 0 auto;
+    z-index: 2;
 }
 
 .text {
@@ -23,12 +24,14 @@
     font-size: var(--font-size-small);
     color: var(--color-red);
     flex: 0 0 auto;
+    z-index: 2;
 }
 
 .button {
     flex: 0 0 auto;
     display: flex;
     justify-content: center;
+    z-index: 2;
 }
 
 .textWhite {
