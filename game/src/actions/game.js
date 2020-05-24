@@ -4,7 +4,9 @@ import {
   START_GAME_ROUND,
   END_GAME_ROUND,
   SELECT_ROUND_ANSWER,
-  LOAD_GAME_SUCCESS
+  LOAD_GAME_START,
+  LOAD_GAME_SUCCESS,
+  LOAD_GAME_ERROR
 } from "../constants/actions";
 
 import { runTimer, stopTimer } from "./timer";
@@ -62,12 +64,23 @@ const selectAnswer = answerIndex => async (dispatch, getState) => {
 };
 
 const startGame = () => async dispatch => {
-  const gameId = await db.startGame();
-
   dispatch({
-    type: LOAD_GAME_SUCCESS,
-    payload: gameId
+    type: LOAD_GAME_START
   });
+  try {
+    const gameId = await db.startGame();
+
+    dispatch({
+      type: LOAD_GAME_SUCCESS,
+      payload: gameId
+    });
+  } catch (e) {
+    dispatch({
+      type: LOAD_GAME_ERROR
+    });
+
+    throw e;
+  }
 };
 
 const startRound = () => async (dispatch, getState) => {

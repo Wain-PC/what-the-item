@@ -32,7 +32,7 @@ const Top = props => {
     );
   } else {
     content = (
-      <div className={cn(styles.text, styles.textWhite)}>
+      <div className={cn(styles.text)}>
         Игра сейчас недоступна.
         <br />
         Пожалуйста, зайдите позднее.

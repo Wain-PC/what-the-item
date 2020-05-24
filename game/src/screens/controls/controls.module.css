@@ -24,3 +24,9 @@
     flex-direction: row;
     padding-top: 35px;
 }
+
+.text {
+    font-family: var(--font-contra);
+    font-size: var(--font-size-xsmall);
+    color: var(--color-red);
+}
