@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import cn from "classnames";
 import TopTable from "../../components/topTable/topTable";
 import WideButton from "../../components/wideButton/wideButton";
+import Loader from "../../components/loader/loader";
 import styles from "./top.module.css";
 
 const Top = props => {
@@ -11,8 +12,33 @@ const Top = props => {
     config: {
       gameplay: { topPlayers }
     },
+    loading: { loading },
     setScreenReady
   } = props;
+
+  let content;
+
+  if (loading) {
+    content = <Loader />;
+  } else if (topPlayers) {
+    content = (
+      <>
+        <div className={styles.table}>
+          <div className={styles.text}>TOP-{topPlayers}</div>
+          <TopTable players={players} />
+        </div>
+        <WideButton text="start" onClick={setScreenReady} />
+      </>
+    );
+  } else {
+    content = (
+      <div className={cn(styles.text, styles.textWhite)}>
+        Игра сейчас недоступна.
+        <br />
+        Пожалуйста, зайдите позднее.
+      </div>
+    );
+  }
 
   return (
     <div className={styles.root}>
@@ -22,11 +48,7 @@ const Top = props => {
         </a>
       </div>
       <div className={cn(styles.header)} />
-      <div className={styles.table}>
-        <div className={styles.text}>TOP-{topPlayers}</div>
-        <TopTable players={players} />
-      </div>
-      <WideButton text="start" onClick={setScreenReady} />
+      {content}
     </div>
   );
 };
@@ -45,6 +67,9 @@ Top.propTypes = {
     gameplay: PropTypes.shape({
       topPlayers: PropTypes.number
     }).isRequired
+  }).isRequired,
+  loading: PropTypes.shape({
+    loading: PropTypes.bool.isRequired
   }).isRequired,
   setScreenReady: PropTypes.func.isRequired
 };

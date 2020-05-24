@@ -7,7 +7,7 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 const Loader = ({ type }) => {
   return (
     <div className={styles.loader}>
-      <LoaderComponent type={type} />
+      <LoaderComponent type={type} width="100%" height="100%" color="#FF6163" />
     </div>
   );
 };

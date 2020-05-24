@@ -58,6 +58,10 @@
     color: var(--color-red);
 }
 
+.textWhite {
+    color: var(--color-white);
+}
+
 @keyframes spin {
     0% {
         transform:rotate(calc(var(--rotation-angle) * -1));

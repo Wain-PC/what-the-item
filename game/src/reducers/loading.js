@@ -1,16 +1,21 @@
-import { LOAD_CONFIG_SUCCESS } from "../constants/actions";
+import { LOADER_SHOW, LOADER_HIDE } from "../constants/actions";
 
 const initialState = {
-  loader: false
+  loading: false
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case LOAD_CONFIG_SUCCESS: {
-      const { config } = action.payload;
+    case LOADER_SHOW: {
       return {
         ...state,
-        ...config
+        loading: true
+      };
+    }
+    case LOADER_HIDE: {
+      return {
+        ...state,
+        loading: false
       };
     }
 
