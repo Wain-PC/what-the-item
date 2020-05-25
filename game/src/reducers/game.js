@@ -33,9 +33,9 @@ export default (state = initialState, action) => {
       return {
         ...initialState,
         player: {
+          ...initialState.player,
           name: state.player.name,
-          contact: state.player.contact,
-          ...initialState.player
+          contact: state.player.contact
         }
       };
     }
