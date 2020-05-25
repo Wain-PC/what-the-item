@@ -2,7 +2,7 @@
 // eslint-disable-next-line max-classes-per-file
 const arrayShuffle = require("array-shuffle");
 const models = require("./schema");
-const { flush, getURL } = require("./utils/fileCache");
+const { flush } = require("./utils/fileCache");
 
 class UtilsDataSources {
   async getGame(_id) {
@@ -10,7 +10,9 @@ class UtilsDataSources {
       throw new Error("No gameId provided or it is invalid");
     }
 
-    const game = await models.Game.findById({ _id }).exec();
+    const game = await models.Game.findById({ _id })
+      .populate("rounds.image")
+      .exec();
 
     if (!game) {
       throw new Error("No gameId provided or it is invalid");
@@ -42,11 +44,18 @@ class UtilsDataSources {
     });
   }
 
-  getNRandomImages(n) {
-    return models.Image.aggregate([
+  getNRandomImages(n, excludedIds = []) {
+    const pipeline = [
       { $match: { active: true } },
-      { $sample: { size: n } }
-    ]).exec();
+      { $sample: { size: n } },
+      { $project: { _id: true, title: true, incorrectTitles: true } }
+    ];
+
+    if (excludedIds.length) {
+      pipeline[0].$match._id = { $nin: excludedIds };
+    }
+
+    return models.Image.aggregate(pipeline).exec();
   }
 
   async getWinners(limit = 100, includeGameIds = false) {
@@ -110,37 +119,24 @@ class DataSources {
 
     // Get some more random images' titles
     const randomOptions = (
-      await models.Image.aggregate([
-        { $match: { active: true, _id: { $nin: ids } } },
-        { $sample: { size: numberOfMissingOptions } },
-        { $project: { title: true } }
-      ]).exec()
-    ).map(({ title }) => title);
+      await utils.getNRandomImages(numberOfMissingOptions, ids)
+    ).reduce((acc, { incorrectTitles }) => {
+      return acc.concat(incorrectTitles);
+    }, []);
 
-    const outputImages = images.map(image => {
-      const { incorrectTitles } = image;
-      const imagesToFill = answersToGet - incorrectTitles.length;
-      return {
-        ...image,
-        incorrectTitles: incorrectTitles.concat(
-          randomOptions.splice(0, imagesToFill)
+    const rounds = images.map((image, index) => {
+      const imagesToFill = answersToGet - image.incorrectTitles.length;
+      const selection = arrayShuffle(
+        image.incorrectTitles.concat(
+          randomOptions.splice(0, imagesToFill),
+          image.title
         )
-      };
-    });
-
-    const rounds = new Array(roundsInGame).fill(null).map((_, index) => {
-      const image = outputImages[index];
-      image.url = getURL(
-        image._id.toString(),
-        image.extension,
-        image.image.buffer
       );
-      const answerIndex = Math.floor(Math.random() * answersInRound);
-      const selection = arrayShuffle(image.incorrectTitles);
-      selection.splice(answerIndex, 0, image.title);
+      const answerIndex = selection.indexOf(image.title);
+
       return {
         index,
-        image,
+        image: image._id, // Will use .populate() on that image later on
         selection: selection.map(title => ({ title })),
         answerIndex
       };
@@ -171,7 +167,7 @@ class DataSources {
     }
 
     const nextRound = game.rounds.find(({ started }) => !started);
-    if (nextRound) {
+    if (nextRound && nextRound.image) {
       nextRound.started = true;
       nextRound.startedOn = new Date();
       nextRound.timeLeft = secondsInRound;
@@ -182,8 +178,10 @@ class DataSources {
 
       return {
         index,
-        selection: selection.map(({ title }) => ({ title })),
-        image: { image: image.url }
+        selection,
+        image: {
+          image: image && image.url
+        }
       };
     }
     game.finished = true;

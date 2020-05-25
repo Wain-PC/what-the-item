@@ -52,7 +52,7 @@ const roundSchema = new Schema(
   {
     _id: Schema.Types.ObjectId,
     index: Number,
-    image: imageSchema,
+    image: { type: Schema.Types.ObjectId, ref: "Image" },
     selection: [selectionSchema],
     started: { type: Boolean, default: false },
     finished: { type: Boolean, default: false },
@@ -130,9 +130,9 @@ gameSchema.index({ "player.score": -1, _id: 1 });
 gameSchema.index({ "player.score": -1, _id: 1, contact: 1 });
 
 const models = {
-  Game: mongoose.model("Game", gameSchema),
   Config: mongoose.model("Config", configSchema),
-  Image: mongoose.model("Image", imageSchema)
+  Image: mongoose.model("Image", imageSchema),
+  Game: mongoose.model("Game", gameSchema)
 };
 
 module.exports = models;
