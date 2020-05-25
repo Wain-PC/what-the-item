@@ -1,23 +1,22 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { Table, Label, Header } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Table, Header } from "semantic-ui-react";
+import LinkComponent from "../components/link/link";
 
 const TopPlayers = ({ players, total, loadTopPlayers }) => {
   useEffect(() => {
     loadTopPlayers();
   }, []);
 
-  const tableRows = players.map(({ gameId, name, score }) => {
+  const tableRows = players.map(({ gameIds, name, score, contact }) => {
+    const games = gameIds.map(gameId => <LinkComponent id={gameId} />);
+
     return (
-      <Table.Row key={gameId}>
+      <Table.Row key={name + score}>
         <Table.Cell>{score}</Table.Cell>
         <Table.Cell>{name}</Table.Cell>
-        <Table.Cell>
-          <Link to={`/game/${gameId}`}>
-            <Label>{gameId}</Label>
-          </Link>
-        </Table.Cell>
+        <Table.Cell>{contact}</Table.Cell>
+        <Table.Cell>{games}</Table.Cell>
       </Table.Row>
     );
   });
@@ -28,9 +27,10 @@ const TopPlayers = ({ players, total, loadTopPlayers }) => {
       <Table celled>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Счёт</Table.HeaderCell>
+            <Table.HeaderCell>Лучший счёт</Table.HeaderCell>
             <Table.HeaderCell>Имя</Table.HeaderCell>
-            <Table.HeaderCell>Игра</Table.HeaderCell>
+            <Table.HeaderCell>Контакт</Table.HeaderCell>
+            <Table.HeaderCell>Игры</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -38,8 +38,10 @@ const TopPlayers = ({ players, total, loadTopPlayers }) => {
 
         <Table.Footer>
           <Table.Row>
-            <Table.HeaderCell colSpan="3">
-              <strong>Total: {total}</strong>
+            <Table.HeaderCell colSpan="4">
+              <strong>
+                Всего уникальных игроков (среди завершённых игр): {total}
+              </strong>
             </Table.HeaderCell>
           </Table.Row>
         </Table.Footer>
@@ -51,9 +53,10 @@ const TopPlayers = ({ players, total, loadTopPlayers }) => {
 TopPlayers.propTypes = {
   players: PropTypes.arrayOf(
     PropTypes.shape({
-      gameId: PropTypes.string.isRequired,
+      gameIds: PropTypes.arrayOf(PropTypes.string).isRequired,
       name: PropTypes.string.isRequired,
-      score: PropTypes.number.isRequired
+      score: PropTypes.number.isRequired,
+      contact: PropTypes.number.isRequired
     })
   ).isRequired,
   total: PropTypes.number.isRequired,

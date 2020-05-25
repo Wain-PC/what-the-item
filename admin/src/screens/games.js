@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Table, Label, Header } from "semantic-ui-react";
-import { Link } from "react-router-dom";
 import Timestamp from "react-timestamp";
+import LinkComponent from "../components/link/link";
 
 const Games = ({ games, total, finished: finishedCount, loadGames }) => {
   useEffect(() => {
@@ -14,9 +14,7 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
       return (
         <Table.Row key={_id}>
           <Table.Cell>
-            <Link to={`/game/${_id}`}>
-              <Label>{_id}</Label>
-            </Link>
+            <LinkComponent id={_id} />
           </Table.Cell>
           <Table.Cell>
             <Label

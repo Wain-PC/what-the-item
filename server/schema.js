@@ -38,6 +38,8 @@ const imageSchema = new Schema(
   }
 );
 
+imageSchema.index({ title: 1 });
+
 imageSchema.virtual("url").get(function getUrl() {
   return getURL(this._id.toString(), this.extension, this.image);
 });
@@ -122,6 +124,10 @@ const gameSchema = new Schema(
     toJSON: { getters: true, virtuals: true }
   }
 );
+
+gameSchema.index({ "player.score": -1 });
+gameSchema.index({ "player.score": -1, _id: 1 });
+gameSchema.index({ "player.score": -1, _id: 1, contact: 1 });
 
 const models = {
   Game: mongoose.model("Game", gameSchema),

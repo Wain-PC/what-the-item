@@ -49,22 +49,28 @@ class UtilsDataSources {
     ]).exec();
   }
 
-  async getWinners({ where = {}, limit = 100, sort = {} }) {
-    const documentsModel = models.Game.find()
-      .where({ finished: true, ...where })
-      .sort({ ...sort, _id: 1 });
-
-    const documents = await documentsModel.limit(limit).exec();
-    const total = await documentsModel.countDocuments().exec();
+  async getWinners(limit = 100) {
+    const docs = await models.Game.aggregate([
+      { $match: { finished: true } },
+      {
+        $group: {
+          _id: { name: "$player.name", contact: "$player.contact" },
+          score: { $max: "$player.score" }
+        }
+      },
+      { $addFields: { name: "$_id.name" } },
+      {
+        $project: {
+          _id: 0
+        }
+      },
+      { $sort: { score: -1 } },
+      { $limit: limit }
+    ]);
 
     return {
-      players: documents.map(doc => ({
-        gameId: doc._id.toString(),
-        _id: doc.player._id,
-        name: doc.player.name,
-        score: doc.player.score
-      })),
-      total
+      players: docs,
+      total: docs.length
     };
   }
 }
@@ -223,10 +229,7 @@ class DataSources {
   async isInTop({ gameId }) {
     const config = await utils.getConfig();
     const { topPlayers } = config.gameplay;
-    const { players } = await utils.getWinners({
-      limit: topPlayers,
-      sort: { "player.score": -1 }
-    });
+    const { players } = await utils.getWinners(topPlayers);
 
     const response = {
       topPlayers,
@@ -258,13 +261,9 @@ class DataSources {
 
   async getTopPlayers() {
     const config = await utils.getConfig();
-    return utils.getWinners({
-      where: {
-        name: { $ne: "" }
-      },
-      limit: config.gameplay.topPlayers,
-      sort: { "player.score": -1 }
-    });
+    const { topPlayers } = config.gameplay;
+
+    return utils.getWinners(topPlayers);
   }
 }
 
@@ -307,13 +306,24 @@ class AdminDataSources {
   }
 
   async getAllPlayers() {
-    const { players, total } = await utils.getWinners({
-      sort: { "player.score": -1 }
-    });
-    return {
-      players,
-      total
-    };
+    const docs = await models.Game.aggregate([
+      { $match: { finished: true } },
+      {
+        $group: {
+          _id: { name: "$player.name", contact: "$player.contact" },
+          score: { $max: "$player.score" },
+          gameIds: { $addToSet: "$_id" }
+        }
+      },
+      { $addFields: { name: "$_id.name", contact: "$_id.contact" } },
+      {
+        $project: {
+          _id: 0
+        }
+      },
+      { $sort: { score: -1 } }
+    ]);
+    return { players: docs, total: docs.length };
   }
 
   async getImage({ id }) {
