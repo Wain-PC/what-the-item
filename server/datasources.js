@@ -199,6 +199,11 @@ class DataSources {
     const finishedRound = game.rounds.find(
       ({ started, finished }) => started && !finished
     );
+
+    if (!finishedRound) {
+      throw new Error("No valid round found");
+    }
+
     finishedRound.finished = true;
     finishedRound.finishedOn = new Date();
     finishedRound.userAnswered = answerIndex;
