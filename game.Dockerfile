@@ -7,7 +7,8 @@ COPY ./game/package.json /build
 COPY ./game/package-lock.json /build
 WORKDIR /build
 RUN npm ci
-COPY ./game /build
+COPY ./game/public /build/public
+COPY ./game/src /build/src
 ENV GENERATE_SOURCEMAP false
 RUN npm run build
 

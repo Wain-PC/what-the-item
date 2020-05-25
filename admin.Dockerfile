@@ -7,7 +7,8 @@ COPY ./admin/package.json /build
 COPY ./admin/package-lock.json /build
 WORKDIR /build
 RUN npm ci
-COPY ./admin /build
+COPY ./admin/public /build/public
+COPY ./admin/src /build/src
 ENV GENERATE_SOURCEMAP false
 RUN npm run build
 
