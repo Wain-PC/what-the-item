@@ -49,16 +49,22 @@ class UtilsDataSources {
     ]).exec();
   }
 
-  async getWinners(limit = 100) {
+  async getWinners(limit = 100, includeGameIds = false) {
     const docs = await models.Game.aggregate([
       { $match: { finished: true } },
       {
         $group: {
           _id: { name: "$player.name", contact: "$player.contact" },
-          score: { $max: "$player.score" }
+          score: { $max: "$player.score" },
+          gameIds: { $addToSet: "$_id" }
         }
       },
-      { $addFields: { name: "$_id.name" } },
+      {
+        $addFields: {
+          name: "$_id.name",
+          gameIds: includeGameIds ? "$gameIds" : 0
+        }
+      },
       {
         $project: {
           _id: 0
@@ -229,7 +235,7 @@ class DataSources {
   async isInTop({ gameId }) {
     const config = await utils.getConfig();
     const { topPlayers } = config.gameplay;
-    const { players } = await utils.getWinners(topPlayers);
+    const { players } = await utils.getWinners(topPlayers, true);
 
     const response = {
       topPlayers,
@@ -238,7 +244,11 @@ class DataSources {
     };
 
     players.some((player, index) => {
-      if (player.gameId === gameId) {
+      if (
+        player.gameIds &&
+        player.gameIds.length &&
+        player.gameIds.find(id => id.toString() === gameId)
+      ) {
         response.isInTop = true;
         response.place = index + 1;
         return true;
@@ -269,7 +279,7 @@ class DataSources {
     const config = await utils.getConfig();
     const { topPlayers } = config.gameplay;
 
-    return utils.getWinners(topPlayers);
+    return utils.getWinners(topPlayers, false);
   }
 }
 
@@ -311,25 +321,8 @@ class AdminDataSources {
     return game;
   }
 
-  async getAllPlayers() {
-    const docs = await models.Game.aggregate([
-      { $match: { finished: true } },
-      {
-        $group: {
-          _id: { name: "$player.name", contact: "$player.contact" },
-          score: { $max: "$player.score" },
-          gameIds: { $addToSet: "$_id" }
-        }
-      },
-      { $addFields: { name: "$_id.name", contact: "$_id.contact" } },
-      {
-        $project: {
-          _id: 0
-        }
-      },
-      { $sort: { score: -1 } }
-    ]);
-    return { players: docs, total: docs.length };
+  getAllPlayers() {
+    return utils.getWinners(100, true);
   }
 
   async getImage({ id }) {
