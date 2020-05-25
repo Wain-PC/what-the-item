@@ -30,7 +30,14 @@ export default (state = initialState, action) => {
     }
 
     case END_GAME: {
-      return initialState;
+      return {
+        ...initialState,
+        player: {
+          name: state.player.name,
+          contact: state.player.contact,
+          ...initialState.player
+        }
+      };
     }
 
     case START_ROUND_SUCCESS: {
