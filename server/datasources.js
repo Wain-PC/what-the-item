@@ -316,8 +316,10 @@ class AdminDataSources {
     const game = (await utils.getGame(id)).toObject();
 
     game.rounds.forEach(round => {
-      // eslint-disable-next-line no-param-reassign
-      delete round.image.image;
+      if (round.image) {
+        // eslint-disable-next-line no-param-reassign
+        delete round.image.image;
+      }
     });
 
     return game;
