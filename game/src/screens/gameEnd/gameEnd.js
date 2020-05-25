@@ -46,6 +46,9 @@ const GameEnd = props => {
             onChange={changeContact}
             disabled={loading}
           />
+          <div className={styles.text}>
+            В топе будет только твой лучший счёт!
+          </div>
         </div>
       </div>
       <div className={styles.button}>{content}</div>

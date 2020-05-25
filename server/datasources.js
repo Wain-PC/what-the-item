@@ -208,9 +208,11 @@ class DataSources {
     finishedRound.finishedOn = new Date();
     finishedRound.userAnswered = answerIndex;
 
-    const timeLeft =
+    const timeLeftExact =
       game.config.timers.round -
-      Math.round((finishedRound.finishedOn - finishedRound.startedOn) / 1000);
+      (finishedRound.finishedOn - finishedRound.startedOn) / 1000;
+
+    const timeLeft = Math.round(timeLeftExact);
     const isCorrectAnswer = answerIndex === finishedRound.answerIndex;
 
     finishedRound.timeLeft = timeLeft;
@@ -220,7 +222,7 @@ class DataSources {
 
     if (isCorrectAnswer && timeLeft) {
       pointsReceived = Math.round(
-        (game.config.gameplay.maxPointsPerRound * timeLeft) /
+        (game.config.gameplay.maxPointsPerRound * timeLeftExact) /
           game.config.timers.round
       );
     }
@@ -250,12 +252,7 @@ class DataSources {
     };
 
     players.some((player, index) => {
-      if (
-        player.score === game.player.score &&
-        player.gameIds &&
-        player.gameIds.length &&
-        player.gameIds.find(id => id.toString() === gameId)
-      ) {
+      if (game.player.score > player.score) {
         response.isInTop = true;
         response.place = index + 1;
         return true;

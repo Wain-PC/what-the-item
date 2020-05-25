@@ -16,6 +16,7 @@
 }
 
 .text {
+    padding: 20px;
     font-family: var(--font-contra);
     font-size: var(--font-size-small);
     color: var(--color-red);
