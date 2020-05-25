@@ -240,6 +240,7 @@ class DataSources {
   async isInTop({ gameId }) {
     const config = await utils.getConfig();
     const { topPlayers } = config.gameplay;
+    const game = await utils.getGame(gameId);
     const { players } = await utils.getWinners(topPlayers, true);
 
     const response = {
@@ -250,6 +251,7 @@ class DataSources {
 
     players.some((player, index) => {
       if (
+        player.score === game.player.score &&
         player.gameIds &&
         player.gameIds.length &&
         player.gameIds.find(id => id.toString() === gameId)
