@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Table, Label, Header } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import Timestamp from "react-timestamp";
 
 const Games = ({ games, total, finished: finishedCount, loadGames }) => {
   useEffect(() => {
@@ -23,8 +24,12 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
               content={finished ? "Закончена" : "Не закончена"}
             />
           </Table.Cell>
-          <Table.Cell>{startedOn}</Table.Cell>
-          <Table.Cell>{finishedOn}</Table.Cell>
+          <Table.Cell>
+            <Timestamp date={startedOn} />
+          </Table.Cell>
+          <Table.Cell>
+            <Timestamp date={finishedOn} />
+          </Table.Cell>
           <Table.Cell>{player && player.score}</Table.Cell>
         </Table.Row>
       );
