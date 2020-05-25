@@ -22,7 +22,11 @@ const Top = props => {
   let content;
 
   if (loading) {
-    content = <Loader />;
+    content = (
+      <div className={styles.button}>
+        <Loader />
+      </div>
+    );
   } else if (topPlayers) {
     content = (
       <>
@@ -37,10 +41,12 @@ const Top = props => {
     );
   } else {
     content = (
-      <div className={cn(styles.text)}>
-        Игра сейчас недоступна.
-        <br />
-        Пожалуйста, зайдите позднее.
+      <div className={styles.button}>
+        <div className={cn(styles.text)}>
+          Игра сейчас недоступна.
+          <br />
+          Пожалуйста, зайдите позднее.
+        </div>
       </div>
     );
   }

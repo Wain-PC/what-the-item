@@ -40,5 +40,5 @@
     display: flex;
     flex: 0 0 auto;
     justify-content: center;
-    padding-top: 80px;
+    padding: 80px 20px 20px 20px;
 }
