@@ -11,10 +11,8 @@ const Game = ({
     params: { id }
   },
   config,
+  player,
   finished,
-  startedOn,
-  finishedOn,
-  players,
   rounds,
   getGame
 }) => {
@@ -29,29 +27,33 @@ const Game = ({
     />
   );
 
-  const startedOnComponent = startedOn && (
-    <Form.Input label="Время начала" value={startedOn} />
-  );
-  const finishedOnComponent = finishedOn && (
-    <Form.Input label="Время завершения" value={finishedOn} />
+  const playerName = finished && (
+    <Form.Input label="Имя игрока" value={player.name} />
   );
 
-  const roundsArray = rounds.map(round => (
-    <Round round={round} players={players} />
-  ));
+  const playerContact = finished && (
+    <Form.Input label="Контакт игрока" value={player.contact} />
+  );
+
+  const playerScore = finished && (
+    <Form.Input label="Счёт" value={player.score} />
+  );
+
+  const roundsArray = rounds.map(round => <Round round={round} />);
 
   return (
     <>
       <Header as="h1" content={`Игра ${id}`} />
       {finishedLabel}
       <Form>
-        {startedOnComponent}
-        {finishedOnComponent}
+        {playerName}
+        {playerContact}
+        {playerScore}
       </Form>
-      <Header as="h1" content="Конфигурация игры" />
-      {config && <Config config={config} />}
       <Header as="h1" content="Раунды" />
       {roundsArray}
+      <Header as="h1" content="Конфигурация этой игры" />
+      {config && <Config config={config} />}
     </>
   );
 };
@@ -61,6 +63,11 @@ Game.propTypes = {
     params: PropTypes.shape({
       id: PropTypes.string.isRequired
     }).isRequired
+  }).isRequired,
+  player: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    contact: PropTypes.string.isRequired,
+    score: PropTypes.number.isRequired
   }).isRequired,
   config: PropTypes.shape({
     gameplay: PropTypes.shape({
@@ -72,14 +79,6 @@ Game.propTypes = {
     })
   }).isRequired,
   finished: PropTypes.bool.isRequired,
-  startedOn: PropTypes.string.isRequired,
-  finishedOn: PropTypes.string,
-  players: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      score: PropTypes.string.isRequired
-    }).isRequired
-  ).isRequired,
   rounds: PropTypes.arrayOf(
     PropTypes.shape({
       index: PropTypes.number.isRequired,
@@ -99,10 +98,6 @@ Game.propTypes = {
     })
   ).isRequired,
   getGame: PropTypes.func.isRequired
-};
-
-Game.defaultProps = {
-  finishedOn: ""
 };
 
 export default Game;

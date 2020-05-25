@@ -11,13 +11,13 @@ const TopPlayers = ({ players, total, loadTopPlayers }) => {
   const tableRows = players.map(({ gameId, name, score }) => {
     return (
       <Table.Row key={gameId}>
+        <Table.Cell>{score}</Table.Cell>
+        <Table.Cell>{name}</Table.Cell>
         <Table.Cell>
           <Link to={`/game/${gameId}`}>
             <Label>{gameId}</Label>
           </Link>
         </Table.Cell>
-        <Table.Cell>{name}</Table.Cell>
-        <Table.Cell>{score}</Table.Cell>
       </Table.Row>
     );
   });
@@ -28,9 +28,9 @@ const TopPlayers = ({ players, total, loadTopPlayers }) => {
       <Table celled>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Game Id</Table.HeaderCell>
-            <Table.HeaderCell>Name</Table.HeaderCell>
-            <Table.HeaderCell>Score</Table.HeaderCell>
+            <Table.HeaderCell>Счёт</Table.HeaderCell>
+            <Table.HeaderCell>Имя</Table.HeaderCell>
+            <Table.HeaderCell>Игра</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 

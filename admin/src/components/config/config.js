@@ -107,8 +107,15 @@ const Config = ({ config: { timers, gameplay }, onChange }) => {
         <Row
           type="gameplay"
           id="winnerNickNameMaxLetters"
-          title="Макс. букв в никнейме"
+          title="Макс. символов в никнейме"
           value={gameplay.winnerNickNameMaxLetters}
+          onChange={onChange}
+        />
+        <Row
+          type="gameplay"
+          id="winnerNickNameMaxLetters"
+          title="Макс. символов в почте/контакте"
+          value={gameplay.contactMaxLetters}
           onChange={onChange}
         />
         <Row
@@ -137,7 +144,7 @@ Config.propTypes = {
       roundsInGame: PropTypes.number,
       maxPointsPerRound: PropTypes.number,
       winnerNickNameMaxLetters: PropTypes.number,
-      winnerNickNameLetterTable: PropTypes.string,
+      contactMaxLetters: PropTypes.number,
       topPlayers: PropTypes.number
     }).isRequired
   }).isRequired,
