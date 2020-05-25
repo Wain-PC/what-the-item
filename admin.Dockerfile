@@ -8,6 +8,7 @@ COPY ./admin/package-lock.json /build
 WORKDIR /build
 RUN npm ci
 COPY ./admin /build
+ENV GENERATE_SOURCEMAP false
 RUN npm run build
 
 # Server installation

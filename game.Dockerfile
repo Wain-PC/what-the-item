@@ -8,6 +8,7 @@ COPY ./game/package-lock.json /build
 WORKDIR /build
 RUN npm ci
 COPY ./game /build
+ENV GENERATE_SOURCEMAP false
 RUN npm run build
 
 # Server installation
