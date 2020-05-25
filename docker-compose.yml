@@ -11,6 +11,7 @@ services:
       - db
     environment:
       MONGODB_URI: "mongodb://db:27017/what-the-item"
+    restart: always
   admin:
     build:
       context: .
@@ -22,6 +23,7 @@ services:
       - db
     environment:
       MONGODB_URI: "mongodb://db:27017/what-the-item"
+    restart: always
   db:
     image: mongo
     container_name: what-the-item-db
@@ -29,5 +31,6 @@ services:
       - 27017:27017
     volumes:
       - ./db:/data/db
+    restart: always
 volumes:
   db:
