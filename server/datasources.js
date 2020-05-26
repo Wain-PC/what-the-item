@@ -76,7 +76,7 @@ class UtilsDataSources {
           _id: { contact: "$player.contact" },
           name: { $last: "$player.name" },
           score: { $max: "$player.score" },
-          gameIds: { $addToSet: "$_id" }
+          gameIds: { $push: "$_id" }
         }
       },
       {

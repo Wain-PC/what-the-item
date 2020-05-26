@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import Timestamp from "react-timestamp";
 
-import { Label, Header, Form } from "semantic-ui-react";
+import { Header, Form } from "semantic-ui-react";
 
 import Config from "../components/config/config";
 import Round from "../components/round/round";
@@ -12,6 +13,7 @@ const Game = ({
   },
   config,
   player,
+  startedOn,
   finished,
   rounds,
   getGame
@@ -19,13 +21,6 @@ const Game = ({
   useEffect(() => {
     getGame(id);
   }, []);
-
-  const finishedLabel = (
-    <Label
-      color={finished ? "green" : "red"}
-      content={finished ? "Завершена" : "Не завершена"}
-    />
-  );
 
   const playerName = finished && (
     <Form.Input label="Имя игрока" value={player.name} />
@@ -43,8 +38,10 @@ const Game = ({
 
   return (
     <>
-      <Header as="h1" content={`Игра ${id}`} />
-      {finishedLabel}
+      <Header as="h1">
+        <Timestamp time={startedOn} options={{ twentyFourHour: true }} />
+      </Header>
+
       <Form>
         {playerName}
         {playerContact}
@@ -79,6 +76,7 @@ Game.propTypes = {
     })
   }).isRequired,
   finished: PropTypes.bool.isRequired,
+  startedOn: PropTypes.bool.isRequired,
   rounds: PropTypes.arrayOf(
     PropTypes.shape({
       index: PropTypes.number.isRequired,

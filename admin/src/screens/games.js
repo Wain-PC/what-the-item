@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
-import { Table, Label, Header } from "semantic-ui-react";
+import { Table, Header } from "semantic-ui-react";
 import Timestamp from "react-timestamp";
 import LinkComponent from "../components/link/link";
 
@@ -9,30 +9,21 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
     loadGames();
   }, []);
 
-  const tableRows = games.map(
-    ({ _id, finished, startedOn, finishedOn, player }) => {
-      return (
-        <Table.Row key={_id}>
-          <Table.Cell>
-            <LinkComponent id={_id} />
-          </Table.Cell>
-          <Table.Cell>
-            <Label
-              color={finished ? "green" : "red"}
-              content={finished ? "Закончена" : "Не закончена"}
-            />
-          </Table.Cell>
-          <Table.Cell>
-            <Timestamp date={startedOn} />
-          </Table.Cell>
-          <Table.Cell>
-            <Timestamp date={finishedOn} />
-          </Table.Cell>
-          <Table.Cell>{player && player.score}</Table.Cell>
-        </Table.Row>
-      );
-    }
-  );
+  const tableRows = games.map(({ _id, startedOn, player }) => {
+    return (
+      <Table.Row key={_id}>
+        <Table.Cell>
+          <LinkComponent id={_id} />
+        </Table.Cell>
+        <Table.Cell>
+          <Timestamp date={startedOn} />
+        </Table.Cell>
+        <Table.Cell>{player.name === "Player" ? "" : player.name}</Table.Cell>
+        <Table.Cell>{player.contact}</Table.Cell>
+        <Table.Cell>{player && player.score}</Table.Cell>
+      </Table.Row>
+    );
+  });
 
   return (
     <>
@@ -41,10 +32,10 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Id</Table.HeaderCell>
-            <Table.HeaderCell>Статус</Table.HeaderCell>
-            <Table.HeaderCell>Время начала</Table.HeaderCell>
-            <Table.HeaderCell>Время завершения</Table.HeaderCell>
-            <Table.HeaderCell>Очков у победителя</Table.HeaderCell>
+            <Table.HeaderCell>Время</Table.HeaderCell>
+            <Table.HeaderCell>Имя</Table.HeaderCell>
+            <Table.HeaderCell>Контакт</Table.HeaderCell>
+            <Table.HeaderCell>Очки</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
 
