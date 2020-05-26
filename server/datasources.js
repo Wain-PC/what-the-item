@@ -11,7 +11,7 @@ class UtilsDataSources {
     }
 
     const game = await models.Game.findById({ _id })
-      .populate("rounds.image")
+      .populate("rounds.imageRef")
       .exec();
 
     if (!game) {

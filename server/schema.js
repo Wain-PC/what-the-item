@@ -52,7 +52,7 @@ const roundSchema = new Schema(
   {
     _id: Schema.Types.ObjectId,
     index: Number,
-    image: { type: Schema.Types.ObjectId, ref: "Image" },
+    imageRef: { type: Schema.Types.ObjectId, ref: "Image", alias: "image" },
     selection: [selectionSchema],
     started: { type: Boolean, default: false },
     finished: { type: Boolean, default: false },
