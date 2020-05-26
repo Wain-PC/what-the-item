@@ -16,7 +16,7 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
           <LinkComponent id={_id} />
         </Table.Cell>
         <Table.Cell>
-          <Timestamp date={startedOn} />
+          <Timestamp date={startedOn} options={{ twentyFourHour: true }} />
         </Table.Cell>
         <Table.Cell>{player.name === "Player" ? "" : player.name}</Table.Cell>
         <Table.Cell>{player.contact}</Table.Cell>
@@ -27,7 +27,7 @@ const Games = ({ games, total, finished: finishedCount, loadGames }) => {
 
   return (
     <>
-      <Header as="h1" content="Последние игры" />
+      <Header as="h1" content="Последние 100 игр" />
       <Table celled>
         <Table.Header>
           <Table.Row>

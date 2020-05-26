@@ -39,7 +39,7 @@ const Game = ({
   return (
     <>
       <Header as="h1">
-        <Timestamp time={startedOn} options={{ twentyFourHour: true }} />
+        <Timestamp date={startedOn} options={{ twentyFourHour: true }} />
       </Header>
 
       <Form>
