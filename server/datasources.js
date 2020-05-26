@@ -58,27 +58,33 @@ class UtilsDataSources {
     return models.Image.aggregate(pipeline).exec();
   }
 
-  async getWinners(limit = 100, includeGameIds = false) {
+  async getWinners(limit = 100, admin = false) {
+    const projection = admin
+      ? {
+          _id: false
+        }
+      : {
+          _id: false,
+          name: true,
+          score: true
+        };
+
     const docs = await models.Game.aggregate([
       { $match: { finished: true } },
       {
         $group: {
-          _id: { name: "$player.name", contact: "$player.contact" },
+          _id: { contact: "$player.contact" },
+          name: { $last: "$player.name" },
           score: { $max: "$player.score" },
           gameIds: { $addToSet: "$_id" }
         }
       },
       {
         $addFields: {
-          name: "$_id.name",
-          gameIds: includeGameIds ? "$gameIds" : 0
+          contact: "$_id.contact"
         }
       },
-      {
-        $project: {
-          _id: 0
-        }
-      },
+      { $project: projection },
       { $sort: { score: -1 } },
       { $limit: limit }
     ]);
