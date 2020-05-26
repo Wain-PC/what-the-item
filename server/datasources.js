@@ -319,6 +319,8 @@ class AdminDataSources {
       if (round.image) {
         // eslint-disable-next-line no-param-reassign
         delete round.image.image;
+        // eslint-disable-next-line no-param-reassign
+        delete round.imageRef;
       }
     });
 
