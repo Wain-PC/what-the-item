@@ -225,9 +225,12 @@ class DataSources {
     let pointsReceived = 0;
 
     if (isCorrectAnswer && timeLeft) {
-      pointsReceived = Math.round(
-        (game.config.gameplay.maxPointsPerRound * timeLeftExact) /
-          game.config.timers.round
+      pointsReceived = Math.max(
+        Math.round(
+          (game.config.gameplay.maxPointsPerRound * timeLeftExact) /
+            game.config.timers.round
+        ),
+        0
       );
     }
 
