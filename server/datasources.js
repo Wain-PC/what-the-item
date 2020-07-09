@@ -73,15 +73,15 @@ class UtilsDataSources {
       { $match: { finished: true } },
       {
         $group: {
-          _id: { contact: "$player.contact" },
-          name: { $last: "$player.name" },
+          _id: { name: "$player.name", contact: "$player.contact" },
           score: { $max: "$player.score" },
           gameIds: { $push: "$_id" }
         }
       },
       {
         $addFields: {
-          contact: "$_id.contact"
+          contact: "$_id.contact",
+          name: "$_id.name"
         }
       },
       { $project: projection },
@@ -225,9 +225,12 @@ class DataSources {
     let pointsReceived = 0;
 
     if (isCorrectAnswer && timeLeft) {
-      pointsReceived = Math.round(
-        (game.config.gameplay.maxPointsPerRound * timeLeftExact) /
-          game.config.timers.round
+      pointsReceived = Math.max(
+        Math.round(
+          (game.config.gameplay.maxPointsPerRound * timeLeftExact) /
+            game.config.timers.round
+        ),
+        0
       );
     }
 
@@ -256,7 +259,7 @@ class DataSources {
     };
 
     players.some((player, index) => {
-      if (game.player.score > player.score) {
+      if (game.player.score >= player.score) {
         response.isInTop = true;
         response.place = index + 1;
         return true;
