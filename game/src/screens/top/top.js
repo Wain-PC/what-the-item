@@ -43,9 +43,9 @@ const Top = props => {
     content = (
       <div className={styles.button}>
         <div className={cn(styles.text)}>
-          Игра сейчас недоступна.
+          Game is unavailable now, sorry for that =(
           <br />
-          Пожалуйста, зайдите позднее.
+          Please come back later.
         </div>
       </div>
     );

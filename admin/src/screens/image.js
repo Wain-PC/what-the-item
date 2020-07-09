@@ -73,7 +73,7 @@ class ImageScreen extends PureComponent {
       addIncorrectAnswer,
       removeIncorrectAnswer,
       saveImage,
-      removeImage,
+      removeImage
     } = this.props;
 
     const titles = incorrectTitles.map((value, index) => {
@@ -94,14 +94,15 @@ class ImageScreen extends PureComponent {
     return (
       <Grid centered columns={1}>
         <Grid.Column width={16}>
-          <Header as="h1" content={id ? "Редактировать изображение" : "Новое изображение"} />
+          <Header
+            as="h1"
+            content={id ? "Редактировать изображение" : "Новое изображение"}
+          />
         </Grid.Column>
         <Grid.Column width={15}>
           <Form>
             <Form.Field>
-              {url ? (
-                <Image centered rounded size="large" src={url} />
-              ) : null}
+              {url ? <Image centered rounded size="large" src={url} /> : null}
               <Input
                 type="file"
                 accept=".png, .jpg, .jpeg"
@@ -152,13 +153,13 @@ class ImageScreen extends PureComponent {
               onClick={saveImage}
             />
             {id && (
-                <Button
-                    type="submit"
-                    icon="remove"
-                    negative
-                    content="Удалить"
-                    onClick={() => removeImage(id)}
-                />
+              <Button
+                type="submit"
+                icon="remove"
+                negative
+                content="Удалить"
+                onClick={() => removeImage(id)}
+              />
             )}
           </Form>
         </Grid.Column>

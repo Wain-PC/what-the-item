@@ -36,18 +36,18 @@ const GameEnd = props => {
       <div className={styles.column}>
         <div className={styles.inputs}>
           <div className={styles.header}>
-            Ты занял {place} место в топ-{topPlayers}!
+            Your place in top-{topPlayers}: {place}
           </div>
-          <div className={styles.nickNameHeader}>Имя</div>
+          <div className={styles.nickNameHeader}>Name</div>
           <NickName value={name} onChange={changeName} disabled={loading} />
-          <div className={styles.nickNameHeader}>Почта или Telegram</div>
+          <div className={styles.nickNameHeader}>E-Mail or Telegram</div>
           <NickName
             value={contact}
             onChange={changeContact}
             disabled={loading}
           />
           <div className={styles.text}>
-            В топе будет только твой лучший счёт!
+            Only your best attempt will be shown on the scoreboard!
           </div>
         </div>
       </div>
