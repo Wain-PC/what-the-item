@@ -271,14 +271,20 @@ class DataSources {
       place: 0
     };
 
-    players.some((player, index) => {
-      if (game.player.score >= player.score) {
-        response.isInTop = true;
-        response.place = index + 1;
-        return true;
-      }
-      return false;
-    });
+    // No one in top, auto first place
+    if (!players.length) {
+      response.isInTop = true;
+      response.place = 1;
+    } else {
+      players.some((player, index) => {
+        if (game.player.score > player.score) {
+          response.isInTop = true;
+          response.place = index + 1;
+          return true;
+        }
+        return false;
+      });
+    }
 
     return response;
   }
