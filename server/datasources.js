@@ -1,6 +1,12 @@
 /* eslint-disable class-methods-use-this */
 // eslint-disable-next-line max-classes-per-file
 const arrayShuffle = require("array-shuffle");
+const {
+  uniqueNamesGenerator,
+  adjectives,
+  names
+} = require("unique-names-generator");
+
 const models = require("./schema");
 const { flush } = require("./utils/fileCache");
 
@@ -148,12 +154,19 @@ class DataSources {
       };
     });
 
+    const name = uniqueNamesGenerator({
+      dictionaries: [adjectives, names],
+      length: 2,
+      separator: " ",
+      style: "capital"
+    });
+
     const game = new models.Game({
       rounds,
       startedOn: new Date(),
       config,
       player: {
-        name: "Player",
+        name,
         score: 0
       }
     });
