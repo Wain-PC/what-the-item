@@ -21,9 +21,9 @@ const Controls = ({
   } else {
     content = (
       <div className={styles.text}>
-        Не получилось загрузить игру =(
+        Cannot load game =(
         <br />
-        Обновите страницу и попробуйте ещё раз
+        Please update the page to try again
       </div>
     );
   }
@@ -34,9 +34,9 @@ const Controls = ({
       <div className={styles.centered}>
         {content}
         <div className={styles.heading}>
-          Выбирай правильный ответ быстрее, чтобы получить больше очков!
+          Choose a correct answer faster to receive more points!
           <br />
-          Используй клавиши 1-4 или курсор!
+          Use buttons 1-4 on your keyboard or a mouse!
         </div>
         <div className={styles.buttons}>
           <Button index={0} />
