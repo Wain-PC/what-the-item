@@ -28,12 +28,30 @@ const setScreenTop = () => async dispatch => {
   await dispatch(getTopPlayers());
 };
 
-const setScreenReady = () => ({
-  type: SET_SCREEN_READY
-});
+const setScreenReady = () => (dispatch, getState) => {
+  const {
+    config: {
+      gameplay: { topPlayers }
+    },
+    loading: { loading }
+  } = getState();
+
+  if (topPlayers && !loading) {
+    dispatch({
+      type: SET_SCREEN_READY
+    });
+  }
+};
 
 const setScreenControls = () => (dispatch, getState) => {
   const { controls } = getState().config.timers;
+
+  if (!controls) {
+    // eslint-disable-next-line no-use-before-define
+    dispatch(setScreenGame());
+    return;
+  }
+
   dispatch(
     runTimer(controls, () => {
       // eslint-disable-next-line no-use-before-define
