@@ -10,6 +10,7 @@ RUN npm ci
 COPY ./game/public /build/public
 COPY ./game/src /build/src
 ENV GENERATE_SOURCEMAP false
+ENV REACT_APP_LANGUAGE en
 RUN npm run build
 
 # Server installation
