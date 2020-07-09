@@ -1,0 +1,12 @@
+{
+  "cantLoad": "Cannot load game =(",
+  "pleaseUpdatePage": "Please update the page to try again",
+  "chooseAnswer": "Choose a correct answer faster to receive more points!",
+  "buttons": "Use buttons 1-4 on your keyboard or a mouse!",
+  "name": "Name",
+  "contact": "E-mail or Telegram",
+  "youScored": "Your place in top-{topPlayers}: {place}",
+  "bestAttempt": "Only your best attempt will be shown on the scoreboard!",
+  "gameUnavailable": "Game is unavailable now =(",
+  "comeBackLater": "Please come back later"
+}

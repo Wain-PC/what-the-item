@@ -16,6 +16,7 @@ const Top = props => {
       gameplay: { topPlayers }
     },
     loading: { loading },
+    translation: { gameUnavailable, comeBackLater },
     setScreenReady
   } = props;
 
@@ -43,9 +44,9 @@ const Top = props => {
     content = (
       <div className={styles.button}>
         <div className={cn(styles.text)}>
-          Game is unavailable now, sorry for that =(
+          {gameUnavailable}
           <br />
-          Please come back later.
+          {comeBackLater}
         </div>
       </div>
     );
@@ -82,6 +83,10 @@ Top.propTypes = {
   }).isRequired,
   loading: PropTypes.shape({
     loading: PropTypes.bool.isRequired
+  }).isRequired,
+  translation: PropTypes.shape({
+    gameUnavailable: PropTypes.string.isRequired,
+    comeBackLater: PropTypes.string.isRequired
   }).isRequired,
   setScreenReady: PropTypes.func.isRequired
 };

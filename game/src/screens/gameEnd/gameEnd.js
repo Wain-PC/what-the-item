@@ -8,6 +8,8 @@ import Loader from "../../components/loader/loader";
 import Root from "../../components/root/root";
 import Shapes from "../../components/shapes/shapes";
 
+import { replace } from "../../utils/translation";
+
 const GameEnd = props => {
   const {
     game: {
@@ -17,6 +19,7 @@ const GameEnd = props => {
       gameplay: { topPlayers }
     },
     loading: { loading },
+    translation: { youScored, bestAttempt, name: trName, contact: trContact },
     changeName,
     changeContact,
     saveName
@@ -36,19 +39,17 @@ const GameEnd = props => {
       <div className={styles.column}>
         <div className={styles.inputs}>
           <div className={styles.header}>
-            Your place in top-{topPlayers}: {place}
+            {replace(youScored, { topPlayers, place })}
           </div>
-          <div className={styles.nickNameHeader}>Name</div>
+          <div className={styles.nickNameHeader}>{trName}</div>
           <NickName value={name} onChange={changeName} disabled={loading} />
-          <div className={styles.nickNameHeader}>E-Mail or Telegram</div>
+          <div className={styles.nickNameHeader}>{trContact}</div>
           <NickName
             value={contact}
             onChange={changeContact}
             disabled={loading}
           />
-          <div className={styles.text}>
-            Only your best attempt will be shown on the scoreboard!
-          </div>
+          <div className={styles.text}>{bestAttempt}</div>
         </div>
       </div>
       <div className={styles.button}>{content}</div>
@@ -72,6 +73,12 @@ GameEnd.propTypes = {
   }).isRequired,
   loading: PropTypes.shape({
     loading: PropTypes.bool.isRequired
+  }).isRequired,
+  translation: PropTypes.shape({
+    youScored: PropTypes.string.isRequired,
+    bestAttempt: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    contact: PropTypes.string.isRequired
   }).isRequired,
   saveName: PropTypes.func.isRequired,
   changeName: PropTypes.func.isRequired,

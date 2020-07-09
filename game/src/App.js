@@ -5,6 +5,7 @@ import actions from "./actions/index";
 import * as controllers from "./controllers";
 import KeyboardController from "./keyboardController";
 import * as screens from "./screens";
+import config from "./utils/config";
 import styles from "./App.module.css";
 
 class App extends PureComponent {
@@ -14,12 +15,31 @@ class App extends PureComponent {
     // Start keyboard listener
     this.keyboardController = new KeyboardController();
     this.keyboardController.onPress(this.onButtonPress.bind(this));
+
+    this.state = {
+      language: config.language,
+      translation: {}
+    };
   }
 
   async componentDidMount() {
     // Acquire top players
     const { setScreenTop } = this.props;
     await setScreenTop();
+    await this.loadTranslation();
+  }
+
+  async loadTranslation() {
+    const { language } = this.state;
+
+    try {
+      const translation = await import(`./languages/${language}.json`);
+      this.setState({
+        translation
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   onButtonPress(button) {
@@ -46,10 +66,12 @@ class App extends PureComponent {
       ...restProps
     } = this.props;
 
+    const {translation} = this.state;
+
     const Screen = screens[id];
 
     if (Screen) {
-      return <Screen {...restProps} />;
+      return <Screen {...restProps} translation={translation} />;
     }
 
     return <div>Unknown screen id: {id}</div>;

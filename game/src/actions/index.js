@@ -16,6 +16,4 @@ const actions = {
   ...loading
 };
 
-console.log(actions);
-
 export default actions;

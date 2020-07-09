@@ -33,9 +33,9 @@ const getTopPlayers = () => async dispatch => {
     type: LOAD_TOP_PLAYERS_START
   });
 
-  const { players } = await db.getTopPlayers();
-
   try {
+    const { players } = await db.getTopPlayers();
+
     dispatch({
       type: LOAD_TOP_PLAYERS_SUCCESS,
       payload: players

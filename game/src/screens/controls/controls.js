@@ -10,6 +10,7 @@ import WideButton from "../../components/wideButton/wideButton";
 const Controls = ({
   timer: { timer },
   loading: { loading },
+  translation: { cantLoad, pleaseUpdatePage, chooseAnswer, buttons },
   setScreenGame
 }) => {
   let content;
@@ -21,9 +22,9 @@ const Controls = ({
   } else {
     content = (
       <div className={styles.text}>
-        Cannot load game =(
+        {cantLoad}
         <br />
-        Please update the page to try again
+        {pleaseUpdatePage}
       </div>
     );
   }
@@ -34,9 +35,9 @@ const Controls = ({
       <div className={styles.centered}>
         {content}
         <div className={styles.heading}>
-          Choose a correct answer faster to receive more points!
+          {chooseAnswer}
           <br />
-          Use buttons 1-4 on your keyboard or a mouse!
+          {buttons}
         </div>
         <div className={styles.buttons}>
           <Button index={0} />
@@ -58,6 +59,12 @@ Controls.propTypes = {
   }).isRequired,
   loading: PropTypes.shape({
     loading: PropTypes.bool.isRequired
+  }).isRequired,
+  translation: PropTypes.shape({
+    cantLoad: PropTypes.string.isRequired,
+    pleaseUpdatePage: PropTypes.string.isRequired,
+    chooseAnswer: PropTypes.string.isRequired,
+    buttons: PropTypes.string.isRequired
   }).isRequired,
   setScreenGame: PropTypes.func.isRequired
 };
