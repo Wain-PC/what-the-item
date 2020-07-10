@@ -1,39 +1,20 @@
-// TODO: Use real config
-
-const config = {
-  game: {
-    system: {
-      mode: "user",
-      baseURL: "/",
-      port: 3333,
-      apiPath: "/game",
-      staticDir: "static",
-      imageCache: ".cache/images"
-    },
-    auth: {
-      user: "",
-      password: ""
-    },
-    db: {
-      mongoConnectionLine: "mongodb://localhost/what-the-item"
-    },
-    timers: {
-      controls: 3,
-      round: 9,
-      roundEnd: 3
-    },
-    gameplay: {
-      roundsInGame: 4,
-      answersInRound: 4,
-      maxPointsPerRound: 100,
-      winnerNickNameMaxLetters: 8,
-      winnerNickNameLetterTable: "0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-      contactMaxLetters: 20,
-      contactLetterTable:
-        "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.-_@",
-      topPlayers: 5
-    }
+export default {
+  db: {
+    mongoConnectionLine: process.env.MONGODB_URI
+  },
+  timers: {
+    controls: Number(process.env.TIMERS_CONTROLS),
+    round: Number(process.env.TIMERS_ROUND),
+    roundEnd: Number(process.env.TIMERS_ROUND_END)
+  },
+  gameplay: {
+    roundsInGame: Number(process.env.ROUNDS_IN_GAME),
+    answersInRound: Number(process.env.ANSWERS_IN_ROUND),
+    maxPointsPerRound: Number(process.env.MAX_POINTS_PER_ROUND),
+    winnerNickNameMaxLetters: Number(process.env.WINNER_NICKNAME_MAX_LETTERS),
+    winnerNickNameLetterTable: process.env.WINNER_NICKNAME_LETTER_TABLE,
+    contactMaxLetters: Number(process.env.CONTACT_MAX_LETTERS),
+    contactLetterTable: process.env.CONTACT_LETTER_TABLE,
+    topPlayers: Number(process.env.TOP_PLAYERS)
   }
 };
-
-export default config.game;

@@ -4,7 +4,6 @@ import arrayShuffle from "array-shuffle";
 import { generate } from "../utils/nameGenerator";
 
 import models from "./schema";
-import { flush } from "../utils/fileCache";
 
 class UtilsDataSources {
   async getGame(_id) {
@@ -368,9 +367,6 @@ class AdminDataSources {
 
   async saveImage({ image }) {
     const { _id, incorrectTitles, ...restImage } = image;
-
-    // Invalidate image in cache if editing image.
-    flush(_id);
 
     const imageDocument = await models.Image.findOneAndUpdate(
       _id ? { _id } : { title: "@@@@@@@@@@@@@@@@@@@@@@" },
