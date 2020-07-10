@@ -4,6 +4,8 @@ export const send = async (path = "", data = {}) => {
     ? apiPath
     : `${process.env.VERCEL_URL}${apiPath}`;
 
+  console.log(apiURL);
+
   const response = await fetch(apiURL, {
     headers: {
       Accept: "application/json",

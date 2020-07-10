@@ -1,4 +1,4 @@
 import { receive } from "../../src/utils/request";
-import config from "../../src/utils/config";
+import user from "../../src/database/datasources";
 
-export default receive(() => config);
+export default receive(user.getConfig);
