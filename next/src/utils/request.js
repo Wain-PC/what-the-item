@@ -1,6 +1,8 @@
 export const send = async (path = "", data = {}) => {
   const apiPath = `/api/${path}`;
-  const apiURL = process.browser ? apiPath : `http://localhost:3000${apiPath}`;
+  const apiURL = process.browser
+    ? apiPath
+    : `${process.env.LOCAL_URL}${apiPath}`;
 
   const response = await fetch(apiURL, {
     headers: {
