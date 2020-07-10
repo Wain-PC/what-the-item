@@ -242,7 +242,10 @@ class DataSources {
       response.place = 1;
     } else {
       players.some((player, index) => {
-        if (game.player.score > player.score) {
+        if (
+          game.player.score === player.score &&
+          game.player.name === player.name
+        ) {
           response.isInTop = true;
           response.place = index + 1;
           return true;
