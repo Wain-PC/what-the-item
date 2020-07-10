@@ -19,7 +19,9 @@ const GameEnd = props => {
       gameplay: { topPlayers }
     },
     loading: { loading },
-    translation: { data: { youScored, bestAttempt, name: trName, contact: trContact }},
+    translation: {
+      data: { youScored, bestAttempt, name: trName, contact: trContact }
+    },
     changeName,
     changeContact,
     saveName
@@ -75,10 +77,12 @@ GameEnd.propTypes = {
     loading: PropTypes.bool.isRequired
   }).isRequired,
   translation: PropTypes.shape({
-    youScored: PropTypes.string.isRequired,
-    bestAttempt: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    contact: PropTypes.string.isRequired
+    data: PropTypes.shape({
+      youScored: PropTypes.string.isRequired,
+      bestAttempt: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      contact: PropTypes.string.isRequired
+    }).isRequired
   }).isRequired,
   saveName: PropTypes.func.isRequired,
   changeName: PropTypes.func.isRequired,

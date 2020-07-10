@@ -63,10 +63,12 @@ Controls.propTypes = {
     loading: PropTypes.bool.isRequired
   }).isRequired,
   translation: PropTypes.shape({
-    cantLoad: PropTypes.string.isRequired,
-    pleaseUpdatePage: PropTypes.string.isRequired,
-    chooseAnswer: PropTypes.string.isRequired,
-    buttons: PropTypes.string.isRequired
+    data: PropTypes.shape({
+      cantLoad: PropTypes.string.isRequired,
+      pleaseUpdatePage: PropTypes.string.isRequired,
+      chooseAnswer: PropTypes.string.isRequired,
+      buttons: PropTypes.string.isRequired
+    }).isRequired
   }).isRequired,
   setScreenGame: PropTypes.func.isRequired
 };

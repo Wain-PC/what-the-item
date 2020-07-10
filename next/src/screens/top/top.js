@@ -87,8 +87,10 @@ Top.propTypes = {
     loading: PropTypes.bool.isRequired
   }).isRequired,
   translation: PropTypes.shape({
-    gameUnavailable: PropTypes.string.isRequired,
-    comeBackLater: PropTypes.string.isRequired
+    data: PropTypes.shape({
+      gameUnavailable: PropTypes.string.isRequired,
+      comeBackLater: PropTypes.string.isRequired
+    })
   }).isRequired,
   setScreenReady: PropTypes.func.isRequired
 };
