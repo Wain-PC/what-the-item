@@ -2,7 +2,7 @@ export const send = async (path = "", data = {}) => {
   const apiPath = `/api/${path}`;
   const apiURL = process.browser
     ? apiPath
-    : `${process.env.LOCAL_URL}${apiPath}`;
+    : `${process.env.VERCEL_URL}${apiPath}`;
 
   const response = await fetch(apiURL, {
     headers: {
