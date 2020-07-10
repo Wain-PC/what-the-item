@@ -68,9 +68,6 @@ App.propTypes = {
   getConfig: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => {
-  console.log(state);
-  return state;
-};
+const mapStateToProps = state => state;
 const mapDispatchToProps = actions;
 export default connect(mapStateToProps, mapDispatchToProps)(App);

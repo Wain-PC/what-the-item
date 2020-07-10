@@ -1,0 +1,9 @@
+{
+  "game": {
+    "system": {
+      "mode": "admin",
+      "port": 3334,
+      "apiPath": "/admin"
+    }
+  }
+}

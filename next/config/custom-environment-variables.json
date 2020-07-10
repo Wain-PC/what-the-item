@@ -1,5 +1,14 @@
 {
-  "server": {
-    "apiVersion": "API_VERSION"
+  "game": {
+    "system": {
+      "port": "PORT"
+    },
+    "db": {
+      "mongoConnectionLine": "MONGODB_URI"
+    },
+    "auth": {
+      "user": "AUTH_USER",
+      "password": "AUTH_PASSWORD"
+    }
   }
 }

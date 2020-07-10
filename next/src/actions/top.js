@@ -41,6 +41,7 @@ const getTopPlayers = () => async dispatch => {
       payload: players
     });
   } catch (error) {
+    console.error(error);
     dispatch({
       type: LOAD_TOP_PLAYERS_ERROR,
       error

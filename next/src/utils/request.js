@@ -1,4 +1,4 @@
-const send = async (path = "", data = {}) => {
+export const send = async (path = "", data = {}) => {
   const response = await fetch(`/api/${path}`, {
     headers: {
       Accept: "application/json",
@@ -19,5 +19,31 @@ const send = async (path = "", data = {}) => {
   throw new Error("Unable to contact API");
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { send };
+export const receive = method => async (req, res) => {
+  const { connect, disconnect } = await import("../database/db");
+
+  try {
+    const { method: httpMethod, body: data = {} } = req;
+    await connect();
+
+    if (httpMethod !== "POST") {
+      res.setHeader("Allow", ["POST"]);
+      res.status(405).end(`Method ${httpMethod} Not Allowed`);
+    } else if (!method) {
+      res
+        .status(404)
+        .json({ error: "Unknown path" })
+        .end();
+      return;
+    } else {
+      // If we have an appropriate DB path, execute it and return results.
+      const payload = await method(data);
+      res.status(200).json({ payload });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Cannot process request" });
+  } finally {
+    await disconnect();
+  }
+};
