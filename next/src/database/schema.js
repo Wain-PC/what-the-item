@@ -129,7 +129,6 @@ gameSchema.index({ "player.score": -1, _id: 1 });
 gameSchema.index({ "player.score": -1, _id: 1, contact: 1 });
 
 const models = {
-  Config: mongoose.models.Config || mongoose.model("Config", configSchema),
   Image: mongoose.models.Image || mongoose.model("Image", imageSchema),
   Game: mongoose.models.Game || mongoose.model("Game", gameSchema)
 };

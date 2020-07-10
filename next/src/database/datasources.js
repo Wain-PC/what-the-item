@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 // eslint-disable-next-line max-classes-per-file
 import arrayShuffle from "array-shuffle";
+import config from "../utils/config";
 import { generate } from "../utils/nameGenerator";
 
 import models from "./schema";
@@ -20,29 +21,6 @@ class UtilsDataSources {
     }
 
     return game;
-  }
-
-  async getConfig() {
-    let config = await models.Config.findOne();
-    if (!config) {
-      config = this.saveConfig();
-    }
-
-    return config;
-  }
-
-  async saveConfig(newConfig = {}) {
-    const { config = {} } = newConfig;
-    return models.Config.findOneAndUpdate({}, config, {
-      new: true,
-      upsert: true,
-      setDefaultsOnInsert: true,
-      useFindAndModify: true,
-      fields: {
-        gameplay: true,
-        timers: true
-      }
-    });
   }
 
   getNRandomImages(n, excludedIds = []) {
@@ -101,13 +79,11 @@ const utils = new UtilsDataSources();
 
 class DataSources {
   async getConfig() {
-    const { gameplay, timers } = await utils.getConfig();
+    const { gameplay, timers } = config;
     return { gameplay, timers };
   }
 
   async startGame() {
-    const config = await utils.getConfig();
-
     const {
       gameplay: { roundsInGame, answersInRound }
     } = config;
@@ -167,7 +143,7 @@ class DataSources {
   async nextRound({ gameId }) {
     const {
       timers: { round: secondsInRound }
-    } = await utils.getConfig();
+    } = config;
 
     const game = await utils.getGame(gameId);
 
@@ -250,7 +226,6 @@ class DataSources {
   }
 
   async isInTop({ gameId }) {
-    const config = await utils.getConfig();
     const { topPlayers } = config.gameplay;
     const game = await utils.getGame(gameId);
     const { players } = await utils.getWinners(topPlayers, true);
@@ -296,125 +271,10 @@ class DataSources {
   }
 
   async getTopPlayers() {
-    const config = await utils.getConfig();
     const { topPlayers } = config.gameplay;
 
     return utils.getWinners(topPlayers, false);
   }
 }
 
-class AdminDataSources {
-  getConfig(gameId) {
-    return utils.getConfig(gameId);
-  }
-
-  saveConfig({ config }) {
-    return utils.saveConfig(config);
-  }
-
-  async getGames() {
-    const games = await models.Game.find({ finished: true })
-      .select("name started finished startedOn finishedOn player")
-      .sort({ _id: -1 })
-      .exec();
-
-    const total = await models.Game.countDocuments().exec();
-    const finished = await models.Game.where({ finished: true })
-      .countDocuments()
-      .exec();
-
-    return {
-      games,
-      total,
-      finished
-    };
-  }
-
-  async getGame({ id }) {
-    const game = (await utils.getGame(id)).toObject();
-
-    game.rounds.forEach(round => {
-      if (round.image) {
-        // eslint-disable-next-line no-param-reassign
-        delete round.image.image;
-        // eslint-disable-next-line no-param-reassign
-        delete round.imageRef;
-      }
-    });
-
-    return game;
-  }
-
-  getAllPlayers() {
-    return utils.getWinners(100, true);
-  }
-
-  async getImage({ id }) {
-    if (!id) {
-      throw new Error("No image ID provided or it is invalid");
-    }
-
-    const imageDocument = await models.Image.findById(id);
-
-    if (!imageDocument) {
-      throw new Error("No image ID provided or it is invalid");
-    }
-
-    const image = imageDocument.toObject();
-    delete image.image;
-    return image;
-  }
-
-  async saveImage({ image }) {
-    const { _id, incorrectTitles, ...restImage } = image;
-
-    const imageDocument = await models.Image.findOneAndUpdate(
-      _id ? { _id } : { title: "@@@@@@@@@@@@@@@@@@@@@@" },
-      {
-        ...restImage,
-        incorrectTitles: incorrectTitles.filter(v => v)
-      },
-      {
-        new: true,
-        upsert: true,
-        setDefaultsOnInsert: true,
-        useFindAndModify: true
-      }
-    );
-
-    const savedImage = imageDocument.toObject();
-    delete savedImage.image;
-    return savedImage;
-  }
-
-  async removeImage({ id }) {
-    await models.Image.findByIdAndDelete(id);
-    return id;
-  }
-
-  async getImages() {
-    const imagesDocuments = await models.Image.find()
-      .sort({ _id: -1 })
-      .exec();
-
-    const images = imagesDocuments.map(imageDocument => {
-      const image = imageDocument.toObject();
-      delete image.image;
-      return image;
-    });
-
-    const total = await models.Image.countDocuments().exec();
-    const active = await models.Image.where({ active: true })
-      .countDocuments()
-      .exec();
-
-    return {
-      images,
-      total,
-      active
-    };
-  }
-}
-
-export const user = new DataSources();
-export const admin = new AdminDataSources();
+export default new DataSources();
