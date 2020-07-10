@@ -4,7 +4,7 @@ export default class KeyboardController {
     this.releaseListener = () => {};
 
     // Don't set any listeners in SSR mode
-    if (!process.client) {
+    if (!process.browser) {
       return;
     }
 

@@ -6,11 +6,6 @@ const controller = ({ actions, message }) => {
         actions.setScreenGame();
         break;
       }
-      // Switch back to 'top' screen when 'back' button is pressed
-      case "back": {
-        actions.setScreenReady();
-        break;
-      }
       default: {
         // do nothing
       }
