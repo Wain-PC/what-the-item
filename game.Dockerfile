@@ -1,7 +1,7 @@
 # Game Frontend Build
 FROM node:alpine as frontend
-RUN mkdir /build
-WORKDIR /build
+RUN mkdir /app
+WORKDIR /app
 
 COPY ./game/package.json /app
 COPY ./game/package-lock.json /app
