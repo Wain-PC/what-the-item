@@ -1,6 +1,7 @@
 import { send } from "./request";
 
 export const getConfig = () => send("getConfig");
+export const getTranslation = () => send("getTranslation");
 export const getTopPlayers = () => send("getTopPlayers");
 export const isInTop = ({ gameId }) => send("isInTop", { gameId });
 export const startGame = () => send("startGame");

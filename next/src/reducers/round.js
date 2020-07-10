@@ -9,7 +9,7 @@ const initialState = {
   image: {
     image: ""
   },
-  isCorrectAnswer: undefined,
+  isCorrectAnswer: null,
   index: 0,
   selection: []
 };
@@ -40,7 +40,7 @@ export default (state = initialState, action) => {
           }
           return {
             ...item,
-            isCorrectAnswer: undefined
+            isCorrectAnswer: null
           };
         })
       };

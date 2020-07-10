@@ -19,7 +19,8 @@ export default (state = initialState, action) => {
     case LOAD_LANGUAGE_SUCCESS: {
       return {
         ...state,
-        data: action.payload || initialState.data
+        language: action.payload.language || initialState.language,
+        data: action.payload.data || initialState.data
       };
     }
 

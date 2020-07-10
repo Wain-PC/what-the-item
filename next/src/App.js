@@ -16,12 +16,6 @@ class App extends PureComponent {
     this.keyboardController.onPress(this.onButtonPress.bind(this));
   }
 
-  async componentDidMount() {
-    // Acquire top players
-    const { setScreenTop } = this.props;
-    await setScreenTop();
-  }
-
   onButtonPress(button) {
     const state = this.props;
     const {

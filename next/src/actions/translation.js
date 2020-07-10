@@ -4,21 +4,20 @@ import {
   LOAD_LANGUAGE_ERROR
 } from "../constants/actions";
 
+import { getTranslation as loadTranslation } from "../utils/db";
+
 // eslint-disable-next-line import/prefer-default-export
-export const getTranslation = () => async (dispatch, getState) => {
+export const getTranslation = () => async dispatch => {
   dispatch({
     type: LOAD_LANGUAGE_START
   });
 
   try {
-    const { language } = getState().translation;
-    const { default: translation } = await import(
-      `../languages/${language}.json`
-    );
+    const payload = await loadTranslation();
 
     dispatch({
       type: LOAD_LANGUAGE_SUCCESS,
-      payload: translation
+      payload
     });
   } catch (e) {
     dispatch({

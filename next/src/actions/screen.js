@@ -8,13 +8,12 @@ import {
   SET_SCREEN_WINNER
 } from "../constants/actions";
 
-import { getConfig, getTopPlayers } from "./top";
+import { getTopPlayers } from "./top";
 // eslint-disable-next-line import/no-cycle
 import { startGame, startRound } from "./game";
 // eslint-disable-next-line import/no-cycle
 import { getIsInTop } from "./gameEnd";
 import { runTimer } from "./timer";
-import { getTranslation } from "./translation";
 
 const setScreenTop = () => async dispatch => {
   dispatch({
@@ -25,8 +24,6 @@ const setScreenTop = () => async dispatch => {
     type: SET_SCREEN_TOP
   });
 
-  await dispatch(getTranslation());
-  await dispatch(getConfig());
   await dispatch(getTopPlayers());
 };
 

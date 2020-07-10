@@ -5,6 +5,7 @@ import * as ready from "./ready";
 import * as timer from "./timer";
 import * as top from "./top";
 import * as loading from "./loading";
+import * as translation from "./translation";
 
 const actions = {
   ...screen,
@@ -13,7 +14,8 @@ const actions = {
   ...ready,
   ...timer,
   ...top,
-  ...loading
+  ...loading,
+  ...translation
 };
 
 export default actions;

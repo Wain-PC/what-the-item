@@ -1,5 +1,8 @@
 export const send = async (path = "", data = {}) => {
-  const response = await fetch(`/api/${path}`, {
+  const apiPath = `/api/${path}`;
+  const apiURL = process.browser ? apiPath : `http://localhost:3000${apiPath}`;
+
+  const response = await fetch(apiURL, {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json"

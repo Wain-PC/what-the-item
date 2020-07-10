@@ -1,4 +1,5 @@
 export default {
+  language: process.env.LANGUAGE,
   db: {
     mongoConnectionLine: process.env.MONGODB_URI
   },

@@ -6,7 +6,9 @@ import Thumb from "../thumb/thumb";
 const Screen = ({ round, imageURL, isCorrectAnswer }) => {
   const image = imageURL ? { backgroundImage: `url("${imageURL}")` } : {};
   const thumb =
-    isCorrectAnswer !== undefined ? <Thumb down={!isCorrectAnswer} /> : null;
+    typeof isCorrectAnswer === "boolean" ? (
+      <Thumb down={!isCorrectAnswer} />
+    ) : null;
 
   return (
     <div className={styles.root}>
@@ -26,7 +28,7 @@ Screen.propTypes = {
 Screen.defaultProps = {
   round: 0,
   imageURL: "",
-  isCorrectAnswer: undefined
+  isCorrectAnswer: null
 };
 
 export default Screen;
