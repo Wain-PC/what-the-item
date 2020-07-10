@@ -2,7 +2,7 @@ export const send = async (path = "", data = {}) => {
   const apiPath = `/api/${path}`;
   const apiURL = process.browser
     ? apiPath
-    : `https://${process.env.VERCEL_URL}${apiPath}`;
+    : `${process.env.BASE_URL}${apiPath}`;
 
   console.log(apiURL);
 
