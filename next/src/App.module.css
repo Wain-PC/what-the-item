@@ -1,0 +1,19 @@
+.app {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-image: url("./images/elements/Background.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: #ffffff;
+    text-transform: uppercase;
+
+    font-family: BK0010, monospace;
+    font-size: var(--font-size-ms);
+}
+
+.app a {
+    color: #ffffff;
+    text-decoration: none;
+}

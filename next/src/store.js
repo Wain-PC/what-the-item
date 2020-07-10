@@ -2,7 +2,8 @@ import { useMemo } from "react";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { createStore, combineReducers, applyMiddleware } from "redux";
-import * as reducers from "./ducks/reducers";
+import * as reducers from "./reducers";
+import loading from "./middlewares/loading";
 
 let store;
 
@@ -10,7 +11,7 @@ const initStore = (preloadedState = {}) => {
   return createStore(
     combineReducers(reducers),
     preloadedState,
-    composeWithDevTools(applyMiddleware(thunk))
+    composeWithDevTools(applyMiddleware(thunk, loading))
   );
 };
 
