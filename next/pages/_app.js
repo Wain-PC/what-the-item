@@ -13,11 +13,12 @@ export default function MyApp(props) {
   return (
     <>
       <Head>
-        <title>My app</title>
+        <title>What the Item?!</title>
         <meta
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
+        <link rel="manifest" href="/manifest.json" />
       </Head>
       <Provider store={store}>
         <Component {...pageProps} />
