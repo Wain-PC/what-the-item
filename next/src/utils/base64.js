@@ -6,6 +6,11 @@ export const base64ToBinary = dataURI => {
   return Buffer.from(base64, "base64");
 };
 
+export const binaryToBase64 = (blob, extension) => {
+  const str = Buffer.from(blob).toString("base64");
+  return `data:image/${extension};base64,${str}`;
+};
+
 export const getExtension = dataURI => {
   const extensionRegExp = /^data:image\/(\w+);/;
 

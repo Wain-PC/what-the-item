@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import config from "../utils/config";
-import { getURL } from "../utils/fileCache";
-import { base64ToBinary } from "../utils/base64";
+import { base64ToBinary, binaryToBase64 } from "../utils/base64";
 
 const { Schema } = mongoose;
 
@@ -41,7 +40,7 @@ const imageSchema = new Schema(
 imageSchema.index({ title: 1 });
 
 imageSchema.virtual("url").get(function getUrl() {
-  return getURL(this._id.toString(), this.extension, this.image);
+  return binaryToBase64(this.image, this.extension);
 });
 
 const selectionSchema = new Schema({
