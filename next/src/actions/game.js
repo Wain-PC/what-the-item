@@ -24,6 +24,8 @@ const selectAnswer = answerIndex => async (dispatch, getState) => {
     }
   } = getState();
 
+  dispatch(stopTimer());
+
   dispatch({
     type: SELECT_ROUND_ANSWER,
     payload: answerIndex
