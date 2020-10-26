@@ -1,8 +1,7 @@
 /* eslint-disable class-methods-use-this */
 // eslint-disable-next-line max-classes-per-file
-import generate from "./utils/nameGenerator";
-
 const arrayShuffle = require("array-shuffle");
+const generate = require("./utils/nameGenerator");
 
 const models = require("./schema");
 const { flush } = require("./utils/fileCache");
@@ -329,6 +328,21 @@ class AdminDataSources {
       games,
       total,
       finished
+    };
+  }
+
+  async removeGames() {
+    await models.Game.deleteMany({}).exec();
+    return {
+      success: true
+    };
+  }
+
+  async removeGame({ id }) {
+    await models.Game.deleteOne({ _id: id });
+
+    return {
+      success: true
     };
   }
 

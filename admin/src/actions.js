@@ -36,7 +36,13 @@ import {
   LOAD_GAME_START,
   LOAD_GAME_SUCCESS,
   SUCCESS_HIDE,
-  SUCCESS_SHOW
+  SUCCESS_SHOW,
+  REMOVE_GAMES_START,
+  REMOVE_GAMES_SUCCESS,
+  REMOVE_GAMES_ERROR,
+  REMOVE_GAME_START,
+  REMOVE_GAME_SUCCESS,
+  REMOVE_GAME_ERROR
 } from "./constants/actions";
 
 import { send } from "./utils/request";
@@ -305,4 +311,60 @@ export const showSuccess = (message, seconds) => dispatch => {
   }
 
   return null;
+};
+
+export const removeGames = () => async dispatch => {
+  dispatch({
+    type: REMOVE_GAMES_START
+  });
+
+  try {
+    // DB request here
+    const payload = await send("removeGames");
+
+    if (payload.success) {
+      dispatch({
+        type: REMOVE_GAMES_SUCCESS,
+        payload
+      });
+      dispatch(loadGames());
+    } else {
+      dispatch({
+        type: REMOVE_GAME_ERROR
+      });
+    }
+  } catch (e) {
+    dispatch({
+      type: REMOVE_GAMES_ERROR
+    });
+  }
+};
+
+export const removeGame = id => async dispatch => {
+  dispatch({
+    type: REMOVE_GAME_START,
+    payload: id
+  });
+
+  try {
+    // DB request here
+    const payload = await send("removeGame", { id });
+
+    if (payload.success) {
+      dispatch({
+        type: REMOVE_GAME_SUCCESS,
+        payload
+      });
+
+      dispatch(loadGames());
+    } else {
+      dispatch({
+        type: REMOVE_GAME_ERROR
+      });
+    }
+  } catch (e) {
+    dispatch({
+      type: REMOVE_GAME_ERROR
+    });
+  }
 };

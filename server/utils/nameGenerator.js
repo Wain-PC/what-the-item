@@ -13,5 +13,4 @@ const generate = (opts = {}) => {
     ...opts
   });
 };
-
-export default generate;
+module.exports = generate;
